@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include "hall.h"
 
 #define SCREEN_W 1500
 #define SCREEN_H 900
@@ -48,7 +49,7 @@ bool running = true;
 bool redraw = true;
 
 
-int size = 10;
+int size = 100;
 int init_hall_x = 50;
 int init_hall_y = 150;
 int hall_W = SCREEN_W - 50;
@@ -90,13 +91,13 @@ void line_draw(){
    int height = hall_H-init_hall_y;
 
    while(y <= hall_H){
-	   al_draw_line(x, y, x+length, y, color, 0);
+	   //al_draw_line(x, y, x+length, y, color, 0);
 	   y = y + size;
    }
 
    y = init_hall_y;
    while(x <= hall_W){
-   	   al_draw_line(x, y, x, y+height, color, 0);
+   	   //al_draw_line(x, y, x, y+height, color, 0);
    	   x = x + size;
     }
 }
@@ -131,7 +132,7 @@ void player_input_mouse(ALLEGRO_EVENT *ev){
 		al_get_mouse_state(&state);
 		if (state.buttons & 1) {
 			/* Primary (e.g. left) mouse button is held. */
-			printf("Mouse position: (%d, %d)\n", state.x, state.y);
+			//printf("Mouse position: (%d, %d)\n", state.x, state.y);
 			QUADRADO q1 = get_Position(state.x, state.y);
 			yellow_x = q1.x;
 			yellow_y = q1.y;
@@ -278,7 +279,8 @@ void update(){
 
 int main(int argc, char *argv[])
 {
-
+	hall obj1(50, 150, 100, 8, 2);
+	hall obj2(450, 350, 20, 10, 20);
 	init_allegro();
 	text_font = al_create_builtin_font();
 
@@ -312,6 +314,8 @@ int main(int argc, char *argv[])
 		}
 		player_input_keyboard(&event);
 		player_input_mouse(&event);
+		obj1.mouse_event_input(&event);
+		obj2.mouse_event_input(&event);
 		//update();
 		// Check if we need to redraw
 		if (redraw && al_is_event_queue_empty(event_queue)) {
@@ -323,8 +327,10 @@ int main(int argc, char *argv[])
 			fill_rectangle(0, number_y-1, white);
 			fill_rectangle(number_x-1, number_y-1, white);
 			fill_position(249, 350);
-			fill_rectangle(yellow_x, yellow_y, yellow);
+			//fill_rectangle(yellow_x, yellow_y, yellow);
 			lifegame_draw();
+			obj1.update(&event);
+			obj2.update(&event);
 			al_flip_display();
 			redraw = false;
 		}

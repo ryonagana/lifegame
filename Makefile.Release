@@ -29,5 +29,5 @@ BIN=lifeGame
 
 
 all:
-	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) main.cpp $(LIBS)
+	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) hall.cpp main.cpp $(LIBS)
 
