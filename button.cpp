@@ -32,7 +32,7 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 		al_get_mouse_state(&state);
 		if (state.buttons & 1) {
 			/* Primary (e.g. left) mouse button is held. */
-			printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
+			//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
 			if((state.x >= x0)&&(state.x <= x0+sizeX0)){
 				if((state.y >= y0)&&(state.y <= y0+sizeX0)){
 					toogle();
@@ -42,10 +42,10 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 	}
 }
 
-void myButton::registerCallBack(myButtonCallBack* object, funcCallBack c1){
+void myButton::registerCallBack(myButtonCallBack* object, funcCallBack f1){
 	ObjectCallBack obj1;
 	obj1.object = object;
-	obj1.func = c1;
+	obj1.func = f1;
 	CallBackList.push_back(obj1);
 }
 

@@ -14,7 +14,6 @@
 #include "classCallBack.h"
 
 
-
 struct Position {
     int x;
     int y;
@@ -68,17 +67,24 @@ private:
 	int numero_y;
 	Quadrado** QuadradosList;
 
+	ALLEGRO_FONT *text_font = NULL;
+
+	bool play; //If true game is playing if false it is the development fase.
+
 public:
 	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
 	~hall();
 	void draw_line();
+	void draw_text();
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	Position get_Position(int pos_x, int pos_y);
 	void setButtonCallBack(myButton &b1);
-	//int contNeighbors(int x, int y);
+	int contNeighbors(int x, int y);
+	void contAllNeighbors();
+	void CreateAndKillLife();
 	void FuncCallBack(bool);
 
 };

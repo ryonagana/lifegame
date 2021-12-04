@@ -283,8 +283,8 @@ void update(){
 int main(int argc, char *argv[])
 {
 	init_allegro();
-	hall obj1(50, 150, 100, 8, 2);
-	hall obj2(450, 350, 20, 10, 20);
+	//hall obj1(50, 150, 100, 8, 2);
+	hall obj2(50, 150, 20, 70, 35);
 	myButton b1(300, 0, 100, 100);
 	obj2.setButtonCallBack(b1);
 	text_font = al_create_builtin_font();
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
 		}
 		player_input_keyboard(&event);
 		player_input_mouse(&event);
-		obj1.mouse_event_input(&event);
+		//obj1.mouse_event_input(&event);
 		obj2.mouse_event_input(&event);
 		b1.mouse_event_input(&event);
 
@@ -334,14 +334,14 @@ int main(int argc, char *argv[])
 			// Redraw
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			line_draw();
-			fill_rectangle(0, 0, white);
-			fill_rectangle(number_x-1, 0, white);
-			fill_rectangle(0, number_y-1, white);
-			fill_rectangle(number_x-1, number_y-1, white);
-			fill_position(249, 350);
+			//fill_rectangle(0, 0, white);
+			//fill_rectangle(number_x-1, 0, white);
+			//fill_rectangle(0, number_y-1, white);
+			//fill_rectangle(number_x-1, number_y-1, white);
+			//fill_position(249, 350);
 			//fill_rectangle(yellow_x, yellow_y, yellow);
 			lifegame_draw();
-			obj1.update();
+			//obj1.update();
 			obj2.update();
 			b1.update();
 			al_flip_display();

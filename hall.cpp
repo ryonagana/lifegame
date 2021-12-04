@@ -11,8 +11,10 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	for(int i = 0;i<numeroX;i++){
 		QuadradosList[i] = new Quadrado[numeroY];
 	}
-
 	setQuadradoInf();
+
+	text_font = al_create_builtin_font();
+	play = false;
 }
 
 hall::~hall(){
@@ -39,9 +41,27 @@ void hall::draw_line(){
     }
 }
 
+void hall::draw_text(){
+	//int number = contNeighbors(9, 19);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "HALL");
+    //al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Number of Neighbors: %d", number);
+}
+
+void hall::CreateAndKillLife(){
+	if(play){
+		for(int i = 0;i<numero_x;i++){
+			for(int j = 0;j<numero_y;j++){
+				QuadradosList[i][j].checkNeighbors();
+			}
+		}
+	}
+}
+
 void hall::update(){
 	draw_line();
-
+	draw_text();
+	contAllNeighbors();
+	CreateAndKillLife();
 	for(int i = 0;i<numero_x;i++){
 		for(int j = 0;j<numero_y;j++){
 			//QuadradosList[i][j].checkNeighbors();
@@ -58,6 +78,56 @@ void hall::setQuadradoInf(){
 				QuadradosList[i][j].y = y0 + size*j;
 			}
 		}
+}
+
+int hall::contNeighbors(int x, int y){
+	int count = 0;
+
+	if(x > 0){
+		if(QuadradosList[x-1][y].checked){
+			count++;
+		}
+		if((y > 0)&&(QuadradosList[x-1][y-1].checked)){
+			count++;
+		}
+		if((y < numero_y-1)&&(QuadradosList[x-1][y+1].checked)){
+			count++;
+		}
+	}
+
+	if(x < numero_x-1){
+		if(QuadradosList[x+1][y].checked){
+			count++;
+		}
+		if((y > 0)&&(QuadradosList[x+1][y-1].checked)){
+			count++;
+		}
+		if((y < numero_y-1)&&(QuadradosList[x+1][y+1].checked)){
+			count++;
+		}
+	}
+
+	if(y > 0){
+		if(QuadradosList[x][y-1].checked){
+			count++;
+		}
+	}
+
+	if(y < numero_y-1){
+		if(QuadradosList[x][y+1].checked){
+			count++;
+		}
+	}
+
+	return count;
+}
+
+void hall::contAllNeighbors(){
+	for(int i = 0;i<numero_x;i++){
+		for(int j = 0;j<numero_y;j++){
+			QuadradosList[i][j].number_of_neighbors = contNeighbors(i,j);
+		}
+	}
 }
 
 Position hall::get_Position(int pos_x, int pos_y){
@@ -92,9 +162,11 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 		if (state.buttons & 1) {
 			/* Primary (e.g. left) mouse button is held. */
 			//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
-			Position Q1 = get_Position(state.x, state.y);
-			if((Q1.x >= 0)&&(Q1.y >= 0)){
-				QuadradosList[Q1.x][Q1.y].toogle();
+			if(!play){
+				Position Q1 = get_Position(state.x, state.y);
+				if((Q1.x >= 0)&&(Q1.y >= 0)){
+					QuadradosList[Q1.x][Q1.y].toogle();
+				}
 			}
 		}
 	}
@@ -105,7 +177,7 @@ void hall::checkQuadrado(int x, int y, bool check){
 }
 
 void hall::FuncCallBack(bool pressed){
-	printf("\n\nDEU CERTO!!!! %d \n\n", pressed);
+	play = pressed;
 }
 
 void hall::setButtonCallBack(myButton &b1){
