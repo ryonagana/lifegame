@@ -10,6 +10,10 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <iostream>
+#include "button.h"
+#include "classCallBack.h"
+
+
 
 struct Position {
     int x;
@@ -22,16 +26,22 @@ public:
 	int x;
 	int y;
 	int size;
+	int number_of_neighbors;
 	ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
 	Quadrado(){
 		checked = false;
 		x = 0;
 		y = 0;
 		size = 50;
+		number_of_neighbors = 0;
 	}
 
 	void checkNeighbors(){
-
+		if(!checked){
+			if(number_of_neighbors == 3) toogle();
+		}else{
+			if((number_of_neighbors < 2)||(number_of_neighbors > 3)) toogle();
+		}
 	}
 
 	void draw(){
@@ -49,7 +59,7 @@ public:
 	}
 };
 
-class hall{
+class hall: public myButtonCallBack{
 private:
 	int x0;
 	int y0;
@@ -60,14 +70,17 @@ private:
 
 public:
 	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
+	~hall();
 	void draw_line();
-	void update(ALLEGRO_EVENT *ev);
+	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	Position get_Position(int pos_x, int pos_y);
+	void setButtonCallBack(myButton &b1);
+	//int contNeighbors(int x, int y);
+	void FuncCallBack(bool);
 
 };
-
 
 #endif

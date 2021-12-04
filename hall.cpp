@@ -15,6 +15,10 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	setQuadradoInf();
 }
 
+hall::~hall(){
+
+}
+
 void hall::draw_line(){
    ALLEGRO_COLOR color;
    color = al_map_rgb_f(1.0, 1.0, 1.0);
@@ -35,11 +39,12 @@ void hall::draw_line(){
     }
 }
 
-void hall::update(ALLEGRO_EVENT *ev){
+void hall::update(){
 	draw_line();
 
 	for(int i = 0;i<numero_x;i++){
 		for(int j = 0;j<numero_y;j++){
+			//QuadradosList[i][j].checkNeighbors();
 			QuadradosList[i][j].draw();
 		}
 	}
@@ -97,4 +102,13 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 
 void hall::checkQuadrado(int x, int y, bool check){
 	QuadradosList[x][y].checked = check;
+}
+
+void hall::FuncCallBack(bool pressed){
+	printf("\n\nDEU CERTO!!!! %d \n\n", pressed);
+}
+
+void hall::setButtonCallBack(myButton &b1){
+	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
+	b1.registerCallBack(this, f1);
 }

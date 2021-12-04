@@ -10,6 +10,7 @@
 #include <math.h>
 #include <iostream>
 #include "hall.h"
+#include "button.h"
 
 #define SCREEN_W 1500
 #define SCREEN_H 900
@@ -195,6 +196,8 @@ int init_allegro(void)
 			return 1;
 		}
 
+		al_init_image_addon();
+
 		if (!al_install_keyboard()) {
 		    goto error_critical;
 		}
@@ -279,10 +282,14 @@ void update(){
 
 int main(int argc, char *argv[])
 {
+	init_allegro();
 	hall obj1(50, 150, 100, 8, 2);
 	hall obj2(450, 350, 20, 10, 20);
-	init_allegro();
+	myButton b1(300, 0, 100, 100);
+	obj2.setButtonCallBack(b1);
 	text_font = al_create_builtin_font();
+
+
 
 	// Game loop
 	while (running) {
@@ -296,6 +303,9 @@ int main(int argc, char *argv[])
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
 		//bool get_event = false;
 		//al_wait_for_event(event_queue, &event);
+
+
+
 
 		// Handle the event
 		if (get_event) {
@@ -316,6 +326,8 @@ int main(int argc, char *argv[])
 		player_input_mouse(&event);
 		obj1.mouse_event_input(&event);
 		obj2.mouse_event_input(&event);
+		b1.mouse_event_input(&event);
+
 		//update();
 		// Check if we need to redraw
 		if (redraw && al_is_event_queue_empty(event_queue)) {
@@ -329,8 +341,9 @@ int main(int argc, char *argv[])
 			fill_position(249, 350);
 			//fill_rectangle(yellow_x, yellow_y, yellow);
 			lifegame_draw();
-			obj1.update(&event);
-			obj2.update(&event);
+			obj1.update();
+			obj2.update();
+			b1.update();
 			al_flip_display();
 			redraw = false;
 		}
