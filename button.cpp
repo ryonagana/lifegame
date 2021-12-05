@@ -22,12 +22,16 @@ void myButton::toogle(){
 			pressed = true;
 		}
 
-		for(int i = 0;i<CallBackList.size();i++){
+		for(size_t i = 0;i<CallBackList.size();i++){
 			ObjectCallBack obj1;
 			obj1.object = CallBackList[i].object;
 			obj1.func = CallBackList[i].func;
 			(obj1.object->*obj1.func)(pressed);
 		}
+}
+
+void myButton::setEvents(ALLEGRO_EVENT *ev){
+	mouse_event_input(ev);
 }
 
 void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
