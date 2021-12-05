@@ -47,6 +47,21 @@ void hall::draw_text(){
     //al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Number of Neighbors: %d", number);
 }
 
+void hall::resetAll(bool){
+	if(!play){
+		for(int i = 0;i<numero_x;i++){
+			for(int j = 0;j<numero_y;j++){
+				QuadradosList[i][j].checked = false;
+			}
+		}
+	}
+}
+
+void hall::setButtonCallBack_Reset(myButton &b1){
+	funcCallBack f1 = &myButtonCallBack::resetAll;
+	b1.registerCallBack(this, f1);
+}
+
 void hall::CreateAndKillLife(){
 	if(play){
 		for(int i = 0;i<numero_x;i++){

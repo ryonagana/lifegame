@@ -63,8 +63,20 @@ void myButton::load_sprites()
    if (!picture2){
 	   printf("\n\nNAO CARREGOU picture2\n\n");
    }
+}
 
+void myButton::set_sprite1(const char *filename){
+	picture1 = al_load_bitmap(filename);
+	if (!picture1){
+		printf("\n\nNAO CARREGOU Sprite1\n\n");
+	}
+}
 
+void myButton::set_sprite2(const char *filename){
+	picture2 = al_load_bitmap(filename);
+	if (!picture2){
+		printf("\n\nNAO CARREGOU Sprite2\n\n");
+	}
 }
 
 void myButton::draw_sprites(){

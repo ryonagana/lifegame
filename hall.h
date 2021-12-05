@@ -76,12 +76,14 @@ public:
 	~hall();
 	void draw_line();
 	void draw_text();
+	void resetAll(bool);
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	Position get_Position(int pos_x, int pos_y);
 	void setButtonCallBack(myButton &b1);
+	void setButtonCallBack_Reset(myButton &b1);
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
 	void CreateAndKillLife();

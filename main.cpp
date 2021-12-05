@@ -285,8 +285,13 @@ int main(int argc, char *argv[])
 	init_allegro();
 	//hall obj1(50, 150, 100, 8, 2);
 	hall obj2(50, 150, 20, 70, 35);
-	myButton b1(300, 0, 100, 100);
-	obj2.setButtonCallBack(b1);
+	myButton playButton(300, 0, 100, 100);
+	myButton resetButton(450, 0, 100, 100);
+	resetButton.set_sprite1("pictures//reset.png");
+	resetButton.set_sprite2("pictures//reset.png");
+
+	obj2.setButtonCallBack(playButton);
+	obj2.setButtonCallBack_Reset(resetButton);
 	text_font = al_create_builtin_font();
 
 
@@ -326,7 +331,8 @@ int main(int argc, char *argv[])
 		player_input_mouse(&event);
 		//obj1.mouse_event_input(&event);
 		obj2.mouse_event_input(&event);
-		b1.mouse_event_input(&event);
+		playButton.mouse_event_input(&event);
+		resetButton.mouse_event_input(&event);
 
 		//update();
 		// Check if we need to redraw
@@ -343,7 +349,8 @@ int main(int argc, char *argv[])
 			lifegame_draw();
 			//obj1.update();
 			obj2.update();
-			b1.update();
+			resetButton.update();
+			playButton.update();
 			al_flip_display();
 			redraw = false;
 		}

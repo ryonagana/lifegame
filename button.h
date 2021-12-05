@@ -39,6 +39,8 @@ public:
 	void load_sprites();
 	void draw_sprites();
 	void registerCallBack(myButtonCallBack* object, funcCallBack c1);
+	void set_sprite1(const char *filename);
+	void set_sprite2(const char *filename);
 };
 
 
