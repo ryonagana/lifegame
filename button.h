@@ -27,12 +27,14 @@ private:
 	int sizeX0;
 	int sizeY0;
 	bool pressed;
+	bool visible;
 	ALLEGRO_BITMAP *picture1 = NULL;
 	ALLEGRO_BITMAP *picture2 = NULL;
 	std::vector<ObjectCallBack> CallBackList;
 
 public:
 	myButton(int x, int y, int sizeX, int sizeY);
+	void setVisible(bool v1);
 	void toogle();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	void update();

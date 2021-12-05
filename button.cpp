@@ -7,7 +7,12 @@ myButton::myButton(int x, int y, int sizeX, int sizeY){
 	sizeX0 = sizeX;
 	sizeY0 = sizeY;
 	pressed = false;
+	visible = true;
 	load_sprites();
+}
+
+void myButton::setVisible(bool v1){
+	visible = v1;
 }
 
 void myButton::toogle(){
@@ -28,14 +33,16 @@ void myButton::toogle(){
 void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 	ALLEGRO_MOUSE_STATE state;
 
-	if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-		al_get_mouse_state(&state);
-		if (state.buttons & 1) {
-			/* Primary (e.g. left) mouse button is held. */
-			//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
-			if((state.x >= x0)&&(state.x <= x0+sizeX0)){
-				if((state.y >= y0)&&(state.y <= y0+sizeX0)){
-					toogle();
+	if(visible == true){
+		if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+			al_get_mouse_state(&state);
+			if (state.buttons & 1) {
+				/* Primary (e.g. left) mouse button is held. */
+				//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
+				if((state.x >= x0)&&(state.x <= x0+sizeX0)){
+					if((state.y >= y0)&&(state.y <= y0+sizeX0)){
+						toogle();
+					}
 				}
 			}
 		}
@@ -50,7 +57,7 @@ void myButton::registerCallBack(myButtonCallBack* object, funcCallBack f1){
 }
 
 void myButton::update(){
-	draw_sprites();
+	if(visible == true)draw_sprites();
 }
 
 void myButton::load_sprites()

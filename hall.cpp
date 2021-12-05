@@ -13,8 +13,16 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	}
 	setQuadradoInf();
 
+	QuadradosListBackup = new Quadrado*[numeroX];
+	for(int i = 0;i<numeroX;i++){
+		QuadradosListBackup[i] = new Quadrado[numeroY];
+	}
+
 	text_font = al_create_builtin_font();
 	play = false;
+
+	buttonReset = nullptr;
+	buttonRestore = nullptr;
 }
 
 hall::~hall(){
@@ -57,8 +65,33 @@ void hall::resetAll(bool){
 	}
 }
 
+void hall::makeScreenBackup(){
+	for(int i = 0;i<numero_x;i++){
+		for(int j = 0;j<numero_y;j++){
+			QuadradosListBackup[i][j].checked = QuadradosList[i][j].checked;
+		}
+	}
+}
+
+void hall::restoreScreenBackup(bool){
+	if(!play){
+		for(int i = 0;i<numero_x;i++){
+			for(int j = 0;j<numero_y;j++){
+				QuadradosList[i][j].checked = QuadradosListBackup[i][j].checked;
+			}
+		}
+	}
+}
+
 void hall::setButtonCallBack_Reset(myButton &b1){
+	buttonReset = &b1;
 	funcCallBack f1 = &myButtonCallBack::resetAll;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_Restore(myButton &b1){
+	buttonRestore = &b1;
+	funcCallBack f1 = &myButtonCallBack::restoreScreenBackup;
 	b1.registerCallBack(this, f1);
 }
 
@@ -192,6 +225,10 @@ void hall::checkQuadrado(int x, int y, bool check){
 }
 
 void hall::FuncCallBack(bool pressed){
+	buttonReset->setVisible(!pressed);
+	buttonRestore->setVisible(!pressed);
+
+	if(pressed == true)makeScreenBackup();
 	play = pressed;
 }
 

@@ -66,8 +66,11 @@ private:
 	int numero_x;
 	int numero_y;
 	Quadrado** QuadradosList;
+	Quadrado** QuadradosListBackup;
 
 	ALLEGRO_FONT *text_font = NULL;
+	myButton* buttonReset;
+	myButton* buttonRestore;
 
 	bool play; //If true game is playing if false it is the development fase.
 
@@ -77,6 +80,8 @@ public:
 	void draw_line();
 	void draw_text();
 	void resetAll(bool);
+	void makeScreenBackup();
+	void restoreScreenBackup(bool);
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
@@ -84,6 +89,7 @@ public:
 	Position get_Position(int pos_x, int pos_y);
 	void setButtonCallBack(myButton &b1);
 	void setButtonCallBack_Reset(myButton &b1);
+	void setButtonCallBack_Restore(myButton &b1);
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
 	void CreateAndKillLife();

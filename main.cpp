@@ -287,11 +287,17 @@ int main(int argc, char *argv[])
 	hall obj2(50, 150, 20, 70, 35);
 	myButton playButton(300, 0, 100, 100);
 	myButton resetButton(450, 0, 100, 100);
+	myButton restoreButton(650, 0, 100, 100);
+
 	resetButton.set_sprite1("pictures//reset.png");
 	resetButton.set_sprite2("pictures//reset.png");
 
+	restoreButton.set_sprite1("pictures//restore.png");
+	restoreButton.set_sprite2("pictures//restore.png");
+
 	obj2.setButtonCallBack(playButton);
 	obj2.setButtonCallBack_Reset(resetButton);
+	obj2.setButtonCallBack_Restore(restoreButton);
 	text_font = al_create_builtin_font();
 
 
@@ -333,6 +339,7 @@ int main(int argc, char *argv[])
 		obj2.mouse_event_input(&event);
 		playButton.mouse_event_input(&event);
 		resetButton.mouse_event_input(&event);
+		restoreButton.mouse_event_input(&event);
 
 		//update();
 		// Check if we need to redraw
@@ -351,6 +358,7 @@ int main(int argc, char *argv[])
 			obj2.update();
 			resetButton.update();
 			playButton.update();
+			restoreButton.update();
 			al_flip_display();
 			redraw = false;
 		}

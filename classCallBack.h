@@ -9,6 +9,7 @@ public:
 	virtual ~myButtonCallBack(){}
 	virtual void FuncCallBack(bool) = 0;
 	virtual void resetAll(bool) = 0;
+	virtual void restoreScreenBackup(bool) = 0;
 };
 
 #endif
