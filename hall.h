@@ -71,6 +71,7 @@ private:
 	ALLEGRO_FONT *text_font = NULL;
 	myButton* buttonReset;
 	myButton* buttonRestore;
+	myButton* buttonFunPatterns;
 
 	bool play; //If true game is playing if false it is the development fase.
 
@@ -82,6 +83,7 @@ public:
 	void resetAll(bool);
 	void makeScreenBackup();
 	void restoreScreenBackup(bool);
+	void loadFunPatterns(bool);
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
@@ -90,6 +92,7 @@ public:
 	void setButtonCallBack(myButton &b1);
 	void setButtonCallBack_Reset(myButton &b1);
 	void setButtonCallBack_Restore(myButton &b1);
+	void setButtonCallBack_FunPatterns(myButton &b1);
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
 	void CreateAndKillLife();

@@ -294,6 +294,7 @@ int main(int argc, char *argv[])
 	myButton playButton(650, 40, 100, 100);
 	myButton resetButton(760, 40, 100, 100);
 	myButton restoreButton(900, 40, 100, 100);
+	myButton funButton(1040, 40, 100, 100);
 
 	resetButton.set_sprite1("pictures//reset.png");
 	resetButton.set_sprite2("pictures//reset.png");
@@ -301,9 +302,13 @@ int main(int argc, char *argv[])
 	restoreButton.set_sprite1("pictures//restore.png");
 	restoreButton.set_sprite2("pictures//restore.png");
 
+	funButton.set_sprite1("pictures//fun.png");
+	funButton.set_sprite2("pictures//fun.png");
+
 	obj2.setButtonCallBack(playButton);
 	obj2.setButtonCallBack_Reset(resetButton);
 	obj2.setButtonCallBack_Restore(restoreButton);
+	obj2.setButtonCallBack_FunPatterns(funButton);
 	text_font = al_create_builtin_font();
 
 
@@ -346,6 +351,7 @@ int main(int argc, char *argv[])
 		playButton.mouse_event_input(&event);
 		resetButton.mouse_event_input(&event);
 		restoreButton.mouse_event_input(&event);
+		funButton.mouse_event_input(&event);
 
 		//update();
 		// Check if we need to redraw
@@ -365,6 +371,7 @@ int main(int argc, char *argv[])
 			resetButton.update();
 			playButton.update();
 			restoreButton.update();
+			funButton.update();
 			al_flip_display();
 			redraw = false;
 		}

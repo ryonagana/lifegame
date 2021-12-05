@@ -23,6 +23,7 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 
 	buttonReset = nullptr;
 	buttonRestore = nullptr;
+	buttonFunPatterns = nullptr;
 }
 
 hall::~hall(){
@@ -52,7 +53,7 @@ void hall::draw_line(){
 void hall::draw_text(){
 	//int number = contNeighbors(9, 19);
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "HALL");
-    //al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Number of Neighbors: %d", number);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "%d X %d", numero_x, numero_y);
 }
 
 void hall::resetAll(bool){
@@ -92,6 +93,12 @@ void hall::setButtonCallBack_Reset(myButton &b1){
 void hall::setButtonCallBack_Restore(myButton &b1){
 	buttonRestore = &b1;
 	funcCallBack f1 = &myButtonCallBack::restoreScreenBackup;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_FunPatterns(myButton &b1){
+	buttonFunPatterns = &b1;
+	funcCallBack f1 = &myButtonCallBack::loadFunPatterns;
 	b1.registerCallBack(this, f1);
 }
 
@@ -224,9 +231,60 @@ void hall::checkQuadrado(int x, int y, bool check){
 	QuadradosList[x][y].checked = check;
 }
 
+void hall::loadFunPatterns(bool){
+	if(!play){
+
+		//Pattern 1
+		int x1 = 106;
+		int y1 = 25;
+		QuadradosList[106][25].checked = true;
+		QuadradosList[106][26].checked = true;
+		QuadradosList[107][25].checked = true;
+		QuadradosList[108][25].checked = true;
+		QuadradosList[109][25].checked = true;
+		QuadradosList[110][25].checked = true;
+		QuadradosList[110][26].checked = true;
+
+		//Pattern 2
+		//int x2 = 110;
+		//int y2 = 0;
+		int x2 = 100;
+		int y2 = 0;
+		QuadradosList[x2][y2].checked = true;
+		QuadradosList[x2][y2+1].checked = true;
+		QuadradosList[x2][y2+2].checked = true;
+		QuadradosList[x2+1][y2+2].checked = true;
+		QuadradosList[x2+2][y2+1].checked = true;
+
+		//Pattern 3
+		//int x3 = 74;
+		//int y3 = 40;
+		int x3 = 74;
+		int y3 = 30;
+		QuadradosList[x3][y3].checked = true;
+		QuadradosList[x3+1][y3].checked = true;
+		QuadradosList[x3][y3+1].checked = true;
+		QuadradosList[x3+1][y3+1].checked = true;
+
+
+
+		//Pattern 4
+		int x4 = 24;
+		int y4 = 26;
+		QuadradosList[x4][y4].checked = true;
+		QuadradosList[x4][y4-1].checked = true;
+		QuadradosList[x4][y4+1].checked = true;
+		QuadradosList[x4+1][y4].checked = true;
+		QuadradosList[x4+2][y4].checked = true;
+		QuadradosList[x4+3][y4].checked = true;
+		QuadradosList[x4+4][y4].checked = true;
+	}
+}
+
 void hall::FuncCallBack(bool pressed){
 	buttonReset->setVisible(!pressed);
 	buttonRestore->setVisible(!pressed);
+	buttonFunPatterns->setVisible(!pressed);
 
 	if(pressed == true)makeScreenBackup();
 	play = pressed;
