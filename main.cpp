@@ -12,8 +12,8 @@
 #include "hall.h"
 #include "button.h"
 
-#define SCREEN_W 1500
-#define SCREEN_H 900
+#define SCREEN_W 1300
+#define SCREEN_H 700
 
 const float FPS = 60;
 
@@ -284,7 +284,10 @@ int main(int argc, char *argv[])
 {
 	init_allegro();
 	//hall obj1(50, 150, 100, 8, 2);
-	hall obj2(50, 150, 20, 70, 35);
+	int blocSize = 10;
+	int numBlocW = (SCREEN_W-100)/blocSize;
+	int numBlocH = (SCREEN_H-170)/blocSize;
+	hall obj2(50, 150, blocSize, numBlocW, numBlocH);
 	myButton playButton(300, 0, 100, 100);
 	myButton resetButton(450, 0, 100, 100);
 	myButton restoreButton(650, 0, 100, 100);
