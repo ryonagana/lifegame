@@ -1,4 +1,6 @@
 #include "hall.h"
+#include "main.h"
+static float evolution_time = 0.0f;
 
 hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	x0 = x;
@@ -104,12 +106,19 @@ void hall::setButtonCallBack_FunPatterns(myButton &b1){
 
 void hall::CreateAndKillLife(){
 	if(play){
-		for(int i = 0;i<numero_x;i++){
-			for(int j = 0;j<numero_y;j++){
-				QuadradosList[i][j].checkNeighbors();
-			}
-		}
+	    printf("E.T: %.2f\n\n", evolution_time);
+        if(al_get_timer_count(timer) / 30 > evolution_time ){
+
+            evolution_time = (al_get_timer_count(timer) / 30) + 2;
+            for(int i = 0;i<numero_x;i++){
+                for(int j = 0;j<numero_y;j++){
+                    QuadradosList[i][j].checkNeighbors();
+                }
+            }
+
+        }
 	}
+
 }
 
 void hall::update(){
