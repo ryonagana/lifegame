@@ -120,9 +120,12 @@ void fill_rectangle(int x, int y, ALLEGRO_COLOR color){
 void lifegame_draw(){
 
     al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100, 0, "Life Game!");
-    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 10, 0, "Numero X: %d", number_x);
-    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 20, 0, "Numero Y: %d", number_y);
-    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 40, 0, "Press SPACE or ESC to Restart!");
+    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 15, 0, "3 WHITE neighbors and the BLACK becomes WHITE!! (It is LIVE!)");
+    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 25, 0, "Less than 2 WHITE neighbors, or more than 3, and the WHITE");
+    al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 35, 0, "becomes BLACK!! (It is DEAD!)");
+
+    //al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 10, 0, "Numero X: %d", number_x);
+    //al_draw_textf(text_font,al_map_rgb(255,255,255), init_hall_x, init_hall_y - 100 + 20, 0, "Numero Y: %d", number_y);
 }
 
 void player_input_mouse(ALLEGRO_EVENT *ev){
@@ -288,9 +291,9 @@ int main(int argc, char *argv[])
 	int numBlocW = (SCREEN_W-100)/blocSize;
 	int numBlocH = (SCREEN_H-170)/blocSize;
 	hall obj2(50, 150, blocSize, numBlocW, numBlocH);
-	myButton playButton(300, 0, 100, 100);
-	myButton resetButton(450, 0, 100, 100);
-	myButton restoreButton(650, 0, 100, 100);
+	myButton playButton(650, 40, 100, 100);
+	myButton resetButton(760, 40, 100, 100);
+	myButton restoreButton(900, 40, 100, 100);
 
 	resetButton.set_sprite1("pictures//reset.png");
 	resetButton.set_sprite2("pictures//reset.png");
