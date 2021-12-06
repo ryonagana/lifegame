@@ -30,7 +30,34 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=gnu++14" />
+			<Add directory="/opt/liballegro-5.2.7/include" />
 		</Compiler>
+		<Linker>
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_acodec.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_audio.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_color.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_dialog.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_font.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_image.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_main.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_memfile.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_primitives.so" />
+			<Add library="/opt/liballegro-5.2.7/lib/liballegro_ttf.so" />
+			<Add directory="/opt/liballegro-5.2.7/lib/" />
+		</Linker>
+		<Unit filename="bigTextLabel.cpp" />
+		<Unit filename="bigTextLabel.h" />
+		<Unit filename="button.cpp" />
+		<Unit filename="button.h" />
+		<Unit filename="classCallBack.h" />
+		<Unit filename="gameScreenContext.cpp" />
+		<Unit filename="gameScreenContext.h" />
+		<Unit filename="hall.cpp" />
+		<Unit filename="hall.h" />
+		<Unit filename="interfaceComponent.h" />
+		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

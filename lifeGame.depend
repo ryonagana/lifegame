@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1638758302 source:/home/archdark/projetos/cpp/lifegame/hall.cpp
+1638761786 source:/home/archdark/projetos/cpp/lifegame/hall.cpp
 	"hall.h"
-	"main.h"
+	<cstdio>
+	<cstdlib>
 
-1638758302 /home/archdark/projetos/cpp/lifegame/hall.h
+1638761891 /home/archdark/projetos/cpp/lifegame/hall.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -335,10 +336,10 @@
 	<iostream>
 	<vector>
 
-1638708443 /home/archdark/projetos/cpp/lifegame/classCallBack.h
+1638761439 /home/archdark/projetos/cpp/lifegame/classCallBack.h
 	<iostream>
 
-1638758302 source:/home/archdark/projetos/cpp/lifegame/main.cpp
+1638761287 source:/home/archdark/projetos/cpp/lifegame/main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -355,10 +356,10 @@
 	"gameScreenContext.h"
 	"bigTextLabel.h"
 
-1638758745 source:/home/archdark/projetos/cpp/lifegame/button.cpp
+1638758830 source:/home/archdark/projetos/cpp/lifegame/button.cpp
 	"button.h"
 
-1638758296 /home/archdark/projetos/cpp/lifegame/main.h
+1638758823 /home/archdark/projetos/cpp/lifegame/main.h
 
 1638758302 source:/home/archdark/projetos/cpp/lifegame/bigTextLabel.cpp
 	"bigTextLabel.h"

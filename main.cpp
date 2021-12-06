@@ -110,6 +110,9 @@ int main()
 	myButton funButton(1040, 40, 100, 100);
 	bigTestLabel text1(50,50);
 
+	myButton nextSpeedButton(900,40,100,100);
+	myButton prevSpeedButton(900,40,100,100);
+
 	text1.insertText("Life Game!");
 	text1.insertText("");
 	text1.insertText("3 WHITE neighbors and the BLACK becomes WHITE!! (It is ALIVE!)");
@@ -125,10 +128,19 @@ int main()
 	funButton.set_sprite1("pictures//fun.png");
 	funButton.set_sprite2("pictures//fun.png");
 
+	nextSpeedButton.set_sprite1("pictures//next.png");
+	nextSpeedButton.set_sprite1("pictures//next.png");
+
+    prevSpeedButton.set_sprite1("pictures//next.png");
+	prevSpeedButton.set_sprite1("pictures//next.png");
+
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
 	hall1.setButtonCallBack_Restore(restoreButton);
     hall1.setButtonCallBack_FunPatterns(funButton);
+    hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
+    hall1.setButtonCallBack_NextSpeed(prevSpeedButton);
+    hall1.setGlobalTimer(timer);
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);

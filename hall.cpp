@@ -1,8 +1,29 @@
 #include "hall.h"
-#include "main.h"
-static float evolution_time = 0.0f;
+#include <cstdio>
+#include <cstdlib>
 
-hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
+static float speed_table_text[4] = {
+    0.25,
+    0.50,
+    1.0,
+    0
+};
+
+static int speed_table[4] = {
+    60, // 0.25
+    30,// 0.50
+    1 //  1.0
+};
+
+enum {
+    SPEED_SLOWER,
+    SPEED_SLOW,
+    SPEED_NORMAL
+};
+
+static int actual_speed = SPEED_SLOW;
+
+hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceComponent() {
 	x0 = x;
 	y0 = y;
 	size = sizeJ;
@@ -26,6 +47,13 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	buttonReset = nullptr;
 	buttonRestore = nullptr;
 	buttonFunPatterns = nullptr;
+	evolution_speed = speed_table_text[actual_speed];
+
+
+	if(!timer){
+        fprintf(stdout, "TIMER IS NULL %s:%d",__FUNCTION__, __LINE__);
+	}
+
 }
 
 hall::~hall(){
@@ -54,8 +82,10 @@ void hall::draw_line(){
 
 void hall::draw_text(){
 	//int number = contNeighbors(9, 19);
-    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "HALL");
-    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "%d X %d", numero_x, numero_y);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 35, 0, "HALL");
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "%d X %d", numero_x, numero_y);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Evolution Speed: %.2f", speed_table_text[actual_speed]);
+
 }
 
 void hall::resetAll(bool){
@@ -106,10 +136,11 @@ void hall::setButtonCallBack_FunPatterns(myButton &b1){
 
 void hall::CreateAndKillLife(){
 	if(play){
-	    printf("E.T: %.2f\n\n", evolution_time);
-        if(al_get_timer_count(timer) / 30 > evolution_time ){
 
-            evolution_time = (al_get_timer_count(timer) / 30) + 2;
+
+        if(al_get_timer_count(this->timer) / speed_table[actual_speed] > evolution_speed ){
+
+            evolution_speed = (al_get_timer_count(this->timer) / speed_table[actual_speed]);
             for(int i = 0;i<numero_x;i++){
                 for(int j = 0;j<numero_y;j++){
                     QuadradosList[i][j].checkNeighbors();
@@ -306,4 +337,26 @@ void hall::FuncCallBack(bool pressed){
 void hall::setButtonCallBack(myButton &b1){
 	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
 	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_NextSpeed(myButton &b1){
+    funcCallBack cb = &myButtonCallBack::NextSpeed;
+    b1.registerCallBack(this,cb);
+}
+void hall::setButtonCallBack_PrevSpeed(myButton &b1){
+    funcCallBack cb = &myButtonCallBack::PrevSpeed;
+    b1.registerCallBack(this,cb);
+}
+
+void hall::NextSpeed(bool t){
+    if((actual_speed % 3) == 0){
+        actual_speed = 0;
+    }
+    actual_speed++;
+
+}
+
+void hall::PrevSpeed(bool t) {
+    if(actual_speed < 0) actual_speed = 3;
+    actual_speed--;
 }
