@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1638710962 source:/home/archdark/projetos/cpp/lifegame/hall.cpp
+1638758302 source:/home/archdark/projetos/cpp/lifegame/hall.cpp
 	"hall.h"
 	"main.h"
 
-1638708443 /home/archdark/projetos/cpp/lifegame/hall.h
+1638758302 /home/archdark/projetos/cpp/lifegame/hall.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -13,6 +13,7 @@
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_native_dialog.h>
 	<iostream>
+	"interfaceComponent.h"
 	"button.h"
 	"classCallBack.h"
 
@@ -320,7 +321,7 @@
 1638399904 /opt/liballegro-5.2.7/include/allegro5/allegro_native_dialog.h
 	"allegro5/allegro.h"
 
-1638708443 /home/archdark/projetos/cpp/lifegame/button.h
+1638758302 /home/archdark/projetos/cpp/lifegame/button.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -329,6 +330,7 @@
 	<allegro5/allegro_primitives.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_native_dialog.h>
+	"interfaceComponent.h"
 	"classCallBack.h"
 	<iostream>
 	<vector>
@@ -336,7 +338,7 @@
 1638708443 /home/archdark/projetos/cpp/lifegame/classCallBack.h
 	<iostream>
 
-1638710950 source:/home/archdark/projetos/cpp/lifegame/main.cpp
+1638758302 source:/home/archdark/projetos/cpp/lifegame/main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -348,12 +350,51 @@
 	<stdio.h>
 	<math.h>
 	<iostream>
-	"main.h"
 	"hall.h"
 	"button.h"
+	"gameScreenContext.h"
+	"bigTextLabel.h"
 
-1638708443 source:/home/archdark/projetos/cpp/lifegame/button.cpp
-	<button.h>
+1638758745 source:/home/archdark/projetos/cpp/lifegame/button.cpp
+	"button.h"
 
-1638711030 /home/archdark/projetos/cpp/lifegame/main.h
+1638758296 /home/archdark/projetos/cpp/lifegame/main.h
+
+1638758302 source:/home/archdark/projetos/cpp/lifegame/bigTextLabel.cpp
+	"bigTextLabel.h"
+
+1638758302 /home/archdark/projetos/cpp/lifegame/bigTextLabel.h
+	"interfaceComponent.h"
+	<vector>
+
+1638758302 /home/archdark/projetos/cpp/lifegame/interfaceComponent.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_native_dialog.h>
+	<iostream>
+
+1638758302 source:/home/archdark/projetos/cpp/lifegame/gameScreenContext.cpp
+	"gameScreenContext.h"
+
+1638758302 /home/archdark/projetos/cpp/lifegame/gameScreenContext.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_native_dialog.h>
+	<stdio.h>
+	<math.h>
+	<iostream>
+	<vector>
+	"interfaceComponent.h"
+	"button.h"
+	"hall.h"
 
