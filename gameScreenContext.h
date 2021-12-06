@@ -30,9 +30,11 @@ public:
 	gameScreenContext();
 	void setScreenSize(int w, int h);
 	void insertComponent(interfaceComponent* c1);
+	void setGlobalTimer(ALLEGRO_TIMER *timer);
 	void setComponents();
 	void setEvents(ALLEGRO_EVENT *ev);
 	void update();
+
 
 };
 

@@ -16,6 +16,12 @@ void gameScreenContext::insertComponent(interfaceComponent* c1){
 	list_of_components.push_back(c1);
 }
 
+void gameScreenContext::setGlobalTimer(ALLEGRO_TIMER *timer){
+	for(size_t i = 0;i<list_of_components.size();i++){
+			list_of_components[i]->setGlobalTimer(timer);
+	}
+}
+
 void gameScreenContext::setComponents(){
 
 }

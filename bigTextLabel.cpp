@@ -25,7 +25,7 @@ void bigTestLabel::insertText(const char* t1){
 }
 
 void bigTestLabel::setEvents(ALLEGRO_EVENT *ev){
-
+	(void)ev;// Left unused
 }
 
 void bigTestLabel::update(){

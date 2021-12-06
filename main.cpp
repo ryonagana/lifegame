@@ -99,6 +99,7 @@ int main()
 	init_allegro();
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
+	gameMainScreen.setGlobalTimer(timer);
 	int blocSize = 10;
 	int numBlocW = (SCREEN_W-100)/blocSize;
 	int numBlocH = (SCREEN_H-170)/blocSize;
@@ -135,6 +136,8 @@ int main()
 	gameMainScreen.insertComponent(&restoreButton);
 	gameMainScreen.insertComponent(&funButton);
 	gameMainScreen.insertComponent(&text1);
+
+	//al_resize_display(display, 1600, 1000); //resize screen
 
 	// Game loop
 	while (running) {

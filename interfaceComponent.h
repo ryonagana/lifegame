@@ -12,9 +12,17 @@
 #include <iostream>
 
 class interfaceComponent{
+protected:
+	ALLEGRO_TIMER *timer;
+
 public:
-	interfaceComponent(){}
+	interfaceComponent(){
+		timer = nullptr;
+	}
 	virtual ~interfaceComponent(){}
+	void setGlobalTimer(ALLEGRO_TIMER *t1){
+		timer = t1;
+	}
 	virtual void setEvents(ALLEGRO_EVENT *ev) = 0;
 	virtual void update() = 0;
 };
