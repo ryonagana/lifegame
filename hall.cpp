@@ -2,17 +2,17 @@
 #include <cstdio>
 #include <cstdlib>
 
-static float speed_table_text[4] = {
+static float speed_table_text[3] = {
     0.25,
     0.50,
-    1.0,
-    0
+    1.0
 };
 
-static int speed_table[4] = {
+static int speed_table[3] = {
     60, // 0.25
     30,// 0.50
-    1 //  1.0
+    1 //  1.0,
+
 };
 
 enum {
@@ -21,7 +21,7 @@ enum {
     SPEED_NORMAL
 };
 
-static int actual_speed = SPEED_SLOW;
+static int actual_speed = SPEED_NORMAL;
 
 hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceComponent() {
 	x0 = x;
@@ -136,17 +136,14 @@ void hall::setButtonCallBack_FunPatterns(myButton &b1){
 
 void hall::CreateAndKillLife(){
 	if(play){
-
-
-        if(al_get_timer_count(this->timer) / speed_table[actual_speed] > evolution_speed ){
-
-            evolution_speed = (al_get_timer_count(this->timer) / speed_table[actual_speed]);
+        if( (al_get_timer_count(this->timer) / speed_table[actual_speed]) > evolution_speed){
             for(int i = 0;i<numero_x;i++){
                 for(int j = 0;j<numero_y;j++){
                     QuadradosList[i][j].checkNeighbors();
                 }
             }
 
+            evolution_speed = (al_get_timer_count(this->timer) / speed_table[actual_speed])+1;
         }
 	}
 
@@ -349,14 +346,16 @@ void hall::setButtonCallBack_PrevSpeed(myButton &b1){
 }
 
 void hall::NextSpeed(bool t){
-    if((actual_speed % 3) == 0){
-        actual_speed = 0;
-    }
+    if(actual_speed > 3 ) actual_speed = 0;
     actual_speed++;
+    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
+    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
 
 }
 
 void hall::PrevSpeed(bool t) {
-    if(actual_speed < 0) actual_speed = 3;
+    if(actual_speed < 0 ) actual_speed = 3;
     actual_speed--;
+    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
+    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
 }

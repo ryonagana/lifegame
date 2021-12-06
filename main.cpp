@@ -110,8 +110,8 @@ int main()
 	myButton funButton(1040, 40, 100, 100);
 	bigTestLabel text1(50,50);
 
-	myButton nextSpeedButton(900,40,100,100);
-	myButton prevSpeedButton(900,40,100,100);
+	myButton nextSpeedButton(1200,60,32,32);
+	myButton prevSpeedButton(1250,60,32,32);
 
 	text1.insertText("Life Game!");
 	text1.insertText("");
@@ -148,7 +148,8 @@ int main()
 	gameMainScreen.insertComponent(&restoreButton);
 	gameMainScreen.insertComponent(&funButton);
 	gameMainScreen.insertComponent(&text1);
-
+	gameMainScreen.insertComponent(&nextSpeedButton);
+	//gameMainScreen.insertComponent(&prevSpeedButton);
 	//al_resize_display(display, 1600, 1000); //resize screen
 
 	// Game loop
