@@ -9,6 +9,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
+#include "interfaceComponent.h"
 #include "classCallBack.h"
 #include <iostream>
 #include <vector>
@@ -20,7 +21,7 @@ struct ObjectCallBack{
 	funcCallBack func;
 };
 
-class myButton{
+class myButton: public interfaceComponent{
 private:
 	int x0;
 	int y0;
@@ -36,6 +37,7 @@ public:
 	myButton(int x, int y, int sizeX, int sizeY);
 	void setVisible(bool v1);
 	void toogle();
+	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	void update();
 	void load_sprites();

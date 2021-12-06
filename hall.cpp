@@ -218,6 +218,10 @@ Position hall::get_Position(int pos_x, int pos_y){
 	return Q1;
 }
 
+void hall::setEvents(ALLEGRO_EVENT *ev){
+	mouse_event_input(ev);
+}
+
 void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 	ALLEGRO_MOUSE_STATE state;
 
@@ -246,13 +250,13 @@ void hall::loadFunPatterns(bool){
 		//Pattern 1
 		int x1 = 106;
 		int y1 = 25;
-		QuadradosList[106][25].checked = true;
-		QuadradosList[106][26].checked = true;
-		QuadradosList[107][25].checked = true;
-		QuadradosList[108][25].checked = true;
-		QuadradosList[109][25].checked = true;
-		QuadradosList[110][25].checked = true;
-		QuadradosList[110][26].checked = true;
+		QuadradosList[x1][y1].checked = true;
+		QuadradosList[x1][y1+1].checked = true;
+		QuadradosList[x1+1][y1].checked = true;
+		QuadradosList[x1+2][y1].checked = true;
+		QuadradosList[x1+3][y1].checked = true;
+		QuadradosList[x1+4][y1].checked = true;
+		QuadradosList[x1+4][y1+1].checked = true;
 
 		//Pattern 2
 		//int x2 = 110;

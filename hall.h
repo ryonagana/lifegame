@@ -10,6 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <iostream>
+#include "interfaceComponent.h"
 #include "button.h"
 #include "classCallBack.h"
 
@@ -58,7 +59,7 @@ public:
 	}
 };
 
-class hall: public myButtonCallBack{
+class hall: public interfaceComponent, myButtonCallBack{
 private:
 	int x0;
 	int y0;
@@ -87,6 +88,7 @@ public:
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
+	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	Position get_Position(int pos_x, int pos_y);
 	void setButtonCallBack(myButton &b1);
