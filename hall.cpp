@@ -32,7 +32,7 @@ hall::~hall(){
 
 void hall::draw_line(){
    ALLEGRO_COLOR color;
-   color = al_map_rgb_f(1.0, 1.0, 1.0);
+   color = al_map_rgb_f(0.3, 0.3, 0.3);
    int x = x0;
    int y = y0;
    int length = numero_x*size;
