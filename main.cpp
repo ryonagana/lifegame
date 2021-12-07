@@ -14,9 +14,11 @@
 #include "gameScreenContext.h"
 #include "bigTextLabel.h"
 
-#define SCREEN_W 1300
-#define SCREEN_H 700
 
+int SCREEN_W = 1300;
+int SCREEN_H = 700;
+int testJ1 = 0;
+int testJ2 = 0;
 const float FPS = 60;
 
 ALLEGRO_DISPLAY *display = NULL;
@@ -39,15 +41,21 @@ int init_allegro(void)
 		}
 
 		if (!al_init_image_addon()) {
-		    goto error_critical;
+			al_uninstall_system();
+			fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		if (!al_install_keyboard()) {
-		    goto error_critical;
+			al_uninstall_system();
+		    fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		if (!al_install_mouse()) {
-		    goto error_critical;
+			al_uninstall_system();
+			fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		// Initialize the timer
@@ -55,6 +63,13 @@ int init_allegro(void)
 		if (!timer) {
 			fprintf(stderr, "Failed to create timer.\n");
 			return 1;
+		}
+
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
+			SCREEN_W = info.x2 - info.x1 - 100;
+			SCREEN_H = info.y2 - info.y1 - 100;
 		}
 
 		// Create the display
@@ -88,10 +103,10 @@ int init_allegro(void)
 
 		return 1;
 
-		error_critical:
+		/*error_critical:
 		    al_uninstall_system();
 		    fprintf(stdout, "Error Critical!");
-		    return 0;
+		    return 0;*/
 }
 
 int main()
