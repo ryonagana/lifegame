@@ -13,6 +13,10 @@
 #include "interfaceComponent.h"
 #include "button.h"
 #include "classCallBack.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 
 struct Position {
@@ -73,6 +77,8 @@ private:
 	myButton* buttonReset;
 	myButton* buttonRestore;
 	myButton* buttonFunPatterns;
+	myButton* buttonSaveFile;
+	myButton* buttonLoadFile;
 
 	bool play; //If true game is playing if false it is the development fase.
 
@@ -97,17 +103,23 @@ public:
 	void setButtonCallBack_Reset(myButton &b1);
 	void setButtonCallBack_Restore(myButton &b1);
 	void setButtonCallBack_FunPatterns(myButton &b1);
-
-	void NextSpeed(bool) override;
-	void PrevSpeed(bool) override;
-
-	//speed
+	void setButtonCallBack_SaveFile(myButton &b1);
+	void setButtonCallBack_LoadFile(myButton &b1);
 	void setButtonCallBack_NextSpeed(myButton &b1);
 	void setButtonCallBack_PrevSpeed(myButton &b1);
+
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
 	void CreateAndKillLife();
 	void FuncCallBack(bool);
+	int saveToFile();
+	int readFile();
+
+
+	void saveFile(bool);
+	void loadFile(bool);
+	void NextSpeed(bool) override;
+	void PrevSpeed(bool) override;
 
 };
 
