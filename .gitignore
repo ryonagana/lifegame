@@ -4,3 +4,5 @@ debug
 bin
 obj
 lifeGame
+codeblocks/bin*
+codeblocks/obj*
