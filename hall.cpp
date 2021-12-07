@@ -1,6 +1,29 @@
 #include "hall.h"
+#include <cstdio>
+#include <cstdlib>
 
-hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
+static float speed_table_text[3] = {
+    0.25,
+    0.50,
+    1.0
+};
+
+static int speed_table[3] = {
+    60, // 0.25
+    30,// 0.50
+    1 //  1.0,
+
+};
+
+enum {
+    SPEED_SLOWER,
+    SPEED_SLOW,
+    SPEED_NORMAL
+};
+
+static int actual_speed = SPEED_NORMAL;
+
+hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceComponent() {
 	x0 = x;
 	y0 = y;
 	size = sizeJ;
@@ -26,6 +49,13 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	buttonFunPatterns = nullptr;
 	buttonSaveFile = nullptr;
 	buttonLoadFile = nullptr;
+
+	evolution_speed = speed_table_text[actual_speed];
+
+	if(!timer){
+        fprintf(stdout, "TIMER IS NULL %s:%d",__FUNCTION__, __LINE__);
+	}
+
 
 }
 
@@ -55,8 +85,10 @@ void hall::draw_line(){
 
 void hall::draw_text(){
 	//int number = contNeighbors(9, 19);
-    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "HALL");
-    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "%d X %d", numero_x, numero_y);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 35, 0, "HALL");
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "%d X %d", numero_x, numero_y);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Evolution Speed: %.2f", speed_table_text[actual_speed]);
+
 }
 
 void hall::resetAll(bool){
@@ -129,12 +161,17 @@ void hall::loadFile(bool){
 
 void hall::CreateAndKillLife(){
 	if(play){
-		for(int i = 0;i<numero_x;i++){
-			for(int j = 0;j<numero_y;j++){
-				QuadradosList[i][j].checkNeighbors();
-			}
-		}
+        if( (al_get_timer_count(this->timer) / speed_table[actual_speed]) > evolution_speed){
+            for(int i = 0;i<numero_x;i++){
+                for(int j = 0;j<numero_y;j++){
+                    QuadradosList[i][j].checkNeighbors();
+                }
+            }
+
+            evolution_speed = (al_get_timer_count(this->timer) / speed_table[actual_speed])+1;
+        }
 	}
+
 }
 
 void hall::update(){
@@ -275,8 +312,6 @@ void hall::loadFunPatterns(bool){
 		QuadradosList[x1+4][y1+1].checked = true;
 
 		//Pattern 2
-		//int x2 = 110;
-		//int y2 = 0;
 		int x2 = 100;
 		int y2 = 0;
 		QuadradosList[x2][y2].checked = true;
@@ -286,8 +321,6 @@ void hall::loadFunPatterns(bool){
 		QuadradosList[x2+2][y2+1].checked = true;
 
 		//Pattern 3
-		//int x3 = 74;
-		//int y3 = 40;
 		int x3 = 74;
 		int y3 = 30;
 		QuadradosList[x3][y3].checked = true;
@@ -371,4 +404,29 @@ int hall::readFile () {
 	    myfile.close();
 	}
   return 0;
+}
+
+void hall::setButtonCallBack_NextSpeed(myButton &b1){
+    funcCallBack cb = &myButtonCallBack::NextSpeed;
+    b1.registerCallBack(this,cb);
+}
+
+void hall::setButtonCallBack_PrevSpeed(myButton &b1){
+    funcCallBack cb = &myButtonCallBack::PrevSpeed;
+    b1.registerCallBack(this,cb);
+}
+
+void hall::NextSpeed(bool){
+    if(actual_speed > 3 ) actual_speed = 0;
+    actual_speed++;
+    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
+    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
+
+}
+
+void hall::PrevSpeed(bool) {
+    if(actual_speed < 0 ) actual_speed = 3;
+    actual_speed--;
+    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
+    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
 }
