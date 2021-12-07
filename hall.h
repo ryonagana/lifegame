@@ -82,6 +82,8 @@ private:
 
 	bool play; //If true game is playing if false it is the development fase.
 
+	float evolution_speed;
+
 public:
 	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
 	~hall();
@@ -103,6 +105,9 @@ public:
 	void setButtonCallBack_FunPatterns(myButton &b1);
 	void setButtonCallBack_SaveFile(myButton &b1);
 	void setButtonCallBack_LoadFile(myButton &b1);
+	void setButtonCallBack_NextSpeed(myButton &b1);
+	void setButtonCallBack_PrevSpeed(myButton &b1);
+
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
 	void CreateAndKillLife();
@@ -113,6 +118,8 @@ public:
 
 	void saveFile(bool);
 	void loadFile(bool);
+	void NextSpeed(bool) override;
+	void PrevSpeed(bool) override;
 
 };
 

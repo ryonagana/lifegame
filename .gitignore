@@ -1,0 +1,6 @@
+lifeGame
+*.o
+debug 
+bin
+obj
+lifeGame
