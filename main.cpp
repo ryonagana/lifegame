@@ -14,9 +14,11 @@
 #include "gameScreenContext.h"
 #include "bigTextLabel.h"
 
-#define SCREEN_W 1300
-#define SCREEN_H 700
 
+int SCREEN_W = 1300;
+int SCREEN_H = 700;
+int testJ1 = 0;
+int testJ2 = 0;
 const float FPS = 60;
 
 ALLEGRO_DISPLAY *display = NULL;
@@ -39,15 +41,21 @@ int init_allegro(void)
 		}
 
 		if (!al_init_image_addon()) {
-		    goto error_critical;
+			al_uninstall_system();
+			fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		if (!al_install_keyboard()) {
-		    goto error_critical;
+			al_uninstall_system();
+		    fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		if (!al_install_mouse()) {
-		    goto error_critical;
+			al_uninstall_system();
+			fprintf(stdout, "Error Critical!");
+			return 0;
 		}
 
 		// Initialize the timer
@@ -55,6 +63,13 @@ int init_allegro(void)
 		if (!timer) {
 			fprintf(stderr, "Failed to create timer.\n");
 			return 1;
+		}
+
+		ALLEGRO_MONITOR_INFO info;
+		al_get_monitor_info(0, &info);
+		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
+			SCREEN_W = info.x2 - info.x1 - 100;
+			SCREEN_H = info.y2 - info.y1 - 100;
 		}
 
 		// Create the display
@@ -87,11 +102,6 @@ int init_allegro(void)
 		al_init_primitives_addon();
 
 		return 1;
-
-		error_critical:
-		    al_uninstall_system();
-		    fprintf(stdout, "Error Critical!");
-		    return 0;
 }
 
 int main()
@@ -104,14 +114,15 @@ int main()
 	int numBlocW = (SCREEN_W-100)/blocSize;
 	int numBlocH = (SCREEN_H-170)/blocSize;
 	hall hall1(50, 150, blocSize, numBlocW, numBlocH);
-	myButton playButton(650, 40, 100, 100);
-	myButton resetButton(760, 40, 100, 100);
-	myButton restoreButton(900, 40, 100, 100);
-	myButton funButton(1040, 40, 100, 100);
+	myButton playButton(570, 40, 100, 100);
+	myButton resetButton(680, 40, 100, 100);
+	myButton restoreButton(800, 40, 100, 100);
+	myButton funButton(910, 40, 100, 100);
+	myButton saveButton(1020, 40, 100, 100);
+	myButton loadButton(1130, 40, 100, 100);
+	myButton prevSpeedButton(300,108,32,32);
+	myButton nextSpeedButton(230,108,32,32);
 	bigTestLabel text1(50,50);
-
-	myButton nextSpeedButton(1200,60,32,32);
-	myButton prevSpeedButton(1250,60,32,32);
 
 	text1.insertText("Life Game!");
 	text1.insertText("");
@@ -128,29 +139,40 @@ int main()
 	funButton.set_sprite1("pictures//fun.png");
 	funButton.set_sprite2("pictures//fun.png");
 
+	saveButton.set_sprite1("pictures//save.png");
+	saveButton.set_sprite2("pictures//save.png");
+
+	loadButton.set_sprite1("pictures//load.png");
+	loadButton.set_sprite2("pictures//load.png");
+
 	nextSpeedButton.set_sprite1("pictures//next.png");
-	nextSpeedButton.set_sprite1("pictures//next.png");
+	nextSpeedButton.set_sprite2("pictures//next.png");
 
     prevSpeedButton.set_sprite1("pictures//next.png");
-	prevSpeedButton.set_sprite1("pictures//next.png");
+	prevSpeedButton.set_sprite2("pictures//next.png");
+
 
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
 	hall1.setButtonCallBack_Restore(restoreButton);
     hall1.setButtonCallBack_FunPatterns(funButton);
-    hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
+    hall1.setButtonCallBack_SaveFile(saveButton);
+	hall1.setButtonCallBack_LoadFile(loadButton);
     hall1.setButtonCallBack_NextSpeed(prevSpeedButton);
+    hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
     hall1.setGlobalTimer(timer);
+
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);
 	gameMainScreen.insertComponent(&resetButton);
 	gameMainScreen.insertComponent(&restoreButton);
 	gameMainScreen.insertComponent(&funButton);
-	gameMainScreen.insertComponent(&text1);
-	gameMainScreen.insertComponent(&nextSpeedButton);
+	gameMainScreen.insertComponent(&saveButton);
+	gameMainScreen.insertComponent(&loadButton);
 	//gameMainScreen.insertComponent(&prevSpeedButton);
-	//al_resize_display(display, 1600, 1000); //resize screen
+	gameMainScreen.insertComponent(&nextSpeedButton);
+	gameMainScreen.insertComponent(&text1);
 
 	// Game loop
 	while (running) {

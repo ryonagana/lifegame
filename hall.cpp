@@ -47,12 +47,15 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceCompone
 	buttonReset = nullptr;
 	buttonRestore = nullptr;
 	buttonFunPatterns = nullptr;
-	evolution_speed = speed_table_text[actual_speed];
+	buttonSaveFile = nullptr;
+	buttonLoadFile = nullptr;
 
+	evolution_speed = speed_table_text[actual_speed];
 
 	if(!timer){
         fprintf(stdout, "TIMER IS NULL %s:%d",__FUNCTION__, __LINE__);
 	}
+
 
 }
 
@@ -62,7 +65,7 @@ hall::~hall(){
 
 void hall::draw_line(){
    ALLEGRO_COLOR color;
-   color = al_map_rgb_f(1.0, 1.0, 1.0);
+   color = al_map_rgb_f(0.3, 0.3, 0.3);
    int x = x0;
    int y = y0;
    int length = numero_x*size;
@@ -132,6 +135,28 @@ void hall::setButtonCallBack_FunPatterns(myButton &b1){
 	buttonFunPatterns = &b1;
 	funcCallBack f1 = &myButtonCallBack::loadFunPatterns;
 	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_SaveFile(myButton &b1){
+	buttonSaveFile = &b1;
+	funcCallBack f1 = &myButtonCallBack::saveFile;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_LoadFile(myButton &b1){
+	buttonLoadFile = &b1;
+	funcCallBack f1 = &myButtonCallBack::loadFile;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::saveFile(bool){
+	saveToFile();
+	printf("\n\nSAVE\n\n");
+}
+
+void hall::loadFile(bool){
+	readFile();
+	printf("\n\nLOAD\n\n");
 }
 
 void hall::CreateAndKillLife(){
@@ -287,8 +312,6 @@ void hall::loadFunPatterns(bool){
 		QuadradosList[x1+4][y1+1].checked = true;
 
 		//Pattern 2
-		//int x2 = 110;
-		//int y2 = 0;
 		int x2 = 100;
 		int y2 = 0;
 		QuadradosList[x2][y2].checked = true;
@@ -298,8 +321,6 @@ void hall::loadFunPatterns(bool){
 		QuadradosList[x2+2][y2+1].checked = true;
 
 		//Pattern 3
-		//int x3 = 74;
-		//int y3 = 40;
 		int x3 = 74;
 		int y3 = 30;
 		QuadradosList[x3][y3].checked = true;
@@ -326,6 +347,8 @@ void hall::FuncCallBack(bool pressed){
 	buttonReset->setVisible(!pressed);
 	buttonRestore->setVisible(!pressed);
 	buttonFunPatterns->setVisible(!pressed);
+	buttonSaveFile->setVisible(!pressed);
+	buttonLoadFile->setVisible(!pressed);
 
 	if(pressed == true)makeScreenBackup();
 	play = pressed;
@@ -336,16 +359,64 @@ void hall::setButtonCallBack(myButton &b1){
 	b1.registerCallBack(this, f1);
 }
 
+int hall::saveToFile () {
+  std::ofstream myfile;
+  myfile.open ("SavedGame.txt");
+  myfile << numero_x << " " <<  numero_y << "\n";
+  for(int i = 0;i<numero_x;i++){
+  	for(int j = 0;j<numero_y;j++){
+  		myfile << i << " " <<  j << " " << QuadradosList[i][j].checked << "\n";
+  	}
+  }
+  myfile.close();
+  return 0;
+}
+
+int hall::readFile () {
+	std::string line;
+	std::ifstream myfile ("SavedGame.txt");
+	if (myfile.is_open())
+	{
+		resetAll(true);
+		getline (myfile,line);
+		std::stringstream gridInfo(line);
+		std::string word0;
+		int numX = -1;
+		int numY = -1;
+		gridInfo >> numX;
+		gridInfo >> numY;
+
+		while ( getline (myfile,line) )
+	    {
+			std::stringstream ss(line);
+			std::string word;
+			int i = -1;
+			int j = -1;
+			bool check = false;
+			ss >> i;
+			ss >> j;
+			ss >> check;
+			if((i < numero_x)&&(j < numero_y)){
+				QuadradosList[i][j].checked = check;
+			}
+
+	    }
+	    myfile.close();
+	}
+  return 0;
+}
+
 void hall::setButtonCallBack_NextSpeed(myButton &b1){
     funcCallBack cb = &myButtonCallBack::NextSpeed;
     b1.registerCallBack(this,cb);
 }
+
 void hall::setButtonCallBack_PrevSpeed(myButton &b1){
     funcCallBack cb = &myButtonCallBack::PrevSpeed;
     b1.registerCallBack(this,cb);
 }
 
-void hall::NextSpeed(bool t){
+void hall::NextSpeed(bool){
     if(actual_speed > 3 ) actual_speed = 0;
     actual_speed++;
     evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
@@ -353,7 +424,7 @@ void hall::NextSpeed(bool t){
 
 }
 
-void hall::PrevSpeed(bool t) {
+void hall::PrevSpeed(bool) {
     if(actual_speed < 0 ) actual_speed = 3;
     actual_speed--;
     evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
