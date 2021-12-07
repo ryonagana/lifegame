@@ -5,4 +5,4 @@ bin
 obj
 lifeGame
 codeblocks/bin*
-codeblocks/obj*
+codeblocks/obj*SavedGame.*

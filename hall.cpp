@@ -2,26 +2,31 @@
 #include <cstdio>
 #include <cstdlib>
 
-static float speed_table_text[3] = {
-    0.25,
-    0.50,
-    1.0
-};
-
-static int speed_table[3] = {
-    60, // 0.25
-    30,// 0.50
-    1 //  1.0,
-
-};
 
 enum {
+    SPEED_NONE = 0,
+    SPEED_STOPPED,
     SPEED_SLOWER,
     SPEED_SLOW,
     SPEED_NORMAL
 };
 
-static int actual_speed = SPEED_NORMAL;
+
+typedef struct EVOLUTION_SPEED {
+    int div;
+    float speed;
+    int type;
+}EVOLUTION_SPEED;
+
+static EVOLUTION_SPEED ev_speed[4] = {
+     {60,1.25, SPEED_STOPPED},
+     {45,0.50, SPEED_SLOWER},
+     {1,1.0, SPEED_NORMAL},
+     {0}
+};
+
+
+static int actual_speed = 2;
 
 hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceComponent() {
 	x0 = x;
@@ -50,7 +55,7 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceCompone
 	buttonSaveFile = nullptr;
 	buttonLoadFile = nullptr;
 
-	evolution_speed = speed_table_text[actual_speed];
+	evolution_speed = ev_speed[actual_speed].type;
 
 	if(!timer){
         fprintf(stdout, "TIMER IS NULL %s:%d",__FUNCTION__, __LINE__);
@@ -87,7 +92,7 @@ void hall::draw_text(){
 	//int number = contNeighbors(9, 19);
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 35, 0, "HALL");
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "%d X %d", numero_x, numero_y);
-    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Evolution Speed: %.2f", speed_table_text[actual_speed]);
+    al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Evolution Speed: %.2f", ev_speed[actual_speed].speed);
 
 }
 
@@ -160,15 +165,15 @@ void hall::loadFile(bool){
 }
 
 void hall::CreateAndKillLife(){
-	if(play){
-        if( (al_get_timer_count(this->timer) / speed_table[actual_speed]) > evolution_speed){
+	if(play && ev_speed[actual_speed].type != SPEED_STOPPED){
+        if( (al_get_timer_count(this->timer) / ev_speed[actual_speed].div) >= evolution_speed){
             for(int i = 0;i<numero_x;i++){
                 for(int j = 0;j<numero_y;j++){
                     QuadradosList[i][j].checkNeighbors();
                 }
             }
 
-            evolution_speed = (al_get_timer_count(this->timer) / speed_table[actual_speed])+1;
+            evolution_speed = (al_get_timer_count(this->timer) / ev_speed[actual_speed].div)+ev_speed[actual_speed].speed;
         }
 	}
 
@@ -416,17 +421,15 @@ void hall::setButtonCallBack_PrevSpeed(myButton &b1){
     b1.registerCallBack(this,cb);
 }
 
-void hall::NextSpeed(bool){
-    if(actual_speed > 3 ) actual_speed = 0;
+void hall::NextSpeed(bool)
+{
+    actual_speed = actual_speed % 2;
     actual_speed++;
-    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
-    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
-
+    this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
+    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, ev_speed[actual_speed].speed, ev_speed[actual_speed].div);
 }
 
+// não usado
 void hall::PrevSpeed(bool) {
-    if(actual_speed < 0 ) actual_speed = 3;
-    actual_speed--;
-    evolution_speed = al_get_timer_count(this->timer) / speed_table[actual_speed];
-    fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, speed_table_text[actual_speed], speed_table[actual_speed]);
+    return;
 }
