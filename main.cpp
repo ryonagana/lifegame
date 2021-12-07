@@ -102,11 +102,6 @@ int init_allegro(void)
 		al_init_primitives_addon();
 
 		return 1;
-
-		/*error_critical:
-		    al_uninstall_system();
-		    fprintf(stdout, "Error Critical!");
-		    return 0;*/
 }
 
 int main()
@@ -119,10 +114,12 @@ int main()
 	int numBlocW = (SCREEN_W-100)/blocSize;
 	int numBlocH = (SCREEN_H-170)/blocSize;
 	hall hall1(50, 150, blocSize, numBlocW, numBlocH);
-	myButton playButton(650, 40, 100, 100);
-	myButton resetButton(760, 40, 100, 100);
-	myButton restoreButton(900, 40, 100, 100);
-	myButton funButton(1040, 40, 100, 100);
+	myButton playButton(570, 40, 100, 100);
+	myButton resetButton(680, 40, 100, 100);
+	myButton restoreButton(800, 40, 100, 100);
+	myButton funButton(910, 40, 100, 100);
+	myButton saveButton(1020, 40, 100, 100);
+	myButton loadButton(1130, 40, 100, 100);
 	bigTestLabel text1(50,50);
 
 	text1.insertText("Life Game!");
@@ -140,16 +137,26 @@ int main()
 	funButton.set_sprite1("pictures//fun.png");
 	funButton.set_sprite2("pictures//fun.png");
 
+	saveButton.set_sprite1("pictures//save.png");
+	saveButton.set_sprite2("pictures//save.png");
+
+	loadButton.set_sprite1("pictures//load.png");
+	loadButton.set_sprite2("pictures//load.png");
+
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
 	hall1.setButtonCallBack_Restore(restoreButton);
     hall1.setButtonCallBack_FunPatterns(funButton);
+    hall1.setButtonCallBack_SaveFile(saveButton);
+	hall1.setButtonCallBack_LoadFile(loadButton);
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);
 	gameMainScreen.insertComponent(&resetButton);
 	gameMainScreen.insertComponent(&restoreButton);
 	gameMainScreen.insertComponent(&funButton);
+	gameMainScreen.insertComponent(&saveButton);
+	gameMainScreen.insertComponent(&loadButton);
 	gameMainScreen.insertComponent(&text1);
 
 	//al_resize_display(display, 1600, 1000); //resize screen

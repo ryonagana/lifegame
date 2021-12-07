@@ -24,6 +24,9 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY){
 	buttonReset = nullptr;
 	buttonRestore = nullptr;
 	buttonFunPatterns = nullptr;
+	buttonSaveFile = nullptr;
+	buttonLoadFile = nullptr;
+
 }
 
 hall::~hall(){
@@ -100,6 +103,28 @@ void hall::setButtonCallBack_FunPatterns(myButton &b1){
 	buttonFunPatterns = &b1;
 	funcCallBack f1 = &myButtonCallBack::loadFunPatterns;
 	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_SaveFile(myButton &b1){
+	buttonSaveFile = &b1;
+	funcCallBack f1 = &myButtonCallBack::saveFile;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::setButtonCallBack_LoadFile(myButton &b1){
+	buttonLoadFile = &b1;
+	funcCallBack f1 = &myButtonCallBack::loadFile;
+	b1.registerCallBack(this, f1);
+}
+
+void hall::saveFile(bool){
+	saveToFile();
+	printf("\n\nSAVE\n\n");
+}
+
+void hall::loadFile(bool){
+	readFile();
+	printf("\n\nLOAD\n\n");
 }
 
 void hall::CreateAndKillLife(){
@@ -289,6 +314,8 @@ void hall::FuncCallBack(bool pressed){
 	buttonReset->setVisible(!pressed);
 	buttonRestore->setVisible(!pressed);
 	buttonFunPatterns->setVisible(!pressed);
+	buttonSaveFile->setVisible(!pressed);
+	buttonLoadFile->setVisible(!pressed);
 
 	if(pressed == true)makeScreenBackup();
 	play = pressed;
@@ -297,4 +324,51 @@ void hall::FuncCallBack(bool pressed){
 void hall::setButtonCallBack(myButton &b1){
 	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
 	b1.registerCallBack(this, f1);
+}
+
+int hall::saveToFile () {
+  std::ofstream myfile;
+  myfile.open ("SavedGame.txt");
+  myfile << numero_x << " " <<  numero_y << "\n";
+  for(int i = 0;i<numero_x;i++){
+  	for(int j = 0;j<numero_y;j++){
+  		myfile << i << " " <<  j << " " << QuadradosList[i][j].checked << "\n";
+  	}
+  }
+  myfile.close();
+  return 0;
+}
+
+int hall::readFile () {
+	std::string line;
+	std::ifstream myfile ("SavedGame.txt");
+	if (myfile.is_open())
+	{
+		resetAll(true);
+		getline (myfile,line);
+		std::stringstream gridInfo(line);
+		std::string word0;
+		int numX = -1;
+		int numY = -1;
+		gridInfo >> numX;
+		gridInfo >> numY;
+
+		while ( getline (myfile,line) )
+	    {
+			std::stringstream ss(line);
+			std::string word;
+			int i = -1;
+			int j = -1;
+			bool check = false;
+			ss >> i;
+			ss >> j;
+			ss >> check;
+			if((i < numero_x)&&(j < numero_y)){
+				QuadradosList[i][j].checked = check;
+			}
+
+	    }
+	    myfile.close();
+	}
+  return 0;
 }
