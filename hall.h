@@ -83,6 +83,7 @@ private:
 	bool play; //If true game is playing if false it is the development fase.
 
 	float evolution_speed;
+	int actual_speed;
 
 public:
 	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
