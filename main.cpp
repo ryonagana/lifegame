@@ -120,8 +120,8 @@ int main()
 	myButton funButton(910, 40, 100, 100);
 	myButton saveButton(1020, 40, 100, 100);
 	myButton loadButton(1130, 40, 100, 100);
-	myButton prevSpeedButton(300,108,32,32);
-	myButton nextSpeedButton(230,108,32,32);
+	myButton prevSpeedButton(230,110,32,32);
+	myButton nextSpeedButton(265,110,32,32);
 	bigTestLabel text1(50,50);
 
 	text1.insertText("Life Game!");
@@ -145,12 +145,11 @@ int main()
 	loadButton.set_sprite1("pictures//load.png");
 	loadButton.set_sprite2("pictures//load.png");
 
+	prevSpeedButton.set_sprite1("pictures//prev.png");
+	prevSpeedButton.set_sprite2("pictures//prev.png");
+
 	nextSpeedButton.set_sprite1("pictures//next.png");
 	nextSpeedButton.set_sprite2("pictures//next.png");
-
-    prevSpeedButton.set_sprite1("pictures//next.png");
-	prevSpeedButton.set_sprite2("pictures//next.png");
-
 
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
@@ -158,9 +157,8 @@ int main()
     hall1.setButtonCallBack_FunPatterns(funButton);
     hall1.setButtonCallBack_SaveFile(saveButton);
 	hall1.setButtonCallBack_LoadFile(loadButton);
-    hall1.setButtonCallBack_NextSpeed(prevSpeedButton);
+    hall1.setButtonCallBack_PrevSpeed(prevSpeedButton);
     hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
-
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);
@@ -169,7 +167,7 @@ int main()
 	gameMainScreen.insertComponent(&funButton);
 	gameMainScreen.insertComponent(&saveButton);
 	gameMainScreen.insertComponent(&loadButton);
-	//gameMainScreen.insertComponent(&prevSpeedButton);
+	gameMainScreen.insertComponent(&prevSpeedButton);
 	gameMainScreen.insertComponent(&nextSpeedButton);
 	gameMainScreen.insertComponent(&text1);
 	gameMainScreen.setGlobalTimer(timer);

@@ -4,11 +4,13 @@
 
 
 enum {
-    SPEED_NONE = 0,
-    SPEED_STOPPED,
-    SPEED_SLOWER,
-    SPEED_SLOW,
-    SPEED_NORMAL
+	SPEED_NORMAL,
+	SPEED_SLOW1,
+	SPEED_SLOW2,
+	SPEED_SLOW3,
+	SPEED_SLOWER,
+	SPEED_STOPPED,
+    NUMBER_OF_SPEEDS
 };
 
 typedef struct EVOLUTION_SPEED {
@@ -17,10 +19,12 @@ typedef struct EVOLUTION_SPEED {
     int type;
 }EVOLUTION_SPEED;
 
-static EVOLUTION_SPEED ev_speed[4] = {
+static EVOLUTION_SPEED ev_speed[NUMBER_OF_SPEEDS] = {
 		{1,1.0, SPEED_NORMAL},
-		{45,0.50, SPEED_SLOW},
-		{60,0.25, SPEED_SLOWER},
+		{20,0.75, SPEED_SLOW1},
+		{40,0.50, SPEED_SLOW2},
+		{60,0.25, SPEED_SLOW3},
+		{80,0.10, SPEED_SLOWER},
 	    {120,0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
 };
 
@@ -52,7 +56,7 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceCompone
 	buttonLoadFile = nullptr;
 
 	evolution_speed = ev_speed[actual_speed].type;
-	actual_speed = 0;
+	actual_speed = SPEED_NORMAL;
 }
 
 hall::~hall(){
@@ -409,11 +413,16 @@ void hall::setButtonCallBack_PrevSpeed(myButton &b1){
 
 void hall::NextSpeed(bool)
 {
-    actual_speed++;
-    if (actual_speed == 4) actual_speed = 0;//Go back to the normal speed
-    this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
+	if (actual_speed == SPEED_NORMAL){
+		actual_speed = SPEED_STOPPED;//Go back to the stopped speed
+	} else{
+		actual_speed--;
+	}
+	this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
 }
 
 void hall::PrevSpeed(bool) {
-    return;
+	actual_speed++;
+	if (actual_speed == NUMBER_OF_SPEEDS) actual_speed = SPEED_NORMAL;//Go back to the normal speed
+	this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
 }
