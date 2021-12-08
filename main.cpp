@@ -109,7 +109,7 @@ int main()
 	init_allegro();
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
-	gameMainScreen.setGlobalTimer(timer);
+
 	int blocSize = 10;
 	int numBlocW = (SCREEN_W-100)/blocSize;
 	int numBlocH = (SCREEN_H-170)/blocSize;
@@ -160,7 +160,6 @@ int main()
 	hall1.setButtonCallBack_LoadFile(loadButton);
     hall1.setButtonCallBack_NextSpeed(prevSpeedButton);
     hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
-    hall1.setGlobalTimer(timer);
 
 
 	gameMainScreen.insertComponent(&hall1);
@@ -173,6 +172,7 @@ int main()
 	//gameMainScreen.insertComponent(&prevSpeedButton);
 	gameMainScreen.insertComponent(&nextSpeedButton);
 	gameMainScreen.insertComponent(&text1);
+	gameMainScreen.setGlobalTimer(timer);
 
 	// Game loop
 	while (running) {

@@ -19,7 +19,7 @@ typedef struct EVOLUTION_SPEED {
 }EVOLUTION_SPEED;
 
 static EVOLUTION_SPEED ev_speed[4] = {
-     {60,1.25, SPEED_STOPPED},
+     {60,0.25, SPEED_STOPPED},
      {45,0.50, SPEED_SLOWER},
      {1,1.0, SPEED_NORMAL},
      {0}
@@ -429,7 +429,6 @@ void hall::NextSpeed(bool)
     fprintf(stdout, "\nActual Speed Index: %d - Speed: %.2f  Div: %d\n\n", actual_speed, ev_speed[actual_speed].speed, ev_speed[actual_speed].div);
 }
 
-// não usado
 void hall::PrevSpeed(bool) {
     return;
 }
