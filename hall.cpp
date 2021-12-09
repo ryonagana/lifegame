@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-
 enum {
 	SPEED_NORMAL,
 	SPEED_SLOW1,
@@ -47,7 +46,6 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceCompone
 	}
 
 	text_font = al_create_builtin_font();
-	play = false;
 
 	buttonReset = nullptr;
 	buttonRestore = nullptr;
@@ -55,8 +53,10 @@ hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceCompone
 	buttonSaveFile = nullptr;
 	buttonLoadFile = nullptr;
 
+	play = false;
 	evolution_speed = ev_speed[actual_speed].type;
 	actual_speed = SPEED_NORMAL;
+	generationNumber = 0;
 }
 
 hall::~hall(){
@@ -92,6 +92,7 @@ void hall::draw_text(){
 
 void hall::resetAll(bool){
 	if(!play){
+		generationNumber = 0;
 		for(int i = 0;i<numero_x;i++){
 			for(int j = 0;j<numero_y;j++){
 				QuadradosList[i][j].checked = false;
@@ -162,6 +163,7 @@ void hall::CreateAndKillLife(){
 	if(play && ev_speed[actual_speed].type != SPEED_STOPPED){
 		double CurrentTimer = (al_get_timer_count(this->timer) / ev_speed[actual_speed].div);
         if(CurrentTimer >= evolution_speed){
+        	generationNumber++;
         	for(int i = 0;i<numero_x;i++){
                 for(int j = 0;j<numero_y;j++){
                     QuadradosList[i][j].checkNeighbors();
@@ -186,12 +188,12 @@ void hall::update(){
 
 void hall::setQuadradoInf(){
 	for(int i = 0;i<numero_x;i++){
-			for(int j = 0;j<numero_y;j++){
-				QuadradosList[i][j].size = size;
-				QuadradosList[i][j].x = x0 + size*i;
-				QuadradosList[i][j].y = y0 + size*j;
-			}
+		for(int j = 0;j<numero_y;j++){
+			QuadradosList[i][j].size = size;
+			QuadradosList[i][j].x = x0 + size*i;
+			QuadradosList[i][j].y = y0 + size*j;
 		}
+	}
 }
 
 int hall::contNeighbors(int x, int y){
@@ -339,6 +341,7 @@ void hall::loadFunPatterns(bool){
 }
 
 void hall::FuncCallBack(bool pressed){
+	if(pressed)generationNumber = 0;
 	buttonReset->setVisible(!pressed);
 	buttonRestore->setVisible(!pressed);
 	buttonFunPatterns->setVisible(!pressed);
@@ -394,7 +397,6 @@ int hall::readFile () {
 			if((i < numero_x)&&(j < numero_y)){
 				QuadradosList[i][j].checked = check;
 			}
-
 	    }
 	    myfile.close();
 	}
@@ -409,6 +411,10 @@ void hall::setButtonCallBack_NextSpeed(myButton &b1){
 void hall::setButtonCallBack_PrevSpeed(myButton &b1){
     funcCallBack cb = &myButtonCallBack::PrevSpeed;
     b1.registerCallBack(this,cb);
+}
+
+void hall::setTextGenerations(bigTextLabel<int> &t1){
+	t1.insertText("Generation #%d", &generationNumber);
 }
 
 void hall::NextSpeed(bool)

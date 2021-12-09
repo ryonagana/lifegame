@@ -122,13 +122,16 @@ int main()
 	myButton loadButton(1130, 40, 100, 100);
 	myButton prevSpeedButton(230,110,32,32);
 	myButton nextSpeedButton(265,110,32,32);
-	bigTestLabel text1(50,50);
+	bigTextLabel<int> text1(50,50);
+	bigTextLabel<int> textGenerations(320,135);
 
 	text1.insertText("Life Game!");
 	text1.insertText("");
 	text1.insertText("3 WHITE neighbors and the BLACK becomes WHITE!! (It is ALIVE!)");
 	text1.insertText("Less than 2 WHITE neighbors, or more than 3, and the WHITE");
 	text1.insertText("becomes BLACK!! (It is DEAD!)");
+
+	//textGenerations.insertText("Generation # %d", nullptr);
 
 	resetButton.set_sprite1("pictures//reset.png");
 	resetButton.set_sprite2("pictures//reset.png");
@@ -159,6 +162,7 @@ int main()
 	hall1.setButtonCallBack_LoadFile(loadButton);
     hall1.setButtonCallBack_PrevSpeed(prevSpeedButton);
     hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
+    hall1.setTextGenerations(textGenerations);
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);
@@ -170,7 +174,9 @@ int main()
 	gameMainScreen.insertComponent(&prevSpeedButton);
 	gameMainScreen.insertComponent(&nextSpeedButton);
 	gameMainScreen.insertComponent(&text1);
+	gameMainScreen.insertComponent(&textGenerations);
 	gameMainScreen.setGlobalTimer(timer);
+
 
 	// Game loop
 	while (running) {

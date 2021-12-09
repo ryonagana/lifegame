@@ -12,6 +12,7 @@
 #include <iostream>
 #include "interfaceComponent.h"
 #include "button.h"
+#include "bigTextLabel.h"
 #include "classCallBack.h"
 #include <iostream>
 #include <fstream>
@@ -74,6 +75,7 @@ private:
 	Quadrado** QuadradosListBackup;
 
 	ALLEGRO_FONT *text_font = NULL;
+
 	myButton* buttonReset;
 	myButton* buttonRestore;
 	myButton* buttonFunPatterns;
@@ -81,7 +83,7 @@ private:
 	myButton* buttonLoadFile;
 
 	bool play; //If true game is playing if false it is the development fase.
-
+	int generationNumber;
 	float evolution_speed;
 	int actual_speed;
 
@@ -90,16 +92,21 @@ public:
 	~hall();
 	void draw_line();
 	void draw_text();
-	void resetAll(bool);
 	void makeScreenBackup();
-	void restoreScreenBackup(bool);
-	void loadFunPatterns(bool);
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
+	int saveToFile();
+	int readFile();
 	Position get_Position(int pos_x, int pos_y);
+	void setTextGenerations(bigTextLabel<int> &t1);
+	int contNeighbors(int x, int y);
+	void contAllNeighbors();
+	void CreateAndKillLife();
+
+	//CallBack Register Functions
 	void setButtonCallBack(myButton &b1);
 	void setButtonCallBack_Reset(myButton &b1);
 	void setButtonCallBack_Restore(myButton &b1);
@@ -108,15 +115,11 @@ public:
 	void setButtonCallBack_LoadFile(myButton &b1);
 	void setButtonCallBack_NextSpeed(myButton &b1);
 	void setButtonCallBack_PrevSpeed(myButton &b1);
-
-	int contNeighbors(int x, int y);
-	void contAllNeighbors();
-	void CreateAndKillLife();
+	//CallBack Pointer Functions
+	void restoreScreenBackup(bool);
+	void loadFunPatterns(bool);
 	void FuncCallBack(bool);
-	int saveToFile();
-	int readFile();
-
-
+	void resetAll(bool);
 	void saveFile(bool);
 	void loadFile(bool);
 	void NextSpeed(bool) override;
