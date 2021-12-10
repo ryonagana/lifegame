@@ -126,12 +126,10 @@ void hall::setButtonCallBack_LoadFile(myButton &b1){
 
 void hall::saveFile(bool){
 	saveToFile();
-	printf("\n\nSAVE\n\n");
 }
 
 void hall::loadFile(bool){
 	readFile();
-	printf("\n\nLOAD\n\n");
 }
 
 void hall::CreateAndKillLife(){

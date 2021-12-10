@@ -61,8 +61,8 @@ void myInformationPanel::writeInformation(){
 		al_draw_textf(gamefont, white, x0+20, y0+20, 0, "<<< Life Game >>>");
 		al_draw_textf(latoRegularDate, white, x0+250, y0+60, 0, "Ver: 1.0 - December 09, 2021");
 		al_draw_textf(latoBold, white, x0+20, y0+70, 0, "Developers:");
-		al_draw_textf(latoRegular, white, x0+20, y0+110, 0, "João Louzada,");
-		al_draw_textf(latoRegular, white, x0+20, y0+135, 0, "Nicholas Oliveira");
+		al_draw_textf(latoRegular, white, x0+20, y0+110, 0, "João Louzada (tandejoao-lifegame@yahoo.com),");
+		al_draw_textf(latoRegular, white, x0+20, y0+135, 0, "Nicholas Oliveira (archdark@gmail.com)");
 		al_draw_textf(latoBold, white, x0+20, y0+175, 0, "Game based on the original idea of:");
 		al_draw_textf(latoRegular, white, x0+20, y0+215, 0, "John Conway (*1937 +2020)");
 	}

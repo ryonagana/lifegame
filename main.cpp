@@ -92,6 +92,9 @@ int init_allegro(void)
 		al_init_font_addon();
 		al_init_ttf_addon();
 
+		ALLEGRO_BITMAP *icon = al_load_bitmap("pictures//gl.png");
+		al_set_display_icon(display, icon);
+
 		// Register event sources
 		al_register_event_source(event_queue, al_get_display_event_source(display));
 		al_register_event_source(event_queue, al_get_timer_event_source(timer));
