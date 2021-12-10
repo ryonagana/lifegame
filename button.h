@@ -29,14 +29,20 @@ private:
 	int sizeY0;
 	bool pressed;
 	bool visible;
+	bool holdButton; //Hold the button always in the same position. Always true or always false. See "alwaysButton"
+	bool alwaysButton; // If holdButton = true the button pressed will be kept always in this position.
 	ALLEGRO_BITMAP *picture1 = NULL;
 	ALLEGRO_BITMAP *picture2 = NULL;
 	std::vector<ObjectCallBack> CallBackList;
 
 public:
 	myButton(int x, int y, int sizeX, int sizeY);
+	myButton();
+	void setInfo(int x, int y, int sizeX, int sizeY);
 	void setVisible(bool v1);
 	void toogle();
+	void setPressedAlwaysFalse();
+	void setPressedAlwaysTrue();
 	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	void update();

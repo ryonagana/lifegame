@@ -8,7 +8,28 @@ myButton::myButton(int x, int y, int sizeX, int sizeY){
 	sizeY0 = sizeY;
 	pressed = false;
 	visible = true;
+	holdButton = false;
+	alwaysButton = false;
 	load_sprites();
+}
+
+myButton::myButton(){
+	x0 = 0;
+	y0 = 0;
+	sizeX0 = 100;
+	sizeY0 = 100;
+	pressed = false;
+	visible = true;
+	holdButton = false;
+	alwaysButton = false;
+	load_sprites();
+}
+
+void myButton::setInfo(int x, int y, int sizeX, int sizeY){
+	x0 = x;
+	y0 = y;
+	sizeX0 = sizeX;
+	sizeY0 = sizeY;
 }
 
 void myButton::setVisible(bool v1){
@@ -16,10 +37,14 @@ void myButton::setVisible(bool v1){
 }
 
 void myButton::toogle(){
-		if(pressed){
-			pressed = false;
+		if(!holdButton){
+			if(pressed){
+				pressed = false;
+			}else{
+				pressed = true;
+			}
 		}else{
-			pressed = true;
+			pressed = alwaysButton;
 		}
 
 		for(size_t i = 0;i<CallBackList.size();i++){
@@ -29,6 +54,19 @@ void myButton::toogle(){
 			(obj1.object->*obj1.func)(pressed);
 		}
 }
+
+void myButton::setPressedAlwaysFalse(){
+	holdButton = true;
+	alwaysButton = false;
+	pressed = alwaysButton;
+}
+
+void myButton::setPressedAlwaysTrue(){
+	holdButton = true;
+	alwaysButton = true;
+	pressed = alwaysButton;
+}
+
 
 void myButton::setEvents(ALLEGRO_EVENT *ev){
 	mouse_event_input(ev);
@@ -41,7 +79,7 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 		if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 			al_get_mouse_state(&state);
 			if (state.buttons & 1) {
-				/* Primary (e.g. left) mouse button is held. */
+				//Primary (e.g. left) mouse button is held.
 				//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
 				if((state.x >= x0)&&(state.x <= x0+sizeX0)){
 					if((state.y >= y0)&&(state.y <= y0+sizeX0)){

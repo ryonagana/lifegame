@@ -20,10 +20,27 @@
 #include <sstream>
 
 
-struct Position {
+
+enum {
+	SPEED_NORMAL,
+	SPEED_SLOW1,
+	SPEED_SLOW2,
+	SPEED_SLOW3,
+	SPEED_SLOWER,
+	SPEED_STOPPED,
+    NUMBER_OF_SPEEDS
+};
+
+typedef struct Position {
     int x;
     int y;
-};
+}Position;
+
+typedef struct EVOLUTION_SPEED {
+    int div;
+    float speed;
+    int type;
+}EVOLUTION_SPEED;
 
 class Quadrado{
 public:
@@ -88,6 +105,16 @@ private:
 	int actual_speed;
 
 public:
+
+	EVOLUTION_SPEED ev_speed[NUMBER_OF_SPEEDS] = {
+			{1,1.0, SPEED_NORMAL},
+			{20,0.75, SPEED_SLOW1},
+			{40,0.50, SPEED_SLOW2},
+			{60,0.25, SPEED_SLOW3},
+			{80,0.10, SPEED_SLOWER},
+		    {120,0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
+	};
+
 	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
 	~hall();
 	void draw_line();

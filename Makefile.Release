@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -Wextra 
+CFLAGS=-Wall -Wextra -g
 CP=cp
 RM=rm -f
 
@@ -29,5 +29,5 @@ BIN=lifeGame
 
 
 all:
-	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) bigTextLabel.cpp button.cpp hall.cpp gameScreenContext.cpp main.cpp $(LIBS)
+	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) bigTextLabel.cpp button.cpp informationPanel.cpp hall.cpp gameScreenContext.cpp main.cpp $(LIBS)
 

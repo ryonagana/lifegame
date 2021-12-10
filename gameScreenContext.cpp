@@ -1,8 +1,8 @@
 #include "gameScreenContext.h"
 
 gameScreenContext::gameScreenContext(){
-	x0 = 0;
-	y0 = 0;
+	//x0 = 0;
+	//y0 = 0;
 	screen_W = 800;
 	screen_H = 600;
 }

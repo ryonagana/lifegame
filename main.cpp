@@ -13,6 +13,7 @@
 #include "button.h"
 #include "gameScreenContext.h"
 #include "bigTextLabel.h"
+#include "informationPanel.h"
 
 
 int SCREEN_W = 1300;
@@ -34,6 +35,8 @@ bool redraw = true;
 
 int init_allegro(void)
 {
+
+
 		// Initialize allegro
 		if (!al_init()) {
 			fprintf(stderr, "Failed to initialize allegro.\n");
@@ -65,12 +68,12 @@ int init_allegro(void)
 			return 1;
 		}
 
-		ALLEGRO_MONITOR_INFO info;
+		/*ALLEGRO_MONITOR_INFO info;
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
 			SCREEN_W = info.x2 - info.x1 - 100;
 			SCREEN_H = info.y2 - info.y1 - 100;
-		}
+		}*/
 
 		// Create the display
 		display = al_create_display(SCREEN_W, SCREEN_H);
@@ -85,6 +88,9 @@ int init_allegro(void)
 			fprintf(stderr, "Failed to create event queue.");
 			return 1;
 		}
+
+		al_init_font_addon();
+		al_init_ttf_addon();
 
 		// Register event sources
 		al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -101,11 +107,14 @@ int init_allegro(void)
 
 		al_init_primitives_addon();
 
+
+
 		return 1;
 }
 
 int main()
 {
+
 	init_allegro();
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
@@ -122,16 +131,18 @@ int main()
 	myButton loadButton(1130, 40, 100, 100);
 	myButton prevSpeedButton(230,110,32,32);
 	myButton nextSpeedButton(265,110,32,32);
+	myButton aboutButton(1250,40,32,32);
 	bigTextLabel<int> text1(50,50);
 	bigTextLabel<int> textGenerations(320,135);
+	myInformationPanel infoAbout(200,200,450,270);
+
+	aboutButton.setPressedAlwaysTrue();
 
 	text1.insertText("Life Game!");
 	text1.insertText("");
 	text1.insertText("3 WHITE neighbors and the BLACK becomes WHITE!! (It is ALIVE!)");
 	text1.insertText("Less than 2 WHITE neighbors, or more than 3, and the WHITE");
 	text1.insertText("becomes BLACK!! (It is DEAD!)");
-
-	//textGenerations.insertText("Generation # %d", nullptr);
 
 	resetButton.set_sprite1("pictures//reset.png");
 	resetButton.set_sprite2("pictures//reset.png");
@@ -154,6 +165,9 @@ int main()
 	nextSpeedButton.set_sprite1("pictures//next.png");
 	nextSpeedButton.set_sprite2("pictures//next.png");
 
+	aboutButton.set_sprite1("pictures//about.png");
+	aboutButton.set_sprite2("pictures//about.png");
+
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
 	hall1.setButtonCallBack_Restore(restoreButton);
@@ -163,6 +177,8 @@ int main()
     hall1.setButtonCallBack_PrevSpeed(prevSpeedButton);
     hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
     hall1.setTextGenerations(textGenerations);
+
+    infoAbout.setButtonCallBack_OpenAbout(aboutButton);
 
 	gameMainScreen.insertComponent(&hall1);
 	gameMainScreen.insertComponent(&playButton);
@@ -175,6 +191,8 @@ int main()
 	gameMainScreen.insertComponent(&nextSpeedButton);
 	gameMainScreen.insertComponent(&text1);
 	gameMainScreen.insertComponent(&textGenerations);
+	gameMainScreen.insertComponent(&infoAbout);
+	gameMainScreen.insertComponent(&aboutButton);
 	gameMainScreen.setGlobalTimer(timer);
 
 
