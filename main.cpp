@@ -68,12 +68,12 @@ int init_allegro(void)
 			return 1;
 		}
 
-		/*ALLEGRO_MONITOR_INFO info;
+		ALLEGRO_MONITOR_INFO info;
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
 			SCREEN_W = info.x2 - info.x1 - 100;
 			SCREEN_H = info.y2 - info.y1 - 100;
-		}*/
+		}
 
 		// Create the display
 		display = al_create_display(SCREEN_W, SCREEN_H);
