@@ -122,10 +122,10 @@ int main()
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
 
-	int blocSize = 10;
-	int numBlocW = (SCREEN_W-100)/blocSize;
-	int numBlocH = (SCREEN_H-170)/blocSize;
-	hall hall1(50, 150, blocSize, numBlocW, numBlocH);
+	int blocSize = 1;
+	int numBlocW = 1720;//(SCREEN_W-100)/blocSize;
+	int numBlocH = 810;//(SCREEN_H-170)/blocSize;
+	hall hall1(50, 150, blocSize, SCREEN_W, SCREEN_H);//SCREEN_W, SCREEN_H);
 	myButton playButton(570, 40, 100, 100);
 	myButton resetButton(680, 40, 100, 100);
 	myButton restoreButton(800, 40, 100, 100);
@@ -135,11 +135,15 @@ int main()
 	myButton prevSpeedButton(230,110,32,32);
 	myButton nextSpeedButton(265,110,32,32);
 	myButton aboutButton(1250,40,32,32);
+	myButton lessZoomButton(1250,110,32,32);
+	myButton moreZoomButton(1288,110,32,32);
 	bigTextLabel<int> text1(50,50);
 	bigTextLabel<int> textGenerations(320,135);
 	myInformationPanel infoAbout(200,200,450,270);
 
 	aboutButton.setPressedAlwaysTrue();
+	lessZoomButton.setPressedAlwaysFalse();
+	moreZoomButton.setPressedAlwaysTrue();
 
 	text1.insertText("Life Game!");
 	text1.insertText("");
@@ -171,6 +175,13 @@ int main()
 	aboutButton.set_sprite1("pictures//about.png");
 	aboutButton.set_sprite2("pictures//about.png");
 
+	lessZoomButton.set_sprite1("pictures//less.png");
+	lessZoomButton.set_sprite2("pictures//less.png");
+
+	moreZoomButton.set_sprite1("pictures//plus.png");
+	moreZoomButton.set_sprite2("pictures//plus.png");
+
+
 	hall1.setButtonCallBack(playButton);
 	hall1.setButtonCallBack_Reset(resetButton);
 	hall1.setButtonCallBack_Restore(restoreButton);
@@ -180,6 +191,8 @@ int main()
     hall1.setButtonCallBack_PrevSpeed(prevSpeedButton);
     hall1.setButtonCallBack_NextSpeed(nextSpeedButton);
     hall1.setTextGenerations(textGenerations);
+    hall1.setButtonCallBack_Zoom(lessZoomButton);
+    hall1.setButtonCallBack_Zoom(moreZoomButton);
 
     infoAbout.setButtonCallBack_OpenAbout(aboutButton);
 
@@ -196,6 +209,8 @@ int main()
 	gameMainScreen.insertComponent(&textGenerations);
 	gameMainScreen.insertComponent(&infoAbout);
 	gameMainScreen.insertComponent(&aboutButton);
+	gameMainScreen.insertComponent(&lessZoomButton);
+	gameMainScreen.insertComponent(&moreZoomButton);
 	gameMainScreen.setGlobalTimer(timer);
 
 
@@ -223,6 +238,7 @@ int main()
 					break;
 			}
 		}
+
 		gameMainScreen.setEvents(&event);
 
 		// Check if we need to redraw

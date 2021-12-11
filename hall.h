@@ -88,6 +88,12 @@ private:
 	int size;
 	int numero_x;
 	int numero_y;
+	int numBloc_X;
+	int numBloc_Y;
+	int bloco_x0;
+	int bloco_y0;
+	int screen_W;
+	int screen_H;
 	Quadrado** QuadradosList;
 	Quadrado** QuadradosListBackup;
 
@@ -115,8 +121,9 @@ public:
 		    {120,0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
 	};
 
-	hall(int x, int y, int sizeJ, int numeroX, int numeroY);
+	hall(int x, int y, int sizeJ, int screen_Wj, int screen_Hj);
 	~hall();
+	void calcNumBlocs();
 	void draw_line();
 	void draw_text();
 	void makeScreenBackup();
@@ -142,6 +149,7 @@ public:
 	void setButtonCallBack_LoadFile(myButton &b1);
 	void setButtonCallBack_NextSpeed(myButton &b1);
 	void setButtonCallBack_PrevSpeed(myButton &b1);
+	void setButtonCallBack_Zoom(myButton &b1);
 	//CallBack Pointer Functions
 	void restoreScreenBackup(bool);
 	void loadFunPatterns(bool);
@@ -151,6 +159,7 @@ public:
 	void loadFile(bool);
 	void NextSpeed(bool) override;
 	void PrevSpeed(bool) override;
+	void changeSize(bool zoom);
 
 };
 

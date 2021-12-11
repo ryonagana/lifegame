@@ -2,22 +2,30 @@
 #include <cstdio>
 #include <cstdlib>
 
-hall::hall(int x, int y, int sizeJ, int numeroX, int numeroY) : interfaceComponent() {
+hall::hall(int x, int y, int sizeJ, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	x0 = x;
 	y0 = y;
-	size = sizeJ;
-	numero_x = numeroX;
-	numero_y = numeroY;
+	size = 10;
+	numero_x = 1720;
+	numero_y = 810;
+	screen_W = screen_Wj;
+	screen_H = screen_Hj;
+	numBloc_X = (screen_W-100)/size; //1820
+	numBloc_Y = (screen_H-170)/size; //980
+	printf("\n numBloc_X %d\n", numBloc_X);
+	printf("\n numBloc_Y %d\n", numBloc_Y);
+	bloco_x0 = 0;
+	bloco_y0 = 0;
 
-	QuadradosList = new Quadrado*[numeroX];
-	for(int i = 0;i<numeroX;i++){
-		QuadradosList[i] = new Quadrado[numeroY];
+	QuadradosList = new Quadrado*[numero_x];
+	for(int i = 0;i<numero_x;i++){
+		QuadradosList[i] = new Quadrado[numero_y];
 	}
 	setQuadradoInf();
 
-	QuadradosListBackup = new Quadrado*[numeroX];
-	for(int i = 0;i<numeroX;i++){
-		QuadradosListBackup[i] = new Quadrado[numeroY];
+	QuadradosListBackup = new Quadrado*[numero_x];
+	for(int i = 0;i<numero_x;i++){
+		QuadradosListBackup[i] = new Quadrado[numero_y];
 	}
 
 	text_font = al_create_builtin_font();
@@ -38,13 +46,18 @@ hall::~hall(){
 
 }
 
+void hall::calcNumBlocs(){
+	numBloc_X = (screen_W-100)/size;
+	numBloc_Y = (screen_H-170)/size;
+}
+
 void hall::draw_line(){
    ALLEGRO_COLOR color;
    color = al_map_rgb_f(0.3, 0.3, 0.3);
    int x = x0;
    int y = y0;
-   int length = numero_x*size;
-   int height = numero_y*size;
+   int length = numBloc_X*size;
+   int height = numBloc_Y*size;
 
    while(y <= y0+height){
 	   al_draw_line(x, y, x+length, y, color, 0);
@@ -152,9 +165,9 @@ void hall::update(){
 	draw_text();
 	contAllNeighbors();
 	CreateAndKillLife();
-	for(int i = 0;i<numero_x;i++){
-		for(int j = 0;j<numero_y;j++){
-			QuadradosList[i][j].draw();
+	for(int i = 0;i<numBloc_X;i++){
+		for(int j = 0;j<numBloc_Y;j++){
+			QuadradosList[i+bloco_x0][j+bloco_y0].draw();
 		}
 	}
 }
@@ -162,9 +175,15 @@ void hall::update(){
 void hall::setQuadradoInf(){
 	for(int i = 0;i<numero_x;i++){
 		for(int j = 0;j<numero_y;j++){
-			QuadradosList[i][j].size = size;
-			QuadradosList[i][j].x = x0 + size*i;
-			QuadradosList[i][j].y = y0 + size*j;
+			if((i >= bloco_x0)&&(i < (bloco_x0+numBloc_X-1))&&(j >= bloco_y0)&&(j < (bloco_y0+numBloc_Y-1))){
+				QuadradosList[i][j].size = size;
+				QuadradosList[i][j].x = x0 + size*(i-bloco_x0);
+				QuadradosList[i][j].y = y0 + size*(j-bloco_y0);
+			}else{
+				QuadradosList[i][j].size = 0;
+				QuadradosList[i][j].x = -1;
+				QuadradosList[i][j].y = -1;
+			}
 		}
 	}
 }
@@ -228,7 +247,7 @@ Position hall::get_Position(int pos_x, int pos_y){
 		return Q1;
 	}
 
-	if((pos_x > (x0 + size * numero_x))||(pos_y > (y0 + size * numero_y))){
+	if((pos_x > (x0 + size * numBloc_X))||(pos_y > (y0 + size * numBloc_Y))){
 		return Q1;
 	}
 
@@ -238,8 +257,8 @@ Position hall::get_Position(int pos_x, int pos_y){
 	int y = pos_y - y0;
 	y = y / size;
 
-	Q1.x = x;
-	Q1.y = y;
+	Q1.x = x + bloco_x0;
+	Q1.y = y + bloco_y0;
 	return Q1;
 }
 
@@ -263,6 +282,14 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 			}
 		}
 	}
+	// ESTUDO MOUSE SCROLL!################################
+
+			if(ev->type == ALLEGRO_EVENT_MOUSE_AXES){
+						al_get_mouse_state(&state);
+
+						printf("\nMOUSE AXES MOVE! x = %d, y = %d \n", state.w, state.z);
+			}
+			//#####################################################
 }
 
 void hall::checkQuadrado(int x, int y, bool check){
@@ -386,6 +413,12 @@ void hall::setButtonCallBack_PrevSpeed(myButton &b1){
     b1.registerCallBack(this,cb);
 }
 
+void hall::setButtonCallBack_Zoom(myButton &b1){
+	funcCallBack cb = &myButtonCallBack::changeSize;
+	b1.registerCallBack(this,cb);
+}
+
+
 void hall::setTextGenerations(bigTextLabel<int> &t1){
 	t1.insertText("Generation #%d", &generationNumber);
 }
@@ -404,4 +437,16 @@ void hall::PrevSpeed(bool) {
 	actual_speed++;
 	if (actual_speed == NUMBER_OF_SPEEDS) actual_speed = SPEED_NORMAL;//Go back to the normal speed
 	this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
+}
+
+void hall::changeSize(bool zoom){
+	if(zoom){
+		if(size <= 25)size++;
+		calcNumBlocs();
+		setQuadradoInf();
+	}else{
+		if(size >= 2) size--;
+		calcNumBlocs();
+		setQuadradoInf();
+	}
 }
