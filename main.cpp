@@ -122,10 +122,7 @@ int main()
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
 
-	int blocSize = 1;
-	int numBlocW = 1720;//(SCREEN_W-100)/blocSize;
-	int numBlocH = 810;//(SCREEN_H-170)/blocSize;
-	hall hall1(50, 150, blocSize, SCREEN_W, SCREEN_H);//SCREEN_W, SCREEN_H);
+	hall hall1(50, 150, SCREEN_W, SCREEN_H);
 	myButton playButton(570, 40, 100, 100);
 	myButton resetButton(680, 40, 100, 100);
 	myButton restoreButton(800, 40, 100, 100);

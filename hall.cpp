@@ -2,20 +2,22 @@
 #include <cstdio>
 #include <cstdlib>
 
-hall::hall(int x, int y, int sizeJ, int screen_Wj, int screen_Hj) : interfaceComponent() {
+hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	x0 = x;
 	y0 = y;
 	size = 10;
-	numero_x = 1720;
-	numero_y = 810;
+	numero_x = screen_Wj-100;
+	numero_y = screen_Hj-170;
 	screen_W = screen_Wj;
 	screen_H = screen_Hj;
-	numBloc_X = (screen_W-100)/size; //1820
-	numBloc_Y = (screen_H-170)/size; //980
-	printf("\n numBloc_X %d\n", numBloc_X);
-	printf("\n numBloc_Y %d\n", numBloc_Y);
+	numBloc_X = (screen_W-100)/size;
+	numBloc_Y = (screen_H-170)/size;
 	bloco_x0 = 0;
 	bloco_y0 = 0;
+
+	ALLEGRO_MOUSE_STATE state;
+	al_get_mouse_state(&state);
+	lastScrollPosition = state.z;
 
 	QuadradosList = new Quadrado*[numero_x];
 	for(int i = 0;i<numero_x;i++){
@@ -49,6 +51,16 @@ hall::~hall(){
 void hall::calcNumBlocs(){
 	numBloc_X = (screen_W-100)/size;
 	numBloc_Y = (screen_H-170)/size;
+
+
+	if((numero_x - bloco_x0) < numBloc_X){
+		bloco_x0 = numero_x - numBloc_X;
+	}
+
+	if((numero_y - bloco_y0) < numBloc_Y){
+		bloco_y0 = numero_y - numBloc_Y;
+	}
+
 }
 
 void hall::draw_line(){
@@ -282,18 +294,61 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 			}
 		}
 	}
-	// ESTUDO MOUSE SCROLL!################################
 
-			if(ev->type == ALLEGRO_EVENT_MOUSE_AXES){
-						al_get_mouse_state(&state);
-
-						printf("\nMOUSE AXES MOVE! x = %d, y = %d \n", state.w, state.z);
+	if(ev->type == ALLEGRO_EVENT_MOUSE_AXES){
+		al_get_mouse_state(&state);
+		if(lastScrollPosition != state.z){
+			if(lastScrollPosition < state.z){
+				calcNewBlocZeroZero(state.x, state.y, size+1);
+				changeSize(true);
+				lastScrollPosition = state.z;
+			}else{
+				//Just Zoom in have to position the camera.
+				//because of it the below function is commented.
+				//calcNewBlocZeroZero(state.x, state.y, size-1);
+				changeSize(false);
+				lastScrollPosition = state.z;
 			}
-			//#####################################################
+		}
+	}
+
 }
 
 void hall::checkQuadrado(int x, int y, bool check){
 	QuadradosList[x][y].checked = check;
+}
+
+void hall::calcNewBlocZeroZero(int pos_x, int pos_y, int nextSize){
+	Position Q1 = get_Position(pos_x, pos_y);
+	if(nextSize < 1) return;
+	if(nextSize > 25) return;
+	if((Q1.x == -1)||(Q1.y == -1)) return;
+
+	int distanceToBorderX = pos_x - x0;
+	int distanceToBorderY = pos_y - y0;
+
+	int oldQtyBlocksToBorderX = distanceToBorderX/size;
+	int oldQtyBlocksToBorderY = distanceToBorderY/size;
+
+	int newQtyBlocksToBorderX = distanceToBorderX/nextSize;
+	int newQtyBlocksToBorderY = distanceToBorderY/nextSize;
+
+
+	if(Q1.x >= numBloc_X/2){
+		bloco_x0 = bloco_x0 - newQtyBlocksToBorderX + oldQtyBlocksToBorderX;
+	}
+
+	if(Q1.y >= numBloc_Y/2){
+		bloco_y0 = bloco_y0 - newQtyBlocksToBorderY + oldQtyBlocksToBorderY;
+	}
+
+	if(bloco_x0 < 0){
+		bloco_x0 = 0;
+	}
+
+	if(bloco_y0 < 0){
+		bloco_y0 = 0;
+	}
 }
 
 void hall::loadFunPatterns(bool){

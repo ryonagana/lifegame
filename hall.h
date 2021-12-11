@@ -94,6 +94,7 @@ private:
 	int bloco_y0;
 	int screen_W;
 	int screen_H;
+	int lastScrollPosition;
 	Quadrado** QuadradosList;
 	Quadrado** QuadradosListBackup;
 
@@ -121,7 +122,7 @@ public:
 		    {120,0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
 	};
 
-	hall(int x, int y, int sizeJ, int screen_Wj, int screen_Hj);
+	hall(int x, int y, int screen_Wj, int screen_Hj);
 	~hall();
 	void calcNumBlocs();
 	void draw_line();
@@ -138,6 +139,7 @@ public:
 	void setTextGenerations(bigTextLabel<int> &t1);
 	int contNeighbors(int x, int y);
 	void contAllNeighbors();
+	void calcNewBlocZeroZero(int pos_x, int pos_y, int nextSize);
 	void CreateAndKillLife();
 
 	//CallBack Register Functions
