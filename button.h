@@ -33,7 +33,12 @@ private:
 	bool alwaysButton; // If holdButton = true the button pressed will be kept always in this position.
 	ALLEGRO_BITMAP *picture1 = NULL;
 	ALLEGRO_BITMAP *picture2 = NULL;
+	ALLEGRO_FONT *button_font;
 	std::vector<ObjectCallBack> CallBackList;
+
+	std::string query_description;  //an info when you put mouse over the button pop up a short description
+    float mouseover_time;
+    bool mouse_is_over;
 
 public:
 	myButton(int x, int y, int sizeX, int sizeY);
@@ -48,6 +53,7 @@ public:
 	void update();
 	void load_sprites();
 	void draw_sprites();
+	void set_description(const std::string text);
 	void registerCallBack(myButtonCallBack* object, funcCallBack c1);
 	void set_sprite1(const char *filename);
 	void set_sprite2(const char *filename);

@@ -10,6 +10,9 @@ myButton::myButton(int x, int y, int sizeX, int sizeY){
 	visible = true;
 	holdButton = false;
 	alwaysButton = false;
+	mouseover_time = 0.0f;
+	mouse_is_over = false;
+	button_font = nullptr;
 	load_sprites();
 }
 
@@ -22,6 +25,9 @@ myButton::myButton(){
 	visible = true;
 	holdButton = false;
 	alwaysButton = false;
+	mouseover_time = 0.0f;
+	mouse_is_over = false;
+	button_font = nullptr;
 	load_sprites();
 }
 
@@ -76,6 +82,20 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 	ALLEGRO_MOUSE_STATE state;
 
 	if(visible == true){
+
+        if(ev->type == ALLEGRO_EVENT_MOUSE_AXES){
+            al_get_mouse_state(&state);
+
+            if((state.x >= x0)&&(state.x <= x0+sizeX0)){
+                if((state.y >= y0)&&(state.y <= y0+sizeX0)){
+						mouse_is_over = true;
+                }
+            }else {
+                mouse_is_over = false;
+                //printf("MOUSE OVER %d \n\n",mouse_is_over);
+            }
+        }
+
 		if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 			al_get_mouse_state(&state);
 			if (state.buttons & 1) {
@@ -112,6 +132,8 @@ void myButton::load_sprites()
    if (!picture2){
 	   printf("\n\nNAO CARREGOU picture2\n\n");
    }
+
+   this->button_font = al_create_builtin_font();
 }
 
 void myButton::set_sprite1(const char *filename){
@@ -129,17 +151,31 @@ void myButton::set_sprite2(const char *filename){
 }
 
 void myButton::draw_sprites(){
+
+
+
 	if(!pressed){
-	al_draw_scaled_bitmap(picture1,
-		    0,                                 //Source x
-			0,								   //Source y
-			al_get_bitmap_width(picture1),     //Source Width
-			al_get_bitmap_height(picture1),    //Source Height
-			x0, 							   //Destination x
-			y0, 							   //Destination y
-			sizeX0, 						   //Destination Width
-			sizeY0, 						   //Destination Height
-			0);
+        al_draw_scaled_bitmap(picture1,
+                0,                                 //Source x
+                0,								   //Source y
+                al_get_bitmap_width(picture1),     //Source Width
+                al_get_bitmap_height(picture1),    //Source Height
+                x0, 							   //Destination x
+                y0, 							   //Destination y
+                sizeX0, 						   //Destination Width
+                sizeY0, 						   //Destination Height
+                0);
+
+        if(mouse_is_over && query_description.size() > 0 ){
+            const int query_width = al_get_text_width(button_font, query_description.c_str()) + 75;
+            const int query_height = 200;
+
+
+            al_draw_filled_rectangle(x0,y0+sizeY0, x0+query_width,y0+query_height, al_map_rgba(0,0,0,255));
+            al_draw_rectangle(x0,y0+sizeY0, x0+query_width-1,y0+query_height, al_map_rgba(255,255,255,255),1.0);
+            al_draw_textf(button_font, al_map_rgba(255,255,255,255), x0 + 10, y0+sizeY0 + 10, 0, "%s", query_description.c_str());
+        }
+
 	}else{
 	al_draw_scaled_bitmap(picture2,
 			0,                                 //Source x
@@ -153,4 +189,10 @@ void myButton::draw_sprites(){
 			0);
 	}
 
+
+
+}
+
+void myButton::set_description(const std::string text){
+    query_description = text;
 }
