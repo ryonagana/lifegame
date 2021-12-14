@@ -72,7 +72,7 @@ int init_allegro(void)
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
 			SCREEN_W = info.x2 - info.x1;
-			SCREEN_H = info.y2 - info.y1;
+			SCREEN_H = info.y2 - info.y1 - 50;
 		}
 
 		// Create the display
@@ -131,9 +131,10 @@ int main()
 	myButton loadButton(1130, 40, 100, 100);
 	myButton prevSpeedButton(230,110,32,32);
 	myButton nextSpeedButton(265,110,32,32);
-	myButton aboutButton(1250,40,32,32);
 	myButton lessZoomButton(1250,110,32,32);
-	myButton moreZoomButton(1288,110,32,32);
+	myButton moreZoomButton(1250,75,32,32);
+	myButton aboutButton(1250,40,32,32);
+	//myButton moreZoomButton(1288,110,32,32);
 	bigTextLabel<int> text1(50,50);
 	bigTextLabel<int> textGenerations(320,135);
 	myInformationPanel infoAbout(200,200,450,270);
@@ -148,7 +149,7 @@ int main()
 	text1.insertText("Less than 2 WHITE neighbors, or more than 3, and the WHITE");
 	text1.insertText("becomes BLACK!! (It is DEAD!)");
 
-	playButton.set_description("Play the Game! (start generations)");
+	playButton.set_description("Play the Game! (Start generations)");
     aboutButton.set_description("About us...??");
 
 	resetButton.set_sprite1("pictures//reset.png");
@@ -161,34 +162,34 @@ int main()
 
 	funButton.set_sprite1("pictures//fun.png");
 	funButton.set_sprite2("pictures//fun.png");
-	funButton.set_description("Generates Fun Patterns");
+	funButton.set_description("Generates fun patterns");
 
 	saveButton.set_sprite1("pictures//save.png");
 	saveButton.set_sprite2("pictures//save.png");
-	saveButton.set_description("Saves a grid in a  file");
+	saveButton.set_description("Saves the grid to a file");
 
 	loadButton.set_sprite1("pictures//load.png");
 	loadButton.set_sprite2("pictures//load.png");
-	loadButton.set_description("Loads a  saved game file to the game");
+	loadButton.set_description("Loads a saved game file to the game");
 
 	prevSpeedButton.set_sprite1("pictures//prev.png");
 	prevSpeedButton.set_sprite2("pictures//prev.png");
-	prevSpeedButton.set_description("Decreases the speed of evolution");
+	prevSpeedButton.set_description("Decreases speed of evolution");
 
 	nextSpeedButton.set_sprite1("pictures//next.png");
 	nextSpeedButton.set_sprite2("pictures//next.png");
-    nextSpeedButton.set_description("Increase the speed of evolution");
+    nextSpeedButton.set_description("Increase speed of evolution");
 
 	aboutButton.set_sprite1("pictures//about.png");
 	aboutButton.set_sprite2("pictures//about.png");
 
 	lessZoomButton.set_sprite1("pictures//less.png");
 	lessZoomButton.set_sprite2("pictures//less.png");
-	lessZoomButton.set_description("Increase Zoom");
+	lessZoomButton.set_description("Zoom out");
 
 	moreZoomButton.set_sprite1("pictures//plus.png");
 	moreZoomButton.set_sprite2("pictures//plus.png");
-    moreZoomButton.set_description("Increase Zoom");
+    moreZoomButton.set_description("Zoom in");
 
 
 	hall1.setButtonCallBack(playButton);
@@ -217,11 +218,10 @@ int main()
 	gameMainScreen.insertComponent(&text1);
 	gameMainScreen.insertComponent(&textGenerations);
 	gameMainScreen.insertComponent(&infoAbout);
-	gameMainScreen.insertComponent(&aboutButton);
 	gameMainScreen.insertComponent(&lessZoomButton);
 	gameMainScreen.insertComponent(&moreZoomButton);
+	gameMainScreen.insertComponent(&aboutButton);
 	gameMainScreen.setGlobalTimer(timer);
-
 
 	// Game loop
 	while (running) {
@@ -257,7 +257,6 @@ int main()
 			al_flip_display();
 			redraw = false;
 		}
-
 	}
 
 	// Clean up

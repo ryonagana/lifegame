@@ -53,6 +53,7 @@ public:
 	void update();
 	void load_sprites();
 	void draw_sprites();
+	void drawHint();
 	void set_description(const std::string text);
 	void registerCallBack(myButtonCallBack* object, funcCallBack c1);
 	void set_sprite1(const char *filename);

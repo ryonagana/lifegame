@@ -150,10 +150,17 @@ void myButton::set_sprite2(const char *filename){
 	}
 }
 
+void myButton::drawHint(){
+	if(mouse_is_over && query_description.size() > 0 ){
+		const int query_width = al_get_text_width(button_font, query_description.c_str()) + 20;
+	    const int query_height = sizeY0+30;
+        al_draw_filled_rectangle(x0,y0+sizeY0, x0+query_width,y0+query_height, al_map_rgba(0,0,0,255));
+        al_draw_rectangle(x0,y0+sizeY0, x0+query_width-1,y0+query_height, al_map_rgba(255,255,255,255),1.0);
+        al_draw_textf(button_font, al_map_rgba(255,255,255,255), x0 + 10, y0+sizeY0 + 10, 0, "%s", query_description.c_str());
+	}
+}
+
 void myButton::draw_sprites(){
-
-
-
 	if(!pressed){
         al_draw_scaled_bitmap(picture1,
                 0,                                 //Source x
@@ -166,27 +173,23 @@ void myButton::draw_sprites(){
                 sizeY0, 						   //Destination Height
                 0);
 
-        if(mouse_is_over && query_description.size() > 0 ){
-            const int query_width = al_get_text_width(button_font, query_description.c_str()) + 75;
-            const int query_height = 200;
-
-
-            al_draw_filled_rectangle(x0,y0+sizeY0, x0+query_width,y0+query_height, al_map_rgba(0,0,0,255));
-            al_draw_rectangle(x0,y0+sizeY0, x0+query_width-1,y0+query_height, al_map_rgba(255,255,255,255),1.0);
-            al_draw_textf(button_font, al_map_rgba(255,255,255,255), x0 + 10, y0+sizeY0 + 10, 0, "%s", query_description.c_str());
-        }
+        drawHint();
 
 	}else{
-	al_draw_scaled_bitmap(picture2,
-			0,                                 //Source x
-			0,								   //Source y
-			al_get_bitmap_width(picture2),     //Source Width
-			al_get_bitmap_height(picture2),    //Source Height
-			x0, 							   //Destination x
-			y0, 							   //Destination y
-			sizeX0, 						   //Destination Width
-			sizeY0, 						   //Destination Height
-			0);
+		al_draw_scaled_bitmap(picture2,
+				0,                                 //Source x
+				0,								   //Source y
+				al_get_bitmap_width(picture2),     //Source Width
+				al_get_bitmap_height(picture2),    //Source Height
+				x0, 							   //Destination x
+				y0, 							   //Destination y
+				sizeX0, 						   //Destination Width
+				sizeY0, 						   //Destination Height
+				0);
+
+		if((holdButton)&&(alwaysButton)){
+			drawHint();
+		}
 	}
 
 
