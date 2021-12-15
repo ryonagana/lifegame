@@ -15,6 +15,8 @@ hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	bloco_x0 = 0;
 	bloco_y0 = 0;
 
+	keys[6] = {0};
+
 	ALLEGRO_MOUSE_STATE state;
 	al_get_mouse_state(&state);
 	lastScrollPosition = state.z;
@@ -234,7 +236,7 @@ void hall::CreateAndKillLife(){
 }
 
 void hall::update(){
-
+	moveGrid();
 }
 
 void hall::draw(){
@@ -384,24 +386,70 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 void hall::keyboard_event_input(ALLEGRO_EVENT *ev){
 	 if(ev->type == ALLEGRO_EVENT_KEY_DOWN){
 	            if(ev->keyboard.keycode == ALLEGRO_KEY_W || ev->keyboard.keycode == ALLEGRO_KEY_UP){
-	            	moveDown();
+	            	keys[KEY_UP] = 1;
 	            }
 
 	            if(ev->keyboard.keycode == ALLEGRO_KEY_S || ev->keyboard.keycode == ALLEGRO_KEY_DOWN){
-	            	moveUp();
+	            	keys[KEY_DOWN] = 1;
 	            }
 
 	            if(ev->keyboard.keycode == ALLEGRO_KEY_A || ev->keyboard.keycode == ALLEGRO_KEY_LEFT){
-	            	moveRight();
+	            	keys[KEY_LEFT] = 1;
 	            }
 
 	            if(ev->keyboard.keycode == ALLEGRO_KEY_D || ev->keyboard.keycode == ALLEGRO_KEY_RIGHT){
-	            	moveLeft();
+	            	keys[KEY_RIGHT] = 1;
 	            }
 	            setQuadradoInf();
 	 }
 
+	 if(ev->type == ALLEGRO_EVENT_KEY_UP){
+	 	            if(ev->keyboard.keycode == ALLEGRO_KEY_W || ev->keyboard.keycode == ALLEGRO_KEY_UP){
+	 	            	keys[KEY_UP] = 0;
+	 	            }
+
+	 	            if(ev->keyboard.keycode == ALLEGRO_KEY_S || ev->keyboard.keycode == ALLEGRO_KEY_DOWN){
+	 	            	keys[KEY_DOWN] = 0;
+	 	            }
+
+	 	            if(ev->keyboard.keycode == ALLEGRO_KEY_A || ev->keyboard.keycode == ALLEGRO_KEY_LEFT){
+	 	            	keys[KEY_LEFT] = 0;
+	 	            }
+
+	 	            if(ev->keyboard.keycode == ALLEGRO_KEY_D || ev->keyboard.keycode == ALLEGRO_KEY_RIGHT){
+	 	            	keys[KEY_RIGHT] = 0;
+	 	            }
+	 }
 }
+
+void hall::moveGrid(){
+	bool updateGrid = false;
+	if(keys[KEY_UP] == 1){
+		moveUp();
+		updateGrid = true;
+	}
+
+	if(keys[KEY_DOWN] == 1){
+		moveDown();
+		updateGrid = true;
+	}
+
+	if(keys[KEY_LEFT] == 1){
+		moveLeft();
+		updateGrid = true;
+	}
+
+	if(keys[KEY_RIGHT] == 1){
+		moveRight();
+		updateGrid = true;
+	}
+
+	if(updateGrid){
+		setQuadradoInf();
+	}
+}
+
+
 
 void hall::moveUp(){
 	if(bloco_y0 > 0){

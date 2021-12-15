@@ -31,6 +31,14 @@ enum {
     NUMBER_OF_SPEEDS
 };
 
+enum {
+    KEY_UP,
+    KEY_DOWN,
+    KEY_LEFT,
+    KEY_RIGHT,
+	NUMBER_OF_KEYS
+};
+
 typedef struct Position {
     int x;
     int y;
@@ -98,6 +106,8 @@ private:
 	Quadrado** QuadradosList;
 	Quadrado** QuadradosListBackup;
 
+	int keys[6];
+
 	ALLEGRO_FONT *text_font = NULL;
 
 	myButton* buttonReset;
@@ -138,6 +148,7 @@ public:
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	void keyboard_event_input(ALLEGRO_EVENT *ev);
 
+	void moveGrid();
 	void moveUp();
 	void moveLeft();
 	void moveDown();
