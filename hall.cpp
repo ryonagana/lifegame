@@ -152,47 +152,40 @@ void hall::setButtonCallBack_LoadFile(myButton &b1){
 }
 
 void hall::saveFile(bool){
-	//saveToFile("SavedFile.txt");
-
     ALLEGRO_FILECHOOSER *filechooser = nullptr;
     ALLEGRO_PATH *path = nullptr;
 
 	if(!save_dialog_open){
-    save_dialog_open = true;
-	filechooser = al_create_native_file_dialog(".","SAVE File", "*.txt", ALLEGRO_FILECHOOSER_SAVE);
+		save_dialog_open = true;
+		filechooser = al_create_native_file_dialog(".","SAVE File", "*.txt", ALLEGRO_FILECHOOSER_SAVE);
 
-	if(!filechooser){
-        return;
+		if(!filechooser){
+			return;
+		}
+
+		al_stop_timer(timer);
+		al_flush_event_queue(queue);
+		al_pause_event_queue(queue, true);
+		//true when click OK
+		if(al_show_native_file_dialog(display, filechooser) && save_dialog_open ){
+			const char *fname = al_get_native_file_dialog_path(filechooser, 0);
+			path = al_create_path(fname);
+			const char *fullpath_save = al_path_cstr(path,ALLEGRO_NATIVE_PATH_SEP);
+			saveToFile(fullpath_save);
+			al_resume_timer(timer);
+			al_pause_event_queue(queue, false);
+			save_dialog_open = false;
+		}
+
+		al_destroy_native_file_dialog(filechooser);
+		al_destroy_path(path);
+		al_resume_timer(timer);
+		al_pause_event_queue(queue, false);
+		save_dialog_open = false;
 	}
-
-    al_stop_timer(timer);
-    al_flush_event_queue(queue);
-    al_pause_event_queue(queue, true);
-    //true when click OK
-	if(al_show_native_file_dialog(display, filechooser) && save_dialog_open ){
-        const char *fname = al_get_native_file_dialog_path(filechooser, 0);
-        path = al_create_path(fname);
-        const char *fullpath_save = al_path_cstr(path,ALLEGRO_NATIVE_PATH_SEP);
-        saveToFile(fullpath_save);
-        al_resume_timer(timer);
-        al_pause_event_queue(queue, false);
-        save_dialog_open = false;
-	}
-
-    al_destroy_native_file_dialog(filechooser);
-    al_destroy_path(path);
-	al_resume_timer(timer);
-    al_pause_event_queue(queue, false);
-    save_dialog_open = false;
-
-
-	}
-
 }
 
 void hall::loadFile(bool){
-
-
 	ALLEGRO_FILECHOOSER *filechooser = nullptr;
     ALLEGRO_PATH *path = nullptr;
 
@@ -222,9 +215,7 @@ void hall::loadFile(bool){
         al_resume_timer(timer);
         al_pause_event_queue(queue, false);
         load_dialog_open = false;
-
 	}
-
 }
 
 void hall::CreateAndKillLife(){
@@ -261,7 +252,7 @@ void hall::draw(){
 void hall::setQuadradoInf(){
 	for(int i = 0;i<numero_x;i++){
 		for(int j = 0;j<numero_y;j++){
-			if((i >= bloco_x0)&&(i < (bloco_x0+numBloc_X-1))&&(j >= bloco_y0)&&(j < (bloco_y0+numBloc_Y-1))){
+			if((i >= bloco_x0)&&(i < (bloco_x0+numBloc_X))&&(j >= bloco_y0)&&(j < (bloco_y0+numBloc_Y))){
 				QuadradosList[i][j].size = size;
 				QuadradosList[i][j].x = x0 + size*(i-bloco_x0);
 				QuadradosList[i][j].y = y0 + size*(j-bloco_y0);
@@ -333,7 +324,7 @@ Position hall::get_Position(int pos_x, int pos_y){
 		return Q1;
 	}
 
-	if((pos_x > (x0 + size * numBloc_X))||(pos_y > (y0 + size * numBloc_Y))){
+	if((pos_x >= (x0 + size * numBloc_X))||(pos_y >= (y0 + size * numBloc_Y))){
 		return Q1;
 	}
 
@@ -345,6 +336,12 @@ Position hall::get_Position(int pos_x, int pos_y){
 
 	Q1.x = x + bloco_x0;
 	Q1.y = y + bloco_y0;
+
+	if(Q1.x >= numero_x || Q1.y >= numero_y){
+		printf("ERROR: Out of memory space: Q1.x = %d, ", Q1.x);
+		printf("Q1.y = %d\n\n", Q1.y);
+	}
+
 	return Q1;
 }
 
@@ -373,8 +370,8 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 				changeSize(true);
 				lastScrollPosition = state.z;
 			}else{
-				//Just Zoom in have to position the camera.
-				//because of it the below function is commented.
+				//Just ´Zoom in´ have to position the camera.
+				//because of it, the below function is commented.
 				//calcNewBlocZeroZero(state.x, state.y, size-1);
 				changeSize(false);
 				lastScrollPosition = state.z;
@@ -382,6 +379,52 @@ void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 		}
 	}
 
+}
+
+void hall::keyboard_event_input(ALLEGRO_EVENT *ev){
+	 if(ev->type == ALLEGRO_EVENT_KEY_DOWN){
+	            if(ev->keyboard.keycode == ALLEGRO_KEY_W || ev->keyboard.keycode == ALLEGRO_KEY_UP){
+	            	moveDown();
+	            }
+
+	            if(ev->keyboard.keycode == ALLEGRO_KEY_S || ev->keyboard.keycode == ALLEGRO_KEY_DOWN){
+	            	moveUp();
+	            }
+
+	            if(ev->keyboard.keycode == ALLEGRO_KEY_A || ev->keyboard.keycode == ALLEGRO_KEY_LEFT){
+	            	moveRight();
+	            }
+
+	            if(ev->keyboard.keycode == ALLEGRO_KEY_D || ev->keyboard.keycode == ALLEGRO_KEY_RIGHT){
+	            	moveLeft();
+	            }
+	            setQuadradoInf();
+	 }
+
+}
+
+void hall::moveUp(){
+	if(bloco_y0 > 0){
+		bloco_y0 = bloco_y0 - 1;
+	}
+}
+
+void hall::moveLeft(){
+	if(bloco_x0 > 0){
+		bloco_x0 = bloco_x0 - 1;
+	}
+}
+
+void hall::moveDown(){
+	if((bloco_y0 + numBloc_Y) < numero_y){
+		bloco_y0 = bloco_y0 + 1;
+	}
+}
+
+void hall::moveRight(){
+	if((bloco_x0 + numBloc_X) < numero_x){
+		bloco_x0 = bloco_x0 + 1;
+	}
 }
 
 void hall::checkQuadrado(int x, int y, bool check){
@@ -580,4 +623,5 @@ void hall::changeSize(bool zoom){
 
 void hall::update_input(ALLEGRO_EVENT *e){
     mouse_event_input(e);
+    keyboard_event_input(e);
 }

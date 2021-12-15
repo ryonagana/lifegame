@@ -136,6 +136,12 @@ public:
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
+	void keyboard_event_input(ALLEGRO_EVENT *ev);
+
+	void moveUp();
+	void moveLeft();
+	void moveDown();
+	void moveRight();
 
 	int saveToFile(const std::string file);
 	int readFile(const std::string file);
