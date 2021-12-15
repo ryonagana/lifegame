@@ -488,6 +488,7 @@ int hall::saveToFile (const std::string file) {
   myfile << numero_x << " " <<  numero_y << "\n";
   for(int i = 0;i<numero_x;i++){
   	for(int j = 0;j<numero_y;j++){
+        if(!QuadradosList[i][j].checked) continue;
   		myfile << i << " " <<  j << " " << QuadradosList[i][j].checked << "\n";
   	}
   }
@@ -511,6 +512,7 @@ int hall::readFile (const std::string file) {
 
 		while ( getline (myfile,line) )
 	    {
+
 			std::stringstream ss(line);
 			std::string word;
 			int i = -1;
@@ -519,7 +521,7 @@ int hall::readFile (const std::string file) {
 			ss >> i;
 			ss >> j;
 			ss >> check;
-			if((i < numero_x)&&(j < numero_y)){
+			if((i < numero_x)&&(j < numero_y) && !QuadradosList[i][j].checked){
 				QuadradosList[i][j].checked = check;
 			}
 	    }
