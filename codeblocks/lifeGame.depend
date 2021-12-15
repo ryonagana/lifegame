@@ -1,16 +1,16 @@
 # depslib dependency file v1.0
-1639591481 source:d:\projetos\cpp\lifegame\bigtextlabel.cpp
+1639595417 source:d:\projetos\cpp\lifegame\bigtextlabel.cpp
 	"bigTextLabel.h"
 
 1638888048 bel.h"
 
-1639591481 d:\projetos\cpp\lifegame\bigtextlabel.h
+1639595417 d:\projetos\cpp\lifegame\bigtextlabel.h
 	"interfaceComponent.h"
 	<vector>
 
 1638888048 
 
-1639591570 d:\projetos\cpp\lifegame\interfacecomponent.h
+1639595417 d:\projetos\cpp\lifegame\interfacecomponent.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -373,10 +373,10 @@
 1615199821 d:\projetos\libs\allegro-5.2.7\include\allegro5\allegro_native_dialog.h
 	"allegro5/allegro.h"
 
-1639591481 source:d:\projetos\cpp\lifegame\button.cpp
+1639595417 source:d:\projetos\cpp\lifegame\button.cpp
 	"button.h"
 
-1639591481 d:\projetos\cpp\lifegame\button.h
+1639595417 d:\projetos\cpp\lifegame\button.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -393,12 +393,12 @@
 1639591481 d:\projetos\cpp\lifegame\classcallback.h
 	<iostream>
 
-1639591481 source:d:\projetos\cpp\lifegame\gamescreencontext.cpp
+1639595417 source:d:\projetos\cpp\lifegame\gamescreencontext.cpp
 	"gameScreenContext.h"
 
 1638795384 nContext.h"
 
-1639591481 d:\projetos\cpp\lifegame\gamescreencontext.h
+1639595417 d:\projetos\cpp\lifegame\gamescreencontext.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -415,7 +415,7 @@
 	"button.h"
 	"hall.h"
 
-1639591481 d:\projetos\cpp\lifegame\hall.h
+1639595417 d:\projetos\cpp\lifegame\hall.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -434,12 +434,12 @@
 	<string>
 	<sstream>
 
-1639591481 source:d:\projetos\cpp\lifegame\hall.cpp
+1639595417 source:d:\projetos\cpp\lifegame\hall.cpp
 	"hall.h"
 	<cstdio>
 	<cstdlib>
 
-1639591481 source:d:\projetos\cpp\lifegame\main.cpp
+1639595417 source:d:\projetos\cpp\lifegame\main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -878,10 +878,10 @@
 	"bigTextLabel.h"
 	"informationPanel.h"
 
-1639591481 source:d:\projetos\cpp\lifegame\informationpanel.cpp
+1639595417 source:d:\projetos\cpp\lifegame\informationpanel.cpp
 	"informationPanel.h"
 
-1639591481 d:\projetos\cpp\lifegame\informationpanel.h
+1639595417 d:\projetos\cpp\lifegame\informationpanel.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
