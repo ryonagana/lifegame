@@ -35,7 +35,6 @@ public:
         queue = q;
 	}
 
-	virtual void setEvents(ALLEGRO_EVENT *ev) = 0;
 	virtual void update() = 0;
 	virtual void update_input(ALLEGRO_EVENT *ev) = 0;
 	virtual void draw() = 0;

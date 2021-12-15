@@ -10,7 +10,7 @@
 
 1638888048 
 
-1639586768 d:\projetos\cpp\lifegame\interfacecomponent.h
+1639590781 d:\projetos\cpp\lifegame\interfacecomponent.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -434,7 +434,7 @@
 	<string>
 	<sstream>
 
-1639588087 source:d:\projetos\cpp\lifegame\hall.cpp
+1639588716 source:d:\projetos\cpp\lifegame\hall.cpp
 	"hall.h"
 	<cstdio>
 	<cstdlib>
