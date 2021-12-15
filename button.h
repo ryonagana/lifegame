@@ -37,7 +37,6 @@ private:
 	std::vector<ObjectCallBack> CallBackList;
 
 	std::string query_description;  //an info when you put mouse over the button pop up a short description
-    float mouseover_time;
     bool mouse_is_over;
 
 public:

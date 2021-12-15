@@ -29,10 +29,10 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
-ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
+const ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
 bool running = true;
 bool redraw = false;
 
@@ -79,11 +79,16 @@ int init_allegro(void)
 		}
 
 		// Create the display
+		al_set_new_display_flags(ALLEGRO_OPENGL_3_0 | ALLEGRO_WINDOWED);
+
 		display = al_create_display(SCREEN_W, SCREEN_H);
 		if (!display) {
 			fprintf(stderr, "Failed to create display.\n");
 			return 1;
 		}
+
+        //force all bitmaps being used by GPU + better quality, less crisp
+		al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
 
 		// Create the event queue
 		event_queue = al_create_event_queue();
@@ -229,6 +234,7 @@ int main()
 	gameMainScreen.insertComponent(&aboutButton);
     gameMainScreen.setGlobalTimer(timer);
 	gameMainScreen.setGlobalDisplay(display);
+	gameMainScreen.setGlobalEventQueue(event_queue);
 
 
     while(running){
@@ -236,21 +242,22 @@ int main()
         ALLEGRO_TIMEOUT timeout;
 
         al_init_timeout(&timeout, MAX_TIMEOUT);
-        al_wait_for_event_until(event_queue, &event, &timeout);
+        const bool has_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
+        if(has_event){
+            if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+                running = false;
+                break;
+            }
 
-        if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-            running = false;
-            break;
+            if(event.type == ALLEGRO_EVENT_TIMER){
+                gameMainScreen.update();
+                redraw = true;
+            }
+
+            gameMainScreen.update_input(&event);
+
         }
-
-
-        if(event.type == ALLEGRO_EVENT_TIMER){
-            gameMainScreen.update();
-            redraw = true;
-        }
-
-        gameMainScreen.update_input(&event);
 
         if(redraw && al_event_queue_is_empty(event_queue)){
             redraw = false;

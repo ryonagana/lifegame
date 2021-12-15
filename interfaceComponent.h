@@ -15,6 +15,7 @@ class interfaceComponent{
 protected:
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_DISPLAY *display;
+	ALLEGRO_EVENT_QUEUE *queue;
 
 public:
 	interfaceComponent(){
@@ -28,6 +29,10 @@ public:
 
 	void setGlobalDisplay(ALLEGRO_DISPLAY *dsp){
         display = dsp;
+	}
+
+	void setGlobalEventQueue(ALLEGRO_EVENT_QUEUE *q){
+        queue = q;
 	}
 
 	virtual void setEvents(ALLEGRO_EVENT *ev) = 0;

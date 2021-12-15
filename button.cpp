@@ -10,7 +10,6 @@ myButton::myButton(int x, int y, int sizeX, int sizeY){
 	visible = true;
 	holdButton = false;
 	alwaysButton = false;
-	mouseover_time = 0.0f;
 	mouse_is_over = false;
 	button_font = nullptr;
 	load_sprites();
@@ -25,7 +24,6 @@ myButton::myButton(){
 	visible = true;
 	holdButton = false;
 	alwaysButton = false;
-	mouseover_time = 0.0f;
 	mouse_is_over = false;
 	button_font = nullptr;
 	load_sprites();
