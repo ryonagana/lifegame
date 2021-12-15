@@ -75,7 +75,11 @@ void myButton::setPressedAlwaysTrue(){
 
 
 void myButton::setEvents(ALLEGRO_EVENT *ev){
-	mouse_event_input(ev);
+
+}
+
+void myButton::update_input(ALLEGRO_EVENT *e){
+    mouse_event_input(e);
 }
 
 void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
@@ -119,7 +123,7 @@ void myButton::registerCallBack(myButtonCallBack* object, funcCallBack f1){
 }
 
 void myButton::update(){
-	if(visible == true)draw_sprites();
+
 }
 
 void myButton::load_sprites()
@@ -127,10 +131,12 @@ void myButton::load_sprites()
    picture1 = al_load_bitmap("pictures//play.png");
    if (!picture1){
 	   printf("\n\nNAO CARREGOU picture1\n\n");
+	   picture1 = tmp_button();
    }
    picture2 = al_load_bitmap("pictures//stop.png");
    if (!picture2){
 	   printf("\n\nNAO CARREGOU picture2\n\n");
+	   picture2 = tmp_button();
    }
 
    this->button_font = al_create_builtin_font();
@@ -140,6 +146,7 @@ void myButton::set_sprite1(const char *filename){
 	picture1 = al_load_bitmap(filename);
 	if (!picture1){
 		printf("\n\nNAO CARREGOU Sprite1\n\n");
+        picture1 = tmp_button();
 	}
 }
 
@@ -147,11 +154,12 @@ void myButton::set_sprite2(const char *filename){
 	picture2 = al_load_bitmap(filename);
 	if (!picture2){
 		printf("\n\nNAO CARREGOU Sprite2\n\n");
+        picture2 = tmp_button();
 	}
 }
 
 void myButton::drawHint(){
-	if(mouse_is_over && query_description.size() > 0 ){
+	if(mouse_is_over && query_description.size() > 0){
 		const int query_width = al_get_text_width(button_font, query_description.c_str()) + 20;
 	    const int query_height = sizeY0+30;
         al_draw_filled_rectangle(x0,y0+sizeY0, x0+query_width,y0+query_height, al_map_rgba(0,0,0,255));
@@ -161,7 +169,7 @@ void myButton::drawHint(){
 }
 
 void myButton::draw_sprites(){
-	if(!pressed){
+	if(!pressed && picture1){
         al_draw_scaled_bitmap(picture1,
                 0,                                 //Source x
                 0,								   //Source y
@@ -175,7 +183,7 @@ void myButton::draw_sprites(){
 
         drawHint();
 
-	}else{
+	}else if(picture2){
 		al_draw_scaled_bitmap(picture2,
 				0,                                 //Source x
 				0,								   //Source y
@@ -198,4 +206,26 @@ void myButton::draw_sprites(){
 
 void myButton::set_description(const std::string text){
     query_description = text;
+}
+
+void myButton::draw(){
+    if(visible == true)draw_sprites();
+}
+
+ALLEGRO_BITMAP* myButton::tmp_button(){
+    ALLEGRO_BITMAP *tmp = nullptr;
+
+    tmp  = al_create_bitmap(100,100);
+
+    //change the render to render inside this bitmap
+    // dont forget to restore to backbuffer a.k.a screen
+    al_set_target_bitmap(tmp);
+    al_clear_to_color(al_map_rgb(255,0,0));
+    ALLEGRO_FONT *fnt = al_create_builtin_font();
+    const char *text = this->query_description.size() > 0 ? this->query_description.c_str() : "TMP Button";
+    al_draw_text(fnt, al_map_rgba(255,255,255,255), 0, 0, 0, text);
+    //restore the render to the backbuffer
+    al_set_target_backbuffer(display);
+    al_destroy_font(fnt);
+    return tmp;
 }

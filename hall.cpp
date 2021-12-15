@@ -173,10 +173,14 @@ void hall::CreateAndKillLife(){
 }
 
 void hall::update(){
+
+}
+
+void hall::draw(){
+    contAllNeighbors();
+	CreateAndKillLife();
 	draw_line();
 	draw_text();
-	contAllNeighbors();
-	CreateAndKillLife();
 	for(int i = 0;i<numBloc_X;i++){
 		for(int j = 0;j<numBloc_Y;j++){
 			QuadradosList[i+bloco_x0][j+bloco_y0].draw();
@@ -275,7 +279,7 @@ Position hall::get_Position(int pos_x, int pos_y){
 }
 
 void hall::setEvents(ALLEGRO_EVENT *ev){
-	mouse_event_input(ev);
+
 }
 
 void hall::mouse_event_input(ALLEGRO_EVENT *ev){
@@ -504,4 +508,8 @@ void hall::changeSize(bool zoom){
 		calcNumBlocs();
 		setQuadradoInf();
 	}
+}
+
+void hall::update_input(ALLEGRO_EVENT *e){
+    mouse_event_input(e);
 }

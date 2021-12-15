@@ -58,6 +58,11 @@ public:
 	void registerCallBack(myButtonCallBack* object, funcCallBack c1);
 	void set_sprite1(const char *filename);
 	void set_sprite2(const char *filename);
+
+	virtual void update_input(ALLEGRO_EVENT *e);
+	virtual void draw();
+
+	ALLEGRO_BITMAP *tmp_button(); // called only when cannot find the image
 };
 
 

@@ -162,6 +162,8 @@ public:
 	void NextSpeed(bool) override;
 	void PrevSpeed(bool) override;
 	void changeSize(bool zoom);
+	virtual void draw();
+	virtual void update_input(ALLEGRO_EVENT *e);
 
 };
 

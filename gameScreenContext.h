@@ -32,9 +32,16 @@ public:
 	void setScreenSize(int w, int h);
 	void insertComponent(interfaceComponent* c1);
 	void setGlobalTimer(ALLEGRO_TIMER *timer);
+   	void setGlobalDisplay(ALLEGRO_DISPLAY *dsp);
 	void setComponents();
 	virtual void setEvents(ALLEGRO_EVENT *ev);
 	virtual void update();
+	void start();
+
+	virtual void update_input(ALLEGRO_EVENT *e);
+	virtual void draw();
+	void end();
+
 
 
 };
