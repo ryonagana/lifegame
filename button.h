@@ -47,7 +47,6 @@ public:
 	void toogle();
 	void setPressedAlwaysFalse();
 	void setPressedAlwaysTrue();
-	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 	void update();
 	void load_sprites();

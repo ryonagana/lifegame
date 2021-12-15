@@ -29,13 +29,6 @@ myInformationPanel::myInformationPanel(){
         gamefont = al_create_builtin_font();
     }
 
-	/*
-	gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0);
-	latoRegular = al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0);
-	latoBold = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0);
-	latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0);
-	*/
-
 }
 myInformationPanel::myInformationPanel(int x, int y, int sizeX, int sizeY){
 	x0 = x;
@@ -67,18 +60,14 @@ myInformationPanel::myInformationPanel(int x, int y, int sizeX, int sizeY){
         gamefont = al_create_builtin_font();
     }
 
-	/*
-	gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0);
-	latoRegular = al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0);
-	latoBold = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0);
-	latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0);
-    */
 }
+
+myInformationPanel::~myInformationPanel(){}
+
 void myInformationPanel::setVisible(bool v1){
 	visible = v1;
 }
 
-myInformationPanel::~myInformationPanel(){}
 void myInformationPanel::drawBackPanel(){
 	if(visible){
 		al_draw_filled_rectangle(x0, y0, x0+sizeX0, y0+sizeY0, black);
@@ -107,9 +96,6 @@ void myInformationPanel::writeInformation(){
 	}
 
 }
-void myInformationPanel::setEvents(ALLEGRO_EVENT *ev){
-	closeButton.setEvents(ev);
-}
 
 void myInformationPanel::FuncCallBack(bool check){
 	if(check){
@@ -129,20 +115,17 @@ void myInformationPanel::closePanel(){
 }
 
 void myInformationPanel::update(){
-
 	closeButton.update();
     closeButton.setVisible(visible);
 }
 
-
-void myInformationPanel::update_input(ALLEGRO_EVENT* ev)
-{
+void myInformationPanel::update_input(ALLEGRO_EVENT* ev){
+	closeButton.update_input(ev);
 }
 
-void myInformationPanel::draw()
-{
+void myInformationPanel::draw(){
 	drawBackPanel();
 	drawLines();
 	writeInformation();
-
+	closeButton.draw();
 }

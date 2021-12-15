@@ -135,7 +135,6 @@ public:
 	void update();
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
-	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
 
 	int saveToFile(const std::string file);

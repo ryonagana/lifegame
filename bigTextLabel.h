@@ -53,16 +53,9 @@ void update(){
 
 }
 
-
-void setEvents(ALLEGRO_EVENT *ev){
-    (void)ev;// Left unused
-}
-
-
-
 void update_input(ALLEGRO_EVENT *e)
 {
-
+	(void)e;// Left unused
 }
 
 

@@ -47,7 +47,6 @@ public:
 	void setButtonCallBack_OpenAbout(myButton &b1);
 	void FuncCallBack(bool check);
 	void closePanel();
-	void setEvents(ALLEGRO_EVENT *ev);
 	void update();
 
 	virtual void update_input(ALLEGRO_EVENT *ev);

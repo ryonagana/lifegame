@@ -71,11 +71,6 @@ void myButton::setPressedAlwaysTrue(){
 	pressed = alwaysButton;
 }
 
-
-void myButton::setEvents(ALLEGRO_EVENT *ev){
-
-}
-
 void myButton::update_input(ALLEGRO_EVENT *e){
     mouse_event_input(e);
 }

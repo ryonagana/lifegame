@@ -348,10 +348,6 @@ Position hall::get_Position(int pos_x, int pos_y){
 	return Q1;
 }
 
-void hall::setEvents(ALLEGRO_EVENT *ev){
-
-}
-
 void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 	ALLEGRO_MOUSE_STATE state;
 
