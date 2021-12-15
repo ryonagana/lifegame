@@ -14,17 +14,31 @@
 class interfaceComponent{
 protected:
 	ALLEGRO_TIMER *timer;
+	ALLEGRO_DISPLAY *display;
+	ALLEGRO_EVENT_QUEUE *queue;
 
 public:
 	interfaceComponent(){
 		timer = nullptr;
+		display = nullptr;
 	}
 	virtual ~interfaceComponent(){}
 	void setGlobalTimer(ALLEGRO_TIMER *t1){
 		timer = t1;
 	}
+
+	void setGlobalDisplay(ALLEGRO_DISPLAY *dsp){
+        display = dsp;
+	}
+
+	void setGlobalEventQueue(ALLEGRO_EVENT_QUEUE *q){
+        queue = q;
+	}
+
 	virtual void setEvents(ALLEGRO_EVENT *ev) = 0;
 	virtual void update() = 0;
+	virtual void update_input(ALLEGRO_EVENT *ev) = 0;
+	virtual void draw() = 0;
 };
 
 #endif

@@ -42,6 +42,8 @@ hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	actual_speed = SPEED_NORMAL;
 	evolution_speed = ev_speed[actual_speed].type;
 	generationNumber = 0;
+	load_dialog_open = false;
+	save_dialog_open = false;
 }
 
 hall::~hall(){
@@ -150,11 +152,79 @@ void hall::setButtonCallBack_LoadFile(myButton &b1){
 }
 
 void hall::saveFile(bool){
-	saveToFile();
+	//saveToFile("SavedFile.txt");
+
+    ALLEGRO_FILECHOOSER *filechooser = nullptr;
+    ALLEGRO_PATH *path = nullptr;
+
+	if(!save_dialog_open){
+    save_dialog_open = true;
+	filechooser = al_create_native_file_dialog(".","SAVE File", "*.txt", ALLEGRO_FILECHOOSER_SAVE);
+
+	if(!filechooser){
+        return;
+	}
+
+    al_stop_timer(timer);
+    al_flush_event_queue(queue);
+    al_pause_event_queue(queue, true);
+    //true when click OK
+	if(al_show_native_file_dialog(display, filechooser) && save_dialog_open ){
+        const char *fname = al_get_native_file_dialog_path(filechooser, 0);
+        path = al_create_path(fname);
+        const char *fullpath_save = al_path_cstr(path,ALLEGRO_NATIVE_PATH_SEP);
+        saveToFile(fullpath_save);
+        al_resume_timer(timer);
+        al_pause_event_queue(queue, false);
+        save_dialog_open = false;
+	}
+
+    al_destroy_native_file_dialog(filechooser);
+    al_destroy_path(path);
+	al_resume_timer(timer);
+    al_pause_event_queue(queue, false);
+    save_dialog_open = false;
+
+
+	}
+
 }
 
 void hall::loadFile(bool){
-	readFile();
+
+
+	ALLEGRO_FILECHOOSER *filechooser = nullptr;
+    ALLEGRO_PATH *path = nullptr;
+
+	if(!load_dialog_open){
+        load_dialog_open = true;
+        filechooser = al_create_native_file_dialog(".","Load Saved File", "*.txt", ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |ALLEGRO_FILECHOOSER_SHOW_HIDDEN);
+
+        if(!filechooser){
+            return;
+        }
+        al_stop_timer(timer);
+        al_flush_event_queue(queue);
+        al_pause_event_queue(queue, true);
+        //true when click OK
+        if(al_show_native_file_dialog(display, filechooser) && load_dialog_open){
+            const char *fname = al_get_native_file_dialog_path(filechooser, 0);
+            path = al_create_path(fname);
+            const char *fullpath = al_path_cstr(path,ALLEGRO_NATIVE_PATH_SEP);
+            readFile(fullpath);
+            al_resume_timer(timer);
+            al_pause_event_queue(queue, false);
+            load_dialog_open = false;
+        }
+
+        al_destroy_path(path);
+        al_destroy_native_file_dialog(filechooser);
+        al_resume_timer(timer);
+        al_pause_event_queue(queue, false);
+        load_dialog_open = false;
+
+	}
+
 }
 
 void hall::CreateAndKillLife(){
@@ -173,10 +243,14 @@ void hall::CreateAndKillLife(){
 }
 
 void hall::update(){
+
+}
+
+void hall::draw(){
+    contAllNeighbors();
+	CreateAndKillLife();
 	draw_line();
 	draw_text();
-	contAllNeighbors();
-	CreateAndKillLife();
 	for(int i = 0;i<numBloc_X;i++){
 		for(int j = 0;j<numBloc_Y;j++){
 			QuadradosList[i+bloco_x0][j+bloco_y0].draw();
@@ -275,7 +349,7 @@ Position hall::get_Position(int pos_x, int pos_y){
 }
 
 void hall::setEvents(ALLEGRO_EVENT *ev){
-	mouse_event_input(ev);
+
 }
 
 void hall::mouse_event_input(ALLEGRO_EVENT *ev){
@@ -412,9 +486,9 @@ void hall::setButtonCallBack(myButton &b1){
 	b1.registerCallBack(this, f1);
 }
 
-int hall::saveToFile () {
+int hall::saveToFile (const std::string file) {
   std::ofstream myfile;
-  myfile.open ("SavedGame.txt");
+  myfile.open (file);
   myfile << numero_x << " " <<  numero_y << "\n";
   for(int i = 0;i<numero_x;i++){
   	for(int j = 0;j<numero_y;j++){
@@ -425,9 +499,9 @@ int hall::saveToFile () {
   return 0;
 }
 
-int hall::readFile () {
+int hall::readFile (const std::string file) {
 	std::string line;
-	std::ifstream myfile ("SavedGame.txt");
+	std::ifstream myfile (file);
 	if (myfile.is_open())
 	{
 		resetAll(true);
@@ -504,4 +578,8 @@ void hall::changeSize(bool zoom){
 		calcNumBlocs();
 		setQuadradoInf();
 	}
+}
+
+void hall::update_input(ALLEGRO_EVENT *e){
+    mouse_event_input(e);
 }

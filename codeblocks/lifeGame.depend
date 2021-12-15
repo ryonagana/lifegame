@@ -1,16 +1,16 @@
 # depslib dependency file v1.0
-1638795384 source:d:\projetos\cpp\lifegame\bigtextlabel.cpp
+1639578480 source:d:\projetos\cpp\lifegame\bigtextlabel.cpp
 	"bigTextLabel.h"
 
 1638888048 bel.h"
 
-1638795384 d:\projetos\cpp\lifegame\bigtextlabel.h
+1639579690 d:\projetos\cpp\lifegame\bigtextlabel.h
 	"interfaceComponent.h"
 	<vector>
 
 1638888048 
 
-1638795384 d:\projetos\cpp\lifegame\interfacecomponent.h
+1639586768 d:\projetos\cpp\lifegame\interfacecomponent.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -373,10 +373,10 @@
 1615199821 d:\projetos\libs\allegro-5.2.7\include\allegro5\allegro_native_dialog.h
 	"allegro5/allegro.h"
 
-1638887964 source:d:\projetos\cpp\lifegame\button.cpp
+1639583484 source:d:\projetos\cpp\lifegame\button.cpp
 	"button.h"
 
-1638795384 d:\projetos\cpp\lifegame\button.h
+1639583466 d:\projetos\cpp\lifegame\button.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -390,15 +390,15 @@
 	<iostream>
 	<vector>
 
-1638888048 d:\projetos\cpp\lifegame\classcallback.h
+1639571446 d:\projetos\cpp\lifegame\classcallback.h
 	<iostream>
 
-1638795384 source:d:\projetos\cpp\lifegame\gamescreencontext.cpp
+1639586863 source:d:\projetos\cpp\lifegame\gamescreencontext.cpp
 	"gameScreenContext.h"
 
 1638795384 nContext.h"
 
-1638795384 d:\projetos\cpp\lifegame\gamescreencontext.h
+1639586835 d:\projetos\cpp\lifegame\gamescreencontext.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -415,7 +415,7 @@
 	"button.h"
 	"hall.h"
 
-1638888048 d:\projetos\cpp\lifegame\hall.h
+1639587168 d:\projetos\cpp\lifegame\hall.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -427,18 +427,19 @@
 	<iostream>
 	"interfaceComponent.h"
 	"button.h"
+	"bigTextLabel.h"
 	"classCallBack.h"
 	<iostream>
 	<fstream>
 	<string>
 	<sstream>
 
-1638890967 source:d:\projetos\cpp\lifegame\hall.cpp
+1639588087 source:d:\projetos\cpp\lifegame\hall.cpp
 	"hall.h"
 	<cstdio>
 	<cstdlib>
 
-1638888048 source:d:\projetos\cpp\lifegame\main.cpp
+1639586951 source:d:\projetos\cpp\lifegame\main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -454,6 +455,7 @@
 	"button.h"
 	"gameScreenContext.h"
 	"bigTextLabel.h"
+	"informationPanel.h"
 
 1639328590 source:/home/archdark/projetos/cpp/lifegame/bigTextLabel.cpp
 	"bigTextLabel.h"
@@ -875,4 +877,21 @@
 	"gameScreenContext.h"
 	"bigTextLabel.h"
 	"informationPanel.h"
+
+1639579297 source:d:\projetos\cpp\lifegame\informationpanel.cpp
+	"informationPanel.h"
+
+1639577017 d:\projetos\cpp\lifegame\informationpanel.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_native_dialog.h>
+	"interfaceComponent.h"
+	"classCallBack.h"
+	"button.h"
+	"gameScreenContext.h"
 

@@ -20,18 +20,21 @@ int SCREEN_W = 1300;
 int SCREEN_H = 700;
 int testJ1 = 0;
 int testJ2 = 0;
-const float FPS = 60;
+const double FPS = 60.0f;
+
+
+static constexpr double MAX_TIMEOUT = (1.0 / 30);
 
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
-ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
-ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
+const ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
 bool running = true;
-bool redraw = true;
+bool redraw = false;
 
 int init_allegro(void)
 {
@@ -76,11 +79,16 @@ int init_allegro(void)
 		}
 
 		// Create the display
+		al_set_new_display_flags(ALLEGRO_OPENGL_3_0 | ALLEGRO_WINDOWED);
+
 		display = al_create_display(SCREEN_W, SCREEN_H);
 		if (!display) {
 			fprintf(stderr, "Failed to create display.\n");
 			return 1;
 		}
+
+        //force all bitmaps being used by GPU + better quality, less crisp
+		al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
 
 		// Create the event queue
 		event_queue = al_create_event_queue();
@@ -92,8 +100,12 @@ int init_allegro(void)
 		al_init_font_addon();
 		al_init_ttf_addon();
 
-		ALLEGRO_BITMAP *icon = al_load_bitmap("pictures//gl.png");
-		al_set_display_icon(display, icon);
+		ALLEGRO_BITMAP *icon = nullptr;
+
+		if((icon = al_load_bitmap("pictures//gl.png")) != NULL ){
+            al_set_display_icon(display, icon);
+		}
+
 
 		// Register event sources
 		al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -104,10 +116,8 @@ int init_allegro(void)
 		// Display a black screen
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_flip_display();
-
 		// Start the timer
 		al_start_timer(timer);
-
 		al_init_primitives_addon();
 
 
@@ -121,6 +131,7 @@ int main()
 	init_allegro();
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
+
 
 	hall hall1(50, 150, SCREEN_W, SCREEN_H);
 	myButton playButton(570, 40, 100, 100);
@@ -221,47 +232,48 @@ int main()
 	gameMainScreen.insertComponent(&lessZoomButton);
 	gameMainScreen.insertComponent(&moreZoomButton);
 	gameMainScreen.insertComponent(&aboutButton);
-	gameMainScreen.setGlobalTimer(timer);
+    gameMainScreen.setGlobalTimer(timer);
+	gameMainScreen.setGlobalDisplay(display);
+	gameMainScreen.setGlobalEventQueue(event_queue);
 
-	// Game loop
-	while (running) {
-		ALLEGRO_EVENT event;
-		ALLEGRO_TIMEOUT timeout;
 
-		// Initialize timeout
-		al_init_timeout(&timeout, 0.06);
+    while(running){
+        ALLEGRO_EVENT event;
+        ALLEGRO_TIMEOUT timeout;
 
-		// Fetch the event (if one exists)
-		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+        al_init_timeout(&timeout, MAX_TIMEOUT);
+        const bool has_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
-		// Handle the event
-		if (get_event) {
-			switch (event.type) {
-				case ALLEGRO_EVENT_TIMER:
-					redraw = true;
-					break;
-				case ALLEGRO_EVENT_DISPLAY_CLOSE:
-					running = false;
-					break;
-				default:
-					break;
-			}
-		}
+        if(has_event){
+            if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+                running = false;
+                break;
+            }
 
-		gameMainScreen.setEvents(&event);
+            if(event.type == ALLEGRO_EVENT_TIMER){
+                gameMainScreen.update();
+                redraw = true;
+            }
 
-		// Check if we need to redraw
-		if (redraw && al_is_event_queue_empty(event_queue)) {
-			al_clear_to_color(al_map_rgb(0, 0, 0));
-			gameMainScreen.update();
-			al_flip_display();
-			redraw = false;
-		}
-	}
+            gameMainScreen.update_input(&event);
+
+        }
+
+        if(redraw && al_event_queue_is_empty(event_queue)){
+            redraw = false;
+            al_clear_to_color(al_map_rgb(0,0,0));
+            gameMainScreen.draw();
+            al_flip_display();
+        }
+
+    }
+
+
 
 	// Clean up
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
+	al_destroy_timer(timer);
 
 	return 0;
 }

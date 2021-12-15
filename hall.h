@@ -111,6 +111,10 @@ private:
 	float evolution_speed;
 	int actual_speed;
 
+
+	bool load_dialog_open;
+	bool save_dialog_open;
+
 public:
 
 	EVOLUTION_SPEED ev_speed[NUMBER_OF_SPEEDS] = {
@@ -133,8 +137,10 @@ public:
 	void setQuadradoInf();
 	void setEvents(ALLEGRO_EVENT *ev);
 	void mouse_event_input(ALLEGRO_EVENT *ev);
-	int saveToFile();
-	int readFile();
+
+	int saveToFile(const std::string file);
+	int readFile(const std::string file);
+
 	Position get_Position(int pos_x, int pos_y);
 	void setTextGenerations(bigTextLabel<int> &t1);
 	int contNeighbors(int x, int y);
@@ -162,6 +168,9 @@ public:
 	void NextSpeed(bool) override;
 	void PrevSpeed(bool) override;
 	void changeSize(bool zoom);
+	virtual void draw();
+	virtual void update_input(ALLEGRO_EVENT *e);
+
 
 };
 

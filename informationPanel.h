@@ -49,6 +49,10 @@ public:
 	void closePanel();
 	void setEvents(ALLEGRO_EVENT *ev);
 	void update();
+
+	virtual void update_input(ALLEGRO_EVENT *ev);
+	virtual void draw();
+
 };
 
 #endif

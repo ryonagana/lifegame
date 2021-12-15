@@ -12,10 +12,29 @@ myInformationPanel::myInformationPanel(){
 	closeButton.setPressedAlwaysFalse();
 	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
 	closeButton.registerCallBack(this, f1);
+
+    if( (gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoRegular =  al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoBold  = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+	/*
 	gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0);
 	latoRegular = al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0);
 	latoBold = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0);
 	latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0);
+	*/
 
 }
 myInformationPanel::myInformationPanel(int x, int y, int sizeX, int sizeY){
@@ -30,10 +49,30 @@ myInformationPanel::myInformationPanel(int x, int y, int sizeX, int sizeY){
 	closeButton.setPressedAlwaysFalse();
 	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
 	closeButton.registerCallBack(this, f1);
+
+
+    if( (gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoRegular =  al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoBold  = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+    if( (latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0)) == nullptr){
+        gamefont = al_create_builtin_font();
+    }
+
+	/*
 	gamefont = al_load_ttf_font("fonts//Game Of Squids.ttf", 30, 0);
 	latoRegular = al_load_ttf_font("fonts//Lato-Regular.ttf", 20, 0);
 	latoBold = al_load_ttf_font("fonts//Lato-Bold.ttf", 20, 0);
 	latoRegularDate = al_load_ttf_font("fonts//Lato-Regular.ttf", 10, 0);
+    */
 }
 void myInformationPanel::setVisible(bool v1){
 	visible = v1;
@@ -90,9 +129,20 @@ void myInformationPanel::closePanel(){
 }
 
 void myInformationPanel::update(){
+
+	closeButton.update();
+    closeButton.setVisible(visible);
+}
+
+
+void myInformationPanel::update_input(ALLEGRO_EVENT* ev)
+{
+}
+
+void myInformationPanel::draw()
+{
 	drawBackPanel();
 	drawLines();
 	writeInformation();
-	closeButton.setVisible(visible);
-	closeButton.update();
+
 }
