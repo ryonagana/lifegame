@@ -21,6 +21,7 @@ public:
 	interfaceComponent(){
 		timer = nullptr;
 		display = nullptr;
+		queue = nullptr;
 	}
 	virtual ~interfaceComponent(){}
 	void setGlobalTimer(ALLEGRO_TIMER *t1){
@@ -35,7 +36,6 @@ public:
         queue = q;
 	}
 
-	virtual void setEvents(ALLEGRO_EVENT *ev) = 0;
 	virtual void update() = 0;
 	virtual void update_input(ALLEGRO_EVENT *ev) = 0;
 	virtual void draw() = 0;
