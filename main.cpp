@@ -14,6 +14,8 @@
 #include "gameScreenContext.h"
 #include "bigTextLabel.h"
 #include "informationPanel.h"
+#include "config.h"
+
 
 
 int SCREEN_W = 1300;
@@ -22,6 +24,8 @@ int testJ1 = 0;
 int testJ2 = 0;
 const double FPS = 60.0f;
 
+
+bool fullscreen = false;
 
 static constexpr double MAX_TIMEOUT = (1.0 / 30);
 
@@ -35,6 +39,8 @@ const ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
 const ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
 bool running = true;
 bool redraw = false;
+
+static Config config;
 
 int init_allegro(void)
 {
@@ -64,6 +70,11 @@ int init_allegro(void)
 			return 0;
 		}
 
+
+        config.loadFile("config.cfg");
+        fullscreen = Config::getConfig<bool>(config, "game", "fullscreen");
+
+
 		// Initialize the timer
 		timer = al_create_timer(1.0 / FPS);
 		if (!timer) {
@@ -78,8 +89,16 @@ int init_allegro(void)
 			SCREEN_H = info.y2 - info.y1 - 80;
 		}
 
+        int flags = ALLEGRO_OPENGL_3_0;
+
+        if(fullscreen){
+            flags |= ALLEGRO_FULLSCREEN_WINDOW;
+        }else {
+            flags |= ALLEGRO_WINDOWED;
+        }
+
 		// Create the display
-		al_set_new_display_flags(ALLEGRO_OPENGL_3_0 | ALLEGRO_WINDOWED);
+		al_set_new_display_flags(flags);
 
 		display = al_create_display(SCREEN_W, SCREEN_H);
 		if (!display) {
@@ -129,8 +148,14 @@ int main()
 {
 
 	init_allegro();
+
+
+
+
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
+
+
 
 
 	hall hall1(50, 150, SCREEN_W, SCREEN_H);
@@ -271,6 +296,7 @@ int main()
 
 
 	// Clean up
+	config.Unload();
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);

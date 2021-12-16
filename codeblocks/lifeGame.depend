@@ -415,7 +415,7 @@
 	"button.h"
 	"hall.h"
 
-1639595417 d:\projetos\cpp\lifegame\hall.h
+1639658081 d:\projetos\cpp\lifegame\hall.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -434,12 +434,12 @@
 	<string>
 	<sstream>
 
-1639595417 source:d:\projetos\cpp\lifegame\hall.cpp
+1639658081 source:d:\projetos\cpp\lifegame\hall.cpp
 	"hall.h"
 	<cstdio>
 	<cstdlib>
 
-1639595417 source:d:\projetos\cpp\lifegame\main.cpp
+1639680639 source:d:\projetos\cpp\lifegame\main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
@@ -456,6 +456,7 @@
 	"gameScreenContext.h"
 	"bigTextLabel.h"
 	"informationPanel.h"
+	"config.h"
 
 1639328590 source:/home/archdark/projetos/cpp/lifegame/bigTextLabel.cpp
 	"bigTextLabel.h"
@@ -894,4 +895,14 @@
 	"classCallBack.h"
 	"button.h"
 	"gameScreenContext.h"
+
+1639680808 source:d:\projetos\cpp\lifegame\config.cpp
+	"config.h"
+	<vector>
+
+1639680762 d:\projetos\cpp\lifegame\config.h
+	<iostream>
+	<cstring>
+	<allegro5/allegro.h>
+	<allegro5/allegro_font.h>
 
