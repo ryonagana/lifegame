@@ -75,7 +75,7 @@ int init_allegro(void)
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
 			SCREEN_W = info.x2 - info.x1;
-			SCREEN_H = info.y2 - info.y1 - 50;
+			SCREEN_H = info.y2 - info.y1 - 80;
 		}
 
 		// Create the display

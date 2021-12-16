@@ -141,6 +141,7 @@ public:
 	void calcNumBlocs();
 	void draw_line();
 	void draw_text();
+	void draw_markers();
 	void makeScreenBackup();
 	void update();
 	void checkQuadrado(int x, int y, bool check);

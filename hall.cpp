@@ -91,7 +91,38 @@ void hall::draw_text(){
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 35, 0, "HALL");
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 25, 0, "%d X %d", numero_x, numero_y);
     al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0 - 15, 0, "Evolution Speed: %.2f", ev_speed[actual_speed].speed);
+}
 
+void hall::draw_markers(){
+	int step = (numBloc_Y*size)/4;
+	int m0 = bloco_y0;
+	int m1 = bloco_y0+(step/size);
+	int m2 = bloco_y0+(step*2/size);
+	int m3 = bloco_y0+(step*3/size);
+	int m4 = bloco_y0+(step*4/size);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0-35, y0, 0, "%d-", m0);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0-35, y0+step, 0, "%d-", m1);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0-35, y0+step*2, 0, "%d-", m2);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0-35, y0+step*3, 0, "%d-", m3);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0-35, (y0+step*4)-size, 0, "%d-", m4);
+
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+(numBloc_X*size), y0, 0, "-%d", m0);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+(numBloc_X*size), y0+step, 0, "-%d", m1);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+(numBloc_X*size), y0+step*2, 0, "-%d", m2);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+(numBloc_X*size), y0+step*3, 0, "-%d", m3);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+(numBloc_X*size), (y0+step*4)-size, 0, "-%d", m4);
+
+	step = (numBloc_X*size)/4;
+	m0 = bloco_x0;
+	m1 = bloco_x0+(step/size);
+	m2 = bloco_x0+(step*2/size);
+	m3 = bloco_x0+(step*3/size);
+	m4 = bloco_x0+(step*4/size)-1;
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0, y0+(numBloc_Y*size)+5, 0, "|%d", m0);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+step, y0+(numBloc_Y*size)+5, 0, "|%d", m1);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+step*2, y0+(numBloc_Y*size)+5, 0, "|%d", m2);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+step*3, y0+(numBloc_Y*size)+5, 0, "|%d", m3);
+	al_draw_textf(text_font,al_map_rgb(255,255,255), x0+step*4-size, y0+(numBloc_Y*size)+5, 0, "|%d", m4);
 }
 
 void hall::resetAll(bool){
@@ -243,6 +274,7 @@ void hall::draw(){
     contAllNeighbors();
 	CreateAndKillLife();
 	draw_line();
+	draw_markers();
 	draw_text();
 	for(int i = 0;i<numBloc_X;i++){
 		for(int j = 0;j<numBloc_Y;j++){
