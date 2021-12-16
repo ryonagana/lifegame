@@ -11,12 +11,17 @@ typedef struct CONFIG_FIELD {
 
 }CONFIG_FIELD;
 
+#define MAX_DEFAULT_CONFIG 6
 
-CONFIG_FIELD default_config[5] = {
+
+CONFIG_FIELD default_config[MAX_DEFAULT_CONFIG] = {
     {"game", "fullscreen", "0"},
     {"game", "zoom", "1"},
     {"game", "speed", "1"},
+    {"","",0},
+    {"","",0},
     {"","",0}
+
 
 };
 
@@ -70,7 +75,7 @@ ALLEGRO_CONFIG* Config::createDefaultConfig(){
     al_add_config_section(tmp_cfg, "game");
 
 
-    for(int i = 0; i < 5 ; i++){
+    for(int i = 0; i < MAX_DEFAULT_CONFIG; i++){
         CONFIG_FIELD *f = &default_config[i];
         if(strlen(f->key) == 0 || strlen(f->sector) == 0) continue;
         al_set_config_value(tmp_cfg, f->sector, f->key, f->value);
