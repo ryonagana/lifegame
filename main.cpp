@@ -18,12 +18,12 @@
 
 
 
-int SCREEN_W = 1300;
-int SCREEN_H = 700;
-int testJ1 = 0;
-int testJ2 = 0;
-const double FPS = 60.0f;
+static int SCREEN_W = 1300;
+static int SCREEN_H = 700;
 
+const double FPS = 60.0f;
+static bool background_mode = false;
+static bool paused = false;
 
 bool fullscreen = false;
 
@@ -276,15 +276,36 @@ int main()
             }
 
             if(event.type == ALLEGRO_EVENT_TIMER){
-                gameMainScreen.update();
-                redraw = true;
+                if(!paused){
+                    gameMainScreen.update();
+                    redraw = true;
+                }
+            }
+
+
+            if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
+                al_acknowledge_drawing_halt(display);
+                background_mode = true;
+            }
+
+            if(event.type == ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING){
+                al_acknowledge_drawing_resume(display);
+                background_mode = false;
+            }
+
+            if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){
+                paused = true;
+            }
+
+            if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){
+                paused = false;
             }
 
             gameMainScreen.update_input(&event);
 
         }
 
-        if(redraw && al_event_queue_is_empty(event_queue)){
+        if(redraw && al_event_queue_is_empty(event_queue) && !background_mode){
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
             gameMainScreen.draw();
