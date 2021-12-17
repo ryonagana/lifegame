@@ -29,5 +29,5 @@ BIN=lifeGame
 
 
 all:
-	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) bigTextLabel.cpp button.cpp informationPanel.cpp hall.cpp gameScreenContext.cpp main.cpp $(LIBS)
+	$(CC) $(CFLAGS) $(INCPATH) $(LIBPATH)  -o $(BIN) config.cpp bigTextLabel.cpp button.cpp informationPanel.cpp hall.cpp gameScreenContext.cpp main.cpp $(LIBS)
 
