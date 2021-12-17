@@ -301,6 +301,13 @@ int main()
                 paused = false;
             }
 
+
+            if(event.type == ALLEGRO_EVENT_KEY_DOWN && fullscreen){
+                if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                    running = false;
+                }
+            }
+
             gameMainScreen.update_input(&event);
 
         }

@@ -402,17 +402,17 @@
 	"button.h"
 	"gameScreenContext.h"
 
-1639681140 source:d:\projetos\cpp\lifegame\config.cpp
+1639741591 source:d:\projetos\cpp\lifegame\config.cpp
 	"config.h"
 	<vector>
 
-1639681140 d:\projetos\cpp\lifegame\config.h
+1639741338 d:\projetos\cpp\lifegame\config.h
 	<iostream>
 	<cstring>
 	<allegro5/allegro.h>
 	<allegro5/allegro_font.h>
 
-1639681146 source:d:\projetos\cpp\lifegame\main.cpp
+1639741338 source:d:\projetos\cpp\lifegame\main.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_audio.h>
