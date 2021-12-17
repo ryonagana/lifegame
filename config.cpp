@@ -90,8 +90,9 @@ ALLEGRO_CONFIG* Config::createDefaultConfig(){
 
 bool  Config::getConfigBool(Config& cfg, const char *sector, const char *key){
     bool result = false;
+    const char *val = al_get_config_value(cfg.cfg, sector, key);
 
-    if(strcmp(key, "true") == 0){
+    if(strcmp(val, "true") == 0){
         result = true;
     }
 
@@ -100,11 +101,12 @@ bool  Config::getConfigBool(Config& cfg, const char *sector, const char *key){
 }
 
 int   Config::getConfigInt(Config& cfg, const char *sector, const char *key){
-
-    return std::atoi(key);
+    const char *val = al_get_config_value(cfg.cfg, sector, key);
+    return std::atoi(val);
 }
 float Config::getConfigFloat(Config& cfg, const char *sector, const char *key){
-    return std::atof(key);
+    const char *val = al_get_config_value(cfg.cfg, sector, key);
+    return std::atof(val);
 }
 
 void Config::Unload(){
