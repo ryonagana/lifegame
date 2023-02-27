@@ -143,7 +143,7 @@ public:
 	void draw_text();
 	void draw_markers();
 	void makeScreenBackup();
-	void update();
+    void update() override;
 	void checkQuadrado(int x, int y, bool check);
 	void setQuadradoInf();
 	void mouse_event_input(ALLEGRO_EVENT *ev);
@@ -176,17 +176,17 @@ public:
 	void setButtonCallBack_PrevSpeed(myButton &b1);
 	void setButtonCallBack_Zoom(myButton &b1);
 	//CallBack Pointer Functions
-	void restoreScreenBackup(bool);
-	void loadFunPatterns(bool);
-	void FuncCallBack(bool);
-	void resetAll(bool);
-	void saveFile(bool);
-	void loadFile(bool);
+    void restoreScreenBackup(bool) override;
+    void loadFunPatterns(bool) override;
+    void FuncCallBack(bool) override;
+    void resetAll(bool) override;
+    void saveFile(bool) override;
+    void loadFile(bool) override;
 	void NextSpeed(bool) override;
 	void PrevSpeed(bool) override;
-	void changeSize(bool zoom);
-	virtual void draw();
-	virtual void update_input(ALLEGRO_EVENT *e);
+    void changeSize(bool zoom) override;
+    virtual void draw() override;
+    virtual void update_input(ALLEGRO_EVENT *e) override;
 
 
 };

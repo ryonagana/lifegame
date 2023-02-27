@@ -1,7 +1,7 @@
 #include "button.h"
 
 
-myButton::myButton(int x, int y, int sizeX, int sizeY){
+myButton::myButton(int x, int y, int sizeX, int sizeY, bool is_text){
 	x0 = x;
 	y0 = y;
 	sizeX0 = sizeX;
@@ -12,10 +12,14 @@ myButton::myButton(int x, int y, int sizeX, int sizeY){
 	alwaysButton = false;
 	mouse_is_over = false;
 	button_font = nullptr;
-	load_sprites();
+    text_button = false;
+
+    if(!is_text){
+        load_sprites();
+    }
 }
 
-myButton::myButton(){
+myButton::myButton(bool is_text){
 	x0 = 0;
 	y0 = 0;
 	sizeX0 = 100;
@@ -26,7 +30,36 @@ myButton::myButton(){
 	alwaysButton = false;
 	mouse_is_over = false;
 	button_font = nullptr;
-	load_sprites();
+    text_button = false;
+
+    if(!is_text){
+        load_sprites();
+    }
+}
+
+void myButton::setTextFont(const std::string filepath, const int size, const int flags)
+{
+
+    if(button_font) return;
+
+    button_font = al_load_ttf_font(filepath.c_str(), size, flags);
+    if(!button_font){
+        fprintf(stderr, "Font %s cannot be loaded!", filepath.c_str());
+        return;
+    }
+
+    this->font_size = size;
+
+}
+
+float myButton::getButtontextWidth(void) const
+{
+    return al_get_text_width(button_font, button_text.c_str());
+}
+
+void myButton::insertText(const std::string text)
+{
+    this->button_text = text;
 }
 
 void myButton::setInfo(int x, int y, int sizeX, int sizeY){
@@ -202,6 +235,11 @@ void myButton::set_description(const std::string text){
 }
 
 void myButton::draw(){
+
+    if(isTextButton()){
+        al_draw_textf(button_font, al_map_rgb(255,255,255), x0,y0, 0, "%s", button_text.c_str());
+        return;
+    }
     if(visible == true)draw_sprites();
 }
 

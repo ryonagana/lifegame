@@ -35,6 +35,10 @@ public:
    	void setGlobalDisplay(ALLEGRO_DISPLAY *dsp);
     void setGlobalEventQueue(ALLEGRO_EVENT_QUEUE *q);
 	void setComponents();
+
+    int getScreenW(void) const { return screen_W; }
+    int getScreenH(void) const { return screen_H; }
+
 	virtual void update();
 	virtual void update_input(ALLEGRO_EVENT *e);
 	virtual void draw();

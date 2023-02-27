@@ -27,6 +27,7 @@ private:
 	int y0;
 	int sizeX0;
 	int sizeY0;
+    bool text_button;
 	bool pressed;
 	bool visible;
 	bool holdButton; //Hold the button always in the same position. Always true or always false. See "alwaysButton"
@@ -37,11 +38,37 @@ private:
 	std::vector<ObjectCallBack> CallBackList;
 
 	std::string query_description;  //an info when you put mouse over the button pop up a short description
+    std::string button_text; // button text of not  image is loaded
     bool mouse_is_over;
 
+    int font_size;
+
 public:
-	myButton(int x, int y, int sizeX, int sizeY);
-	myButton();
+
+    void X(int x) {  this->x0 = x; }
+    int X(void) { return this->x0; }
+
+    void Y(int y) {  this->y0 = y; }
+    int Y(void) { return this->y0; }
+
+    myButton(int x, int y, int sizeX, int sizeY, bool is_text = false);
+    myButton(bool is_text = false);
+
+    void setTextButton(const bool v) {
+
+        if(button_font){
+            al_destroy_font(button_font);
+            button_font = nullptr;
+        }
+
+        text_button = v;
+    }
+    bool isTextButton(void) const { return text_button; }
+    void setTextFont(const std::string filepath, const int size, const int flags);
+    float getButtontextWidth(void) const;
+
+
+    void insertText(const std::string text);
 	void setInfo(int x, int y, int sizeX, int sizeY);
 	void setVisible(bool v1);
 	void toogle();

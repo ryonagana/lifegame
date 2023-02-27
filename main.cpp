@@ -15,7 +15,8 @@
 #include "bigTextLabel.h"
 #include "informationPanel.h"
 #include "config.h"
-
+#include <memory>
+#include "Menu.h"
 
 
 static int SCREEN_W = 1300;
@@ -41,6 +42,24 @@ bool running = true;
 bool redraw = false;
 
 static Config config;
+
+
+
+enum class GameState {
+    IN_GAME,
+    MAIN_MENU
+};
+
+
+template<typename T>
+struct array_memory_clean{
+    void operator()(T const *p){
+        delete[] p;
+    }
+};
+
+
+static GameState s_gamestate = GameState::MAIN_MENU;
 
 int init_allegro(void)
 {
@@ -144,6 +163,10 @@ int init_allegro(void)
 		return 1;
 }
 
+
+
+
+
 int main()
 {
 
@@ -151,6 +174,7 @@ int main()
 
 
 
+    gameScreenContext mainMenuContext;
 
 	gameScreenContext gameMainScreen;
 	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
@@ -262,62 +286,138 @@ int main()
 	gameMainScreen.setGlobalEventQueue(event_queue);
 
 
+
+    Menu mainMenu(mainMenuContext);
+
+    mainMenu.addSingleMenu("START", nullptr);
+    mainMenu.addSingleMenu("LOAD", nullptr);
+    mainMenu.addSingleMenu("QUIT", nullptr);
+
+
+    mainMenuContext.setGlobalTimer(timer);
+    mainMenuContext.setGlobalDisplay(display);
+    mainMenuContext.setGlobalEventQueue(event_queue);
+
+
+
     while(running){
-        ALLEGRO_EVENT event;
-        ALLEGRO_TIMEOUT timeout;
 
-        al_init_timeout(&timeout, MAX_TIMEOUT);
-        const bool has_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
-        if(has_event){
-            if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-                running = false;
+        do {
+
+            ALLEGRO_EVENT event;
+            ALLEGRO_TIMEOUT timeout;
+
+            al_init_timeout(&timeout, MAX_TIMEOUT);
+
+
+            if(!al_wait_for_event_until(event_queue, &event, &timeout)){
                 break;
             }
 
+
             if(event.type == ALLEGRO_EVENT_TIMER){
-                if(!paused){
-                    gameMainScreen.update();
-                    redraw = true;
+
+
+                switch(s_gamestate){
+                    case GameState::IN_GAME:
+                    {
+                        if(!paused){
+                            gameMainScreen.update();
+                            redraw = true;
+                        }
+                    }
+                    break;
+
+
+                    case GameState::MAIN_MENU:
+                            mainMenuContext.update();
+                            redraw = true;
+                    break;
+
                 }
+
+
             }
 
 
-            if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
-                al_acknowledge_drawing_halt(display);
-                background_mode = true;
-            }
-
-            if(event.type == ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING){
-                al_acknowledge_drawing_resume(display);
-                background_mode = false;
-            }
-
-            if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){
-                paused = true;
-            }
-
-            if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){
-                paused = false;
-            }
 
 
-            if(event.type == ALLEGRO_EVENT_KEY_DOWN && fullscreen){
-                if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-                    running = false;
+            if(s_gamestate == GameState::IN_GAME){
+                if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
+                    al_acknowledge_drawing_halt(display);
+                    background_mode = true;
                 }
+
+                if(event.type == ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING){
+                    al_acknowledge_drawing_resume(display);
+                    background_mode = false;
+                }
+
+                if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){
+                    paused = true;
+                }
+
+                if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){
+                    paused = false;
+                }
+
+
+                if(event.type == ALLEGRO_EVENT_KEY_DOWN && fullscreen){
+                    if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                        running = false;
+                    }
+                }
+
             }
+
 
             gameMainScreen.update_input(&event);
 
-        }
+        }while(!al_event_queue_is_empty(event_queue));
 
-        if(redraw && al_event_queue_is_empty(event_queue) && !background_mode){
+
+        if(redraw){
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
-            gameMainScreen.draw();
+            switch(s_gamestate){
+                case GameState::IN_GAME:
+                {
+                    gameMainScreen.draw();
+                }
+                break;
+
+                case GameState::MAIN_MENU:
+                {
+                     mainMenuContext.draw();
+                }
+                break;
+            }
+
+
             al_flip_display();
+
         }
+
+        /*
+        switch(s_gamestate){
+            case GameState::IN_GAME:
+            {
+                if(redraw){
+                    redraw = false;
+                    al_clear_to_color(al_map_rgb(0,0,0));
+                    gameMainScreen.draw();
+                    al_flip_display();
+
+                }
+            }
+            break;
+
+           case GameState::MAIN_MENU:
+                mainMenuContext.draw();
+           break;
+        }
+        */
 
     }
 

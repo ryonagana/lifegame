@@ -1,0 +1,6 @@
+QMAKE_CXX.INCDIRS = \
+    /usr/include \
+    /usr/local/include
+QMAKE_CXX.LIBDIRS = \
+    /lib \
+    /usr/lib

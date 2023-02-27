@@ -1,5 +1,7 @@
 #include "config.h"
 #include <vector>
+#include <string>
+#include <cstdlib>
 
 #define STRINGIFY(x) #x
 #define STRINGIFY2(x) STRINGIFY(x)
@@ -18,9 +20,9 @@ CONFIG_FIELD default_config[MAX_DEFAULT_CONFIG] = {
     {"game", "fullscreen", "0"},
     {"game", "zoom", "1"},
     {"game", "speed", "1"},
-    {"","",0},
-    {"","",0},
-    {"","",0}
+    {"","",{0}},
+    {"","",{0}},
+    {"","",{0}}
 
 
 };

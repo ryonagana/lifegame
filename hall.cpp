@@ -15,7 +15,10 @@ hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	bloco_x0 = 0;
 	bloco_y0 = 0;
 
-	keys[6] = {0};
+    //keys[6] = {0};
+
+    memset(keys,0, sizeof(keys));
+
 
 	ALLEGRO_MOUSE_STATE state;
 	al_get_mouse_state(&state);
@@ -622,35 +625,40 @@ int hall::saveToFile (const std::string file) {
 int hall::readFile (const std::string file) {
 	std::string line;
 	std::ifstream myfile (file);
-	if (myfile.is_open())
-	{
-		resetAll(true);
-		getline (myfile,line);
-		std::stringstream gridInfo(line);
-		std::string word0;
-		int numX = -1;
-		int numY = -1;
-		gridInfo >> numX;
-		gridInfo >> numY;
 
-		while ( getline (myfile,line) )
-	    {
+    if(myfile.bad()){
+        return -1;
+    }
 
-			std::stringstream ss(line);
-			std::string word;
-			int i = -1;
-			int j = -1;
-			bool check = false;
-			ss >> i;
-			ss >> j;
-			ss >> check;
-			if((i < numero_x)&&(j < numero_y) && !QuadradosList[i][j].checked){
-				QuadradosList[i][j].checked = check;
-			}
-	    }
-	    myfile.close();
-	}
-  return 0;
+
+
+
+    resetAll(true);
+    getline (myfile,line);
+    std::stringstream gridInfo(line);
+    std::string word0;
+    int numX = -1;
+    int numY = -1;
+    gridInfo >> numX;
+    gridInfo >> numY;
+
+    while ( getline (myfile,line) )
+    {
+
+        std::stringstream ss(line);
+        std::string word;
+        int i = -1;
+        int j = -1;
+        bool check = false;
+        ss >> i;
+        ss >> j;
+        ss >> check;
+        if((i < numero_x)&&(j < numero_y) && !QuadradosList[i][j].checked){
+            QuadradosList[i][j].checked = check;
+        }
+    }
+    myfile.close();
+    return 0;
 }
 
 void hall::setButtonCallBack_NextSpeed(myButton &b1){
