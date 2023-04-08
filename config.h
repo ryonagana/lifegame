@@ -29,6 +29,13 @@ public:
     ALLEGRO_CONFIG* createDefaultConfig();
     void Unload();
 
+    template<typename T>
+    inline T getConfigValue(const char *sector, const char *key){
+        const char *v = al_get_config_value(cfg, sector, key);
+        return  static_cast<T>(std::atoi(v));
+    }
+
+
 private:
     ALLEGRO_CONFIG *cfg;
 };

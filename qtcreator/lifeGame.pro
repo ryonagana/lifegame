@@ -2,18 +2,19 @@ TEMPLATE += app
 CONFIG -= qt
 
 
-QMAKE_CXXFLAGS += -std=c++14 -Wall -Werror -Wextra -Wunused
+QMAKE_CXXFLAGS += -std=c++14 -Wall -Werror -Wextra -Wunused -Wno-switch
 
 unix: {
     #INCLUDEPATH += /usr/include
     #INCLUDEPATH += -L/usr/include/c++/10
     LIBS += -L/usr/lib64
-    LIBS += -lallegro -lallegro_primitives -lallegro_font -lallegro_ttf -lallegro_image -lallegro_dialog
+    LIBS += -lallegro -lallegro_primitives  -lallegro_font -lallegro_ttf -lallegro_image -lallegro_dialog
 
 }
 
 SOURCES += \
     ../Menu.cpp \
+    ../MenuHall.cpp \
     ../bigTextLabel.cpp \
     ../button.cpp \
     ../config.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     ../Menu.h \
+    ../MenuHall.h \
     ../bigTextLabel.h \
     ../button.h \
     ../classCallBack.h \

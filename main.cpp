@@ -16,19 +16,20 @@
 #include "informationPanel.h"
 #include "config.h"
 #include <memory>
-#include "Menu.h"
+//#include "Menu.h"
+#include "MenuHall.h"
 
 
 static int SCREEN_W = 1300;
 static int SCREEN_H = 700;
 
-const double FPS = 60.0f;
+static constexpr double FPS = 60.0;
 static bool background_mode = false;
 static bool paused = false;
 
 bool fullscreen = false;
 
-static constexpr double MAX_TIMEOUT = (1.0 / 30);
+static constexpr double MAX_TIMEOUT = (1.0 / FPS);
 
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -46,20 +47,16 @@ static Config config;
 
 
 enum class GameState {
-    IN_GAME,
-    MAIN_MENU
+    IN_GAME_SCREEN,
+    MAIN_MENU_SCREEN,
+    LOGO_SCREEN
 };
 
 
-template<typename T>
-struct array_memory_clean{
-    void operator()(T const *p){
-        delete[] p;
-    }
-};
 
 
-static GameState s_gamestate = GameState::MAIN_MENU;
+
+static GameState s_gamestate = GameState::MAIN_MENU_SCREEN;
 
 int init_allegro(void)
 {
@@ -95,8 +92,8 @@ int init_allegro(void)
 
 
 		// Initialize the timer
-		timer = al_create_timer(1.0 / FPS);
-		if (!timer) {
+        timer = al_create_timer(1.0 / FPS);
+        if (!timer) {
 			fprintf(stderr, "Failed to create timer.\n");
 			return 1;
 		}
@@ -119,8 +116,8 @@ int init_allegro(void)
 		// Create the display
 		al_set_new_display_flags(flags);
 
-		display = al_create_display(SCREEN_W, SCREEN_H);
-		if (!display) {
+        display = al_create_display(SCREEN_W, SCREEN_H);
+        if (!display) {
 			fprintf(stderr, "Failed to create display.\n");
 			return 1;
 		}
@@ -129,8 +126,8 @@ int init_allegro(void)
 		al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
 
 		// Create the event queue
-		event_queue = al_create_event_queue();
-		if (!event_queue) {
+        event_queue = al_create_event_queue();
+        if (!event_queue) {
 			fprintf(stderr, "Failed to create event queue.");
 			return 1;
 		}
@@ -138,7 +135,7 @@ int init_allegro(void)
 		al_init_font_addon();
 		al_init_ttf_addon();
 
-		ALLEGRO_BITMAP *icon = nullptr;
+        ALLEGRO_BITMAP *icon = nullptr;
 
 		if((icon = al_load_bitmap("pictures//gl.png")) != NULL ){
             al_set_display_icon(display, icon);
@@ -146,16 +143,16 @@ int init_allegro(void)
 
 
 		// Register event sources
-		al_register_event_source(event_queue, al_get_display_event_source(display));
-		al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	    al_register_event_source(event_queue, al_get_keyboard_event_source());
-	    al_register_event_source(event_queue, al_get_mouse_event_source());
+        al_register_event_source(event_queue, al_get_display_event_source(display));
+        al_register_event_source(event_queue, al_get_timer_event_source(timer));
+        al_register_event_source(event_queue, al_get_keyboard_event_source());
+        al_register_event_source(event_queue, al_get_mouse_event_source());
 
 		// Display a black screen
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_flip_display();
 		// Start the timer
-		al_start_timer(timer);
+        al_start_timer(timer);
 		al_init_primitives_addon();
 
 
@@ -282,11 +279,13 @@ int main()
 	gameMainScreen.insertComponent(&moreZoomButton);
 	gameMainScreen.insertComponent(&aboutButton);
     gameMainScreen.setGlobalTimer(timer);
-	gameMainScreen.setGlobalDisplay(display);
-	gameMainScreen.setGlobalEventQueue(event_queue);
+    gameMainScreen.setGlobalDisplay(display);
+    gameMainScreen.setGlobalEventQueue(event_queue);
 
 
-
+    MenuHall menuHall(mainMenuContext);
+    menuHall.setConfig(&config);
+    /*
     Menu mainMenu(mainMenuContext);
 
     mainMenu.addSingleMenu("START", nullptr);
@@ -297,7 +296,7 @@ int main()
     mainMenuContext.setGlobalTimer(timer);
     mainMenuContext.setGlobalDisplay(display);
     mainMenuContext.setGlobalEventQueue(event_queue);
-
+    */
 
 
     while(running){
@@ -315,12 +314,20 @@ int main()
                 break;
             }
 
+            if(event.type  == ALLEGRO_EVENT_KEY_DOWN){
+                if(event.keyboard.type == ALLEGRO_KEY_ESCAPE){
+                    running = false;
+                }
+            }
+
 
             if(event.type == ALLEGRO_EVENT_TIMER){
 
 
                 switch(s_gamestate){
-                    case GameState::IN_GAME:
+
+                    case GameState::LOGO_SCREEN:
+                    case GameState::IN_GAME_SCREEN:
                     {
                         if(!paused){
                             gameMainScreen.update();
@@ -330,10 +337,13 @@ int main()
                     break;
 
 
-                    case GameState::MAIN_MENU:
-                            mainMenuContext.update();
+                    case GameState::MAIN_MENU_SCREEN:
+                            //mainMenuContext.update();
+                            menuHall.update(&event);
                             redraw = true;
                     break;
+
+
 
                 }
 
@@ -341,9 +351,7 @@ int main()
             }
 
 
-
-
-            if(s_gamestate == GameState::IN_GAME){
+            if(s_gamestate == GameState::IN_GAME_SCREEN){
                 if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
                     al_acknowledge_drawing_halt(display);
                     background_mode = true;
@@ -381,15 +389,18 @@ int main()
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
             switch(s_gamestate){
-                case GameState::IN_GAME:
+
+                case GameState::LOGO_SCREEN: //temporary disabled
+                case GameState::IN_GAME_SCREEN:
                 {
                     gameMainScreen.draw();
                 }
                 break;
 
-                case GameState::MAIN_MENU:
+                case GameState::MAIN_MENU_SCREEN:
                 {
-                     mainMenuContext.draw();
+                    mainMenuContext.draw();
+                   // menuHall.draw();
                 }
                 break;
             }
@@ -424,10 +435,10 @@ int main()
 
 
 	// Clean up
-	config.Unload();
-	al_destroy_display(display);
-	al_destroy_event_queue(event_queue);
-	al_destroy_timer(timer);
+    config.Unload();
+    al_destroy_display(display);
+    al_destroy_event_queue(event_queue);
+    al_destroy_timer(timer);
 
 	return 0;
 }

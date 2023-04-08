@@ -11,3 +11,5 @@ SavedGame.*
 build-*
 release/
 debug/
+Makefile
+*.pro.user
