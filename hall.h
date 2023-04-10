@@ -13,7 +13,7 @@
 #include "interfaceComponent.h"
 #include "button.h"
 #include "bigTextLabel.h"
-#include "classCallBack.h"
+#include "myButtonCallback.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -89,7 +89,7 @@ public:
 	}
 };
 
-class hall: public interfaceComponent, myButtonCallBack{
+class hall: public interfaceComponent, myButtonCallback{
 private:
 	int x0;
 	int y0;

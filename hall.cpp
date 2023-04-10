@@ -159,31 +159,31 @@ void hall::restoreScreenBackup(bool){
 
 void hall::setButtonCallBack_Reset(myButton &b1){
 	buttonReset = &b1;
-	funcCallBack f1 = &myButtonCallBack::resetAll;
+    funcCallBack f1 = &myButtonCallback::resetAll;
 	b1.registerCallBack(this, f1);
 }
 
 void hall::setButtonCallBack_Restore(myButton &b1){
 	buttonRestore = &b1;
-	funcCallBack f1 = &myButtonCallBack::restoreScreenBackup;
+    funcCallBack f1 = &myButtonCallback::restoreScreenBackup;
 	b1.registerCallBack(this, f1);
 }
 
 void hall::setButtonCallBack_FunPatterns(myButton &b1){
 	buttonFunPatterns = &b1;
-	funcCallBack f1 = &myButtonCallBack::loadFunPatterns;
+    funcCallBack f1 = &myButtonCallback::loadFunPatterns;
 	b1.registerCallBack(this, f1);
 }
 
 void hall::setButtonCallBack_SaveFile(myButton &b1){
 	buttonSaveFile = &b1;
-	funcCallBack f1 = &myButtonCallBack::saveFile;
+    funcCallBack f1 = &myButtonCallback::saveFile;
 	b1.registerCallBack(this, f1);
 }
 
 void hall::setButtonCallBack_LoadFile(myButton &b1){
 	buttonLoadFile = &b1;
-	funcCallBack f1 = &myButtonCallBack::loadFile;
+    funcCallBack f1 = &myButtonCallback::loadFile;
 	b1.registerCallBack(this, f1);
 }
 
@@ -604,7 +604,7 @@ void hall::FuncCallBack(bool pressed){
 }
 
 void hall::setButtonCallBack(myButton &b1){
-	funcCallBack f1 = &myButtonCallBack::FuncCallBack;
+    funcCallBack f1 = &myButtonCallback::FuncCallBack;
 	b1.registerCallBack(this, f1);
 }
 
@@ -662,17 +662,17 @@ int hall::readFile (const std::string file) {
 }
 
 void hall::setButtonCallBack_NextSpeed(myButton &b1){
-    funcCallBack cb = &myButtonCallBack::NextSpeed;
+    funcCallBack cb = &myButtonCallback::NextSpeed;
     b1.registerCallBack(this,cb);
 }
 
 void hall::setButtonCallBack_PrevSpeed(myButton &b1){
-    funcCallBack cb = &myButtonCallBack::PrevSpeed;
+    funcCallBack cb = &myButtonCallback::PrevSpeed;
     b1.registerCallBack(this,cb);
 }
 
 void hall::setButtonCallBack_Zoom(myButton &b1){
-	funcCallBack cb = &myButtonCallBack::changeSize;
+    funcCallBack cb = &myButtonCallback::changeSize;
 	b1.registerCallBack(this,cb);
 }
 

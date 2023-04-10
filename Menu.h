@@ -1,33 +1,37 @@
 #ifndef MENU_H
 #define MENU_H
-#include "gameScreenContext.h"
-#include "bigTextLabel.h"
-#include "button.h"
 #include <string>
 #include <memory>
 #include <array>
 #include <vector>
+#include <algorithm>
+#include <map>
 #include <allegro5/allegro.h>
-#include "classCallBack.h"
+#include <list>
+
+#include "gameScreenContext.h"
+#include "bigTextLabel.h"
+#include "button.h"
 
 
-typedef void (*menu_callback)(void);
+#include "myButtonCallback.h"
 
-class Menu : public myButtonCallBack {
+using myButtonPtr = std::shared_ptr<myButton>;
+
+class Menu : public myButtonCallback {
 
 public:
 
     struct MenuOption {
+        std::string text;
+        std::string name;
         myButton button;
-        std::string menu_name;
-        funcCallBack callback_menu;
     };
 
+    using MenuOptionPtr = std::shared_ptr<MenuOption>;
+
     Menu(gameScreenContext& context);
-    void addMenu(const std::vector<MenuOption> options);
-    void addSingleButton(const std::string name, myButtonCallBack *object, funcCallBack f1);
-    void Update(ALLEGRO_EVENT *event);
-    void Draw();
+    void addSingleButton(std::string name, std::string text);
 
     void menuFunc(bool status);
 
@@ -36,12 +40,18 @@ public:
         printf("apertou virtual funccallback\n");
     }
 
+    void setMenuOffset(int x, int y, int height_offset = 0);
+    void setMenuOptionFont(const std::string filepath, int size, int flags);
+    void setMenuOptionFont(ALLEGRO_FONT* font);
 private:
-    int menu_font_size;
-    int menu_margin_y;
+    int y;
+    int x;
+    int height_offset;
 
     gameScreenContext& menuContext;
-    std::vector<std::unique_ptr<MenuOption>> menu_options;
+    //std::vector<std::unique_ptr<MenuOption>> menu_options;
+    //std::map<std::string, myButtonPtr> m_menu_options;
+    std::list<MenuOptionPtr> m_menu_options;
 
 
 };

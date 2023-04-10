@@ -5,31 +5,24 @@
 Menu::Menu(gameScreenContext &context) : menuContext(context)
 {
 
-    this->menu_font_size = 40;
-    this->menu_margin_y = 25;
-
-
-
 }
 
-void Menu::addMenu(const std::vector<MenuOption> options)
-{
-    (void) options;
 
-}
 
-void Menu::addSingleButton(const std::string name,  myButtonCallBack* object, funcCallBack f1)
+void Menu::addSingleButton(std::string name, std::string text)
 {
 
-    std::unique_ptr<MenuOption> o = std::make_unique<MenuOption>();
+    MenuOptionPtr opt = std::make_shared<MenuOption>();
 
-    /*MenuOption o;
+    opt->button.setTextButton(true);
+    opt->button.insertText(text);
+    opt->text = text;
+    opt->name = name;
 
-    menu_options.push_back(o);
+   m_menu_options.push_back(std::move(opt));
+   menuContext.insertComponent(&m_menu_options.back()->button);
 
-
-    */
-    printf("CRIOU MENU\n");
+    /*
 
     o->menu_name = name;
     //o->callback_menu = callback;
@@ -51,32 +44,26 @@ void Menu::addSingleButton(const std::string name,  myButtonCallBack* object, fu
 
 
     menuContext.insertComponent(&menu_options.back().get()->button);
+    */
 
 }
 
-void Menu::Update(ALLEGRO_EVENT *event)
+void Menu::menuFunc(bool status)
 {
-
-     for(auto& opt  : menu_options){
-         opt.get()->button.X(100);
-         opt->button.update();
-         opt->button.update_input(event);
-
-
-     }
+    printf("status %d", status);
 }
 
-void Menu::Draw()
+void Menu::setMenuOffset(int x, int y, int height_offset)
 {
 
-    if(menu_options.size() <= 0) return;
+    this->x = x;
+    this->y = y;
+    int count = 1;
 
-
-    for(auto& opt  : menu_options){
-        static int bottom = 0;
-        opt->button.X(menuContext.getScreenW()/2 - opt->button.getButtontextWidth());
-        opt->button.Y(bottom);
-        bottom += this->menu_margin_y;
+    for(auto& m : m_menu_options){
+        int text_width = al_get_text_width(m->button.getFont(), m->text.c_str()) + 2;
+        m->button.setInfo(x, y + (count + height_offset) * count,text_width, m->button.getFontSize());
+        count++;
     }
 
 
@@ -84,10 +71,26 @@ void Menu::Draw()
 
 }
 
-void Menu::menuFunc(bool status)
+void Menu::setMenuOptionFont(const std::string filepath, int size, int flags)
 {
-        (void)status;
-        printf("AAAAAAA\n");
+    for(auto& m : m_menu_options){
+        m->button.setTextFont(filepath,size,flags);
+    }
+}
+
+void Menu::setMenuOptionFont(ALLEGRO_FONT *font)
+{
+    if(!font){
+        for(auto& m : m_menu_options){
+            m->button.setTextFont(al_create_builtin_font());
+        }
+        return;
+    }
+
+    for(auto& m : m_menu_options){
+            m->button.setTextFont(font);
+    }
+    return;
 }
 
 

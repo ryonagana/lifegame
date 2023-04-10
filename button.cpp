@@ -52,6 +52,11 @@ void myButton::setTextFont(const std::string filepath, const int size, const int
 
 }
 
+void myButton::setTextFont(ALLEGRO_FONT *font)
+{
+    button_font = font;
+}
+
 float myButton::getButtontextWidth(void) const
 {
     return al_get_text_width(button_font, button_text.c_str());
@@ -142,7 +147,7 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
 	}
 }
 
-void myButton::registerCallBack(myButtonCallBack* object, funcCallBack f1){
+void myButton::registerCallBack(myButtonCallback* object, funcCallBack f1){
 	ObjectCallBack obj1;
 	obj1.object = object;
 	obj1.func = f1;

@@ -14,7 +14,6 @@ unix: {
 
 SOURCES += \
     ../Menu.cpp \
-    ../MenuHall.cpp \
     ../bigTextLabel.cpp \
     ../button.cpp \
     ../config.cpp \
@@ -25,12 +24,11 @@ SOURCES += \
 
 HEADERS += \
     ../Menu.h \
-    ../MenuHall.h \
     ../bigTextLabel.h \
     ../button.h \
-    ../classCallBack.h \
     ../config.h \
     ../gameScreenContext.h \
     ../hall.h \
     ../informationPanel.h \
-    ../interfaceComponent.h
+    ../interfaceComponent.h \
+    ../myButtonCallback.h

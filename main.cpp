@@ -16,8 +16,8 @@
 #include "informationPanel.h"
 #include "config.h"
 #include <memory>
-//#include "Menu.h"
-#include "MenuHall.h"
+#include "Menu.h"
+
 
 
 static int SCREEN_W = 1300;
@@ -283,20 +283,28 @@ int main()
     gameMainScreen.setGlobalEventQueue(event_queue);
 
 
-    MenuHall menuHall(mainMenuContext);
-    menuHall.setConfig(&config);
-    /*
+
+
     Menu mainMenu(mainMenuContext);
 
-    mainMenu.addSingleMenu("START", nullptr);
-    mainMenu.addSingleMenu("LOAD", nullptr);
-    mainMenu.addSingleMenu("QUIT", nullptr);
+    mainMenu.addSingleButton("menu_start", "START");
+    mainMenu.addSingleButton("menu_load", "LOAD");
+    mainMenu.addSingleButton("menu_quit", "QUIT");
+
+    mainMenu.setMenuOptionFont("fonts//Game Of Squids.ttf",22,0);
+    mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, 10, 25);
+
+    //Menu::MenuOption* start_option =  mainMenu.getMenuOption("START");
+
+    //mainMenu.addSingleButton("START", &start_option->button, nullptr);
+
+
 
 
     mainMenuContext.setGlobalTimer(timer);
     mainMenuContext.setGlobalDisplay(display);
     mainMenuContext.setGlobalEventQueue(event_queue);
-    */
+
 
 
     while(running){
@@ -338,8 +346,7 @@ int main()
 
 
                     case GameState::MAIN_MENU_SCREEN:
-                            //mainMenuContext.update();
-                            menuHall.update(&event);
+                            mainMenuContext.update();
                             redraw = true;
                     break;
 
@@ -380,7 +387,13 @@ int main()
             }
 
 
-            gameMainScreen.update_input(&event);
+            if(s_gamestate == GameState::IN_GAME_SCREEN){
+                gameMainScreen.update_input(&event);
+            }
+
+            if(s_gamestate == GameState::MAIN_MENU_SCREEN){
+                mainMenuContext.update_input(&event);
+            }
 
         }while(!al_event_queue_is_empty(event_queue));
 
@@ -400,7 +413,6 @@ int main()
                 case GameState::MAIN_MENU_SCREEN:
                 {
                     mainMenuContext.draw();
-                   // menuHall.draw();
                 }
                 break;
             }

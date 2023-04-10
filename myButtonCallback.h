@@ -3,10 +3,10 @@
 
 #include <iostream>
 
-class myButtonCallBack{
+class myButtonCallback{
 public:
-	myButtonCallBack(){}
-	virtual ~myButtonCallBack(){}
+    myButtonCallback(){}
+    virtual ~myButtonCallback(){}
 	virtual void FuncCallBack(bool) = 0;
 	virtual void resetAll(bool){};
 	virtual void restoreScreenBackup(bool){};
