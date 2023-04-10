@@ -5,7 +5,6 @@
 #include <array>
 #include <vector>
 #include <algorithm>
-#include <map>
 #include <allegro5/allegro.h>
 #include <list>
 
@@ -21,6 +20,12 @@ using myButtonPtr = std::shared_ptr<myButton>;
 class Menu : public myButtonCallback {
 
 public:
+
+    enum class MenuOptionId: int {
+        START_GAME=1,
+        LOAD_FILE,
+        QUIT
+    };
 
     struct MenuOption {
         std::string text;
@@ -45,10 +50,13 @@ public:
     void setMenuOptionFont(const std::string filepath, int size, int flags);
     void setMenuOptionFont(ALLEGRO_FONT* font);
 
-    void MoveMenuUp();
-    void MoveMenuDown();
+    void moveMenuUp();
+    void moveMenuDown();
 
-    void DrawMenuSelected();
+    void drawMenuSelected();
+    void drawTitle();
+
+    void updateMenu();
 
 private:
     int y;
@@ -66,6 +74,8 @@ private:
     //std::vector<std::unique_ptr<MenuOption>> menu_options;
     //std::map<std::string, myButtonPtr> m_menu_options;
     std::list<MenuOptionPtr> m_menu_options;
+
+    MenuOptionId menu_chosen;
 
 
 };

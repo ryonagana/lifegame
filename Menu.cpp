@@ -2,6 +2,14 @@
 #include "config.h"
 #include "main.h"
 
+
+char title_text[][127] = {
+    {"Conway\'s Game of Life"},
+    {"LIFEGAME!"}
+};
+
+
+
 Menu::Menu(gameScreenContext &context) : menuContext(context)
 {
     menu_selected = 1;
@@ -9,14 +17,23 @@ Menu::Menu(gameScreenContext &context) : menuContext(context)
     selected_y = 0;
     cursor = nullptr;
 
-    cursor  = al_load_bitmap("pictures//gl.png");
+    //cursor  = al_load_bitmap("pictures//gl.png");
 
+    cursor = al_create_bitmap(16,16);
+    al_set_target_bitmap(cursor);
+    al_clear_to_color(al_map_rgb(255,255,255));
+    al_set_target_backbuffer(display);
+
+    menu_chosen  = MenuOptionId::START_GAME;
+
+    /*
     if(!cursor){
         cursor = al_create_bitmap(32,32);
         al_set_target_bitmap(cursor);
         al_clear_to_color(al_map_rgb(255,255,255));
         al_set_target_backbuffer(display);
     }
+    */
 
 }
 
@@ -39,30 +56,6 @@ void Menu::addSingleButton(std::string name, std::string text)
 
    m_menu_options.push_back(std::move(opt));
    menuContext.insertComponent(&m_menu_options.back()->button);
-
-    /*
-
-    o->menu_name = name;
-    //o->callback_menu = callback;
-    //o->button.registerCallBack
-    o->button.registerCallBack(object,f1);
-   // o->button.setInfo(menuContext.getScreenW()/2, o->button.Y() + this->menu_margin_y * menu_options.size() +  menuContext.getScreenH() / 2 - 100, 200,200 );
-    o->button.setInfo(300,300,100,100);
-
-    o->button.setTextButton(true);
-    o->button.setTextFont("fonts//Game Of Squids.ttf",22,0);
-    //o->button.X(menuContext.getScreenW()/2);
-    //o->button.Y(o->button.Y() + this->menu_margin_y * menu_options.size() +  menuContext.getScreenH() / 2 - 100 );
-
-    o->button.insertText(o->menu_name);
-    //o->button.registerCallBack()
-
-    menu_options.push_back(std::move(o));
-
-
-
-    menuContext.insertComponent(&menu_options.back().get()->button);
-    */
 
 }
 
@@ -112,9 +105,9 @@ void Menu::setMenuOptionFont(ALLEGRO_FONT *font)
     return;
 }
 
-void Menu::MoveMenuUp()
+void Menu::moveMenuUp()
 {
-    if(static_cast<size_t>(menu_selected) < 1){
+    if(static_cast<size_t>(menu_selected) <= 1){
         menu_selected = m_menu_options.size();
         return;
     }
@@ -122,7 +115,7 @@ void Menu::MoveMenuUp()
     menu_selected--;
 }
 
-void Menu::MoveMenuDown()
+void Menu::moveMenuDown()
 {
     if(static_cast<size_t>(menu_selected) > m_menu_options.size()-1){
         menu_selected = 1;
@@ -133,16 +126,53 @@ void Menu::MoveMenuDown()
     menu_selected++;
 }
 
-void Menu::DrawMenuSelected()
+void Menu::drawMenuSelected()
 {
 
     al_draw_scaled_rotated_bitmap(cursor,
                                   al_get_bitmap_width(cursor)/2,
                                   al_get_bitmap_height(cursor)/2,
                                   this->x - 50,
-                                  (this->y + this->height_offset) * menu_selected,
-                                  0.3f,0.3f,0.0,0
+                                  (this->y + this->height_offset * menu_selected)+this->height_offset/2,
+                                  1.0f,1.0f,0.0,0
                                   );
+}
+
+void Menu::drawTitle()
+{
+    ALLEGRO_FONT *fnt = al_load_ttf_font("fonts//Game Of Squids.ttf", 48,0);
+
+
+
+
+    if(!fnt) return;
+
+    for(size_t i = 0;i < sizeof(title_text)/sizeof(title_text[0]);i++){
+        int text_size = al_get_text_width(fnt,title_text[i]);
+        al_draw_textf(fnt,al_map_rgb(255,255,255), al_get_display_width(display)/2 - text_size /2 ,i * 80 +10,0,"%s", title_text[i]);
+    }
+
+    al_destroy_font(fnt);
+}
+
+void Menu::updateMenu()
+{
+    menu_chosen = static_cast<MenuOptionId>(menu_selected);
+
+    switch(menu_chosen){
+        case MenuOptionId::START_GAME:
+            g_gamestate = GameState::IN_GAME_SCREEN;
+        break;
+
+        case MenuOptionId::LOAD_FILE:
+        break;
+
+        case MenuOptionId::QUIT:
+        //printf("QUIT");
+        running = false;
+        fprintf(stdout,"QUIT");
+        break;
+    }
 }
 
 

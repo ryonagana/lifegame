@@ -28,13 +28,8 @@ static Config config;
 
 
 
-enum class GameState {
-    IN_GAME_SCREEN,
-    MAIN_MENU_SCREEN,
-    LOGO_SCREEN
-};
 
-static GameState s_gamestate = GameState::MAIN_MENU_SCREEN;
+GameState g_gamestate = GameState::MAIN_MENU_SCREEN;
 
 int init_allegro(void)
 {
@@ -270,7 +265,7 @@ int main()
     mainMenu.addSingleButton("menu_quit", "QUIT");
 
     mainMenu.setMenuOptionFont("fonts//Game Of Squids.ttf",22,0);
-    mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, 10, 35);
+    mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, al_get_display_height(display)/2 - 100 , 36);
 
     mainMenuContext.setGlobalTimer(timer);
     mainMenuContext.setGlobalDisplay(display);
@@ -299,7 +294,7 @@ int main()
             if(event.type == ALLEGRO_EVENT_TIMER){
 
 
-                switch(s_gamestate){
+                switch(g_gamestate){
 
                     case GameState::LOGO_SCREEN:
                     case GameState::IN_GAME_SCREEN:
@@ -313,6 +308,7 @@ int main()
 
 
                     case GameState::MAIN_MENU_SCREEN:
+
                             mainMenuContext.update();
                             redraw = true;
                     break;
@@ -327,7 +323,11 @@ int main()
 
 
 
-            if(s_gamestate == GameState::IN_GAME_SCREEN){
+            if(g_gamestate == GameState::IN_GAME_SCREEN){
+
+                if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
+                        running = false;
+                }
 
                 if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
                     al_acknowledge_drawing_halt(display);
@@ -348,20 +348,20 @@ int main()
                 }
 
 
-                if(event.type == ALLEGRO_EVENT_KEY_DOWN && fullscreen){
+                if(event.type == ALLEGRO_EVENT_KEY_DOWN){
                     if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-                        running = false;
+                        g_gamestate = GameState::MAIN_MENU_SCREEN;
                     }
                 }
 
             }
 
 
-            if(s_gamestate == GameState::IN_GAME_SCREEN){
+            if(g_gamestate == GameState::IN_GAME_SCREEN){
                 gameMainScreen.update_input(&event);
             }
 
-            if(s_gamestate == GameState::MAIN_MENU_SCREEN){
+            if(g_gamestate == GameState::MAIN_MENU_SCREEN){
 
                  bool fullscreen = Config::getConfig<bool>(config, "game", "fullscreen");
 
@@ -373,11 +373,15 @@ int main()
 
 
                     if(event.keyboard.keycode == ALLEGRO_KEY_UP || event.keyboard.keycode == ALLEGRO_KEY_W){
-                        mainMenu.MoveMenuUp();
+                        mainMenu.moveMenuUp();
                     }
 
                     if(event.keyboard.keycode == ALLEGRO_KEY_DOWN || event.keyboard.keycode == ALLEGRO_KEY_S){
-                        mainMenu.MoveMenuDown();
+                        mainMenu.moveMenuDown();
+                    }
+
+                    if(event.keyboard.keycode == ALLEGRO_KEY_ENTER || event.keyboard.keycode == ALLEGRO_KEY_SPACE){
+                            mainMenu.updateMenu();
                     }
 
                 }
@@ -399,7 +403,7 @@ int main()
         if(redraw){
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
-            switch(s_gamestate){
+            switch(g_gamestate){
 
                 case GameState::LOGO_SCREEN: //temporary disabled
                 case GameState::IN_GAME_SCREEN:
@@ -410,7 +414,8 @@ int main()
 
                 case GameState::MAIN_MENU_SCREEN:
                 {
-                    mainMenu.DrawMenuSelected();
+                    mainMenu.drawTitle();
+                    mainMenu.drawMenuSelected();
                     mainMenuContext.draw();
                 }
                 break;
