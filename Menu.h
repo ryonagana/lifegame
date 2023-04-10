@@ -71,10 +71,7 @@ private:
     ALLEGRO_BITMAP *cursor;
 
     gameScreenContext& menuContext;
-    //std::vector<std::unique_ptr<MenuOption>> menu_options;
-    //std::map<std::string, myButtonPtr> m_menu_options;
     std::list<MenuOptionPtr> m_menu_options;
-
     MenuOptionId menu_chosen;
 
 

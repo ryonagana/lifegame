@@ -145,9 +145,10 @@ int main()
 
 
     gameScreenContext mainMenuContext;
+    gameScreenContext gameContext;
 
-	gameScreenContext gameMainScreen;
-	gameMainScreen.setScreenSize(SCREEN_W, SCREEN_H);
+
+    gameContext.setScreenSize(SCREEN_W, SCREEN_H);
 
 
 
@@ -236,24 +237,24 @@ int main()
 
     infoAbout.setButtonCallBack_OpenAbout(aboutButton);
 
-	gameMainScreen.insertComponent(&hall1);
-	gameMainScreen.insertComponent(&playButton);
-	gameMainScreen.insertComponent(&resetButton);
-	gameMainScreen.insertComponent(&restoreButton);
-	gameMainScreen.insertComponent(&funButton);
-	gameMainScreen.insertComponent(&saveButton);
-	gameMainScreen.insertComponent(&loadButton);
-	gameMainScreen.insertComponent(&prevSpeedButton);
-	gameMainScreen.insertComponent(&nextSpeedButton);
-	gameMainScreen.insertComponent(&text1);
-	gameMainScreen.insertComponent(&textGenerations);
-	gameMainScreen.insertComponent(&infoAbout);
-	gameMainScreen.insertComponent(&lessZoomButton);
-	gameMainScreen.insertComponent(&moreZoomButton);
-	gameMainScreen.insertComponent(&aboutButton);
-    gameMainScreen.setGlobalTimer(timer);
-    gameMainScreen.setGlobalDisplay(display);
-    gameMainScreen.setGlobalEventQueue(event_queue);
+    gameContext.insertComponent(&hall1);
+    gameContext.insertComponent(&playButton);
+    gameContext.insertComponent(&resetButton);
+    gameContext.insertComponent(&restoreButton);
+    gameContext.insertComponent(&funButton);
+    gameContext.insertComponent(&saveButton);
+    gameContext.insertComponent(&loadButton);
+    gameContext.insertComponent(&prevSpeedButton);
+    gameContext.insertComponent(&nextSpeedButton);
+    gameContext.insertComponent(&text1);
+    gameContext.insertComponent(&textGenerations);
+    gameContext.insertComponent(&infoAbout);
+    gameContext.insertComponent(&lessZoomButton);
+    gameContext.insertComponent(&moreZoomButton);
+    gameContext.insertComponent(&aboutButton);
+    gameContext.setGlobalTimer(timer);
+    gameContext.setGlobalDisplay(display);
+    gameContext.setGlobalEventQueue(event_queue);
 
 
 
@@ -300,7 +301,7 @@ int main()
                     case GameState::IN_GAME_SCREEN:
                     {
                         if(!paused){
-                            gameMainScreen.update();
+                            gameContext.update();
                             redraw = true;
                         }
                     }
@@ -326,7 +327,7 @@ int main()
             if(g_gamestate == GameState::IN_GAME_SCREEN){
 
                 if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
-                        running = false;
+                        g_gamestate = GameState::MAIN_MENU_SCREEN;
                 }
 
                 if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
@@ -354,22 +355,19 @@ int main()
                     }
                 }
 
+                gameContext.update_input(&event);
             }
 
 
-            if(g_gamestate == GameState::IN_GAME_SCREEN){
-                gameMainScreen.update_input(&event);
-            }
+
 
             if(g_gamestate == GameState::MAIN_MENU_SCREEN){
 
-                 bool fullscreen = Config::getConfig<bool>(config, "game", "fullscreen");
+
 
                 //esc to quit on in main menu
                 if(event.type  == ALLEGRO_EVENT_KEY_DOWN){
-                    if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-                        running = false;
-                    }
+
 
 
                     if(event.keyboard.keycode == ALLEGRO_KEY_UP || event.keyboard.keycode == ALLEGRO_KEY_W){
@@ -386,16 +384,12 @@ int main()
 
                 }
 
-                if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
-                    running = false;
-                }
-
-
-
-
-
                 mainMenuContext.update_input(&event);
             }
+
+
+
+
 
         }while(!al_event_queue_is_empty(event_queue));
 
@@ -408,7 +402,7 @@ int main()
                 case GameState::LOGO_SCREEN: //temporary disabled
                 case GameState::IN_GAME_SCREEN:
                 {
-                    gameMainScreen.draw();
+                    gameContext.draw();
                 }
                 break;
 
