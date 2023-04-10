@@ -31,6 +31,7 @@ public:
     using MenuOptionPtr = std::shared_ptr<MenuOption>;
 
     Menu(gameScreenContext& context);
+    ~Menu();
     void addSingleButton(std::string name, std::string text);
 
     void menuFunc(bool status);
@@ -43,10 +44,23 @@ public:
     void setMenuOffset(int x, int y, int height_offset = 0);
     void setMenuOptionFont(const std::string filepath, int size, int flags);
     void setMenuOptionFont(ALLEGRO_FONT* font);
+
+    void MoveMenuUp();
+    void MoveMenuDown();
+
+    void DrawMenuSelected();
+
 private:
     int y;
     int x;
+    int width_offset;
     int height_offset;
+
+    int menu_selected;
+    int selected_x;
+    int selected_y;
+
+    ALLEGRO_BITMAP *cursor;
 
     gameScreenContext& menuContext;
     //std::vector<std::unique_ptr<MenuOption>> menu_options;

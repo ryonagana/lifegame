@@ -1,22 +1,4 @@
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <stdio.h>
-#include <math.h>
-#include <iostream>
-#include "hall.h"
-#include "button.h"
-#include "gameScreenContext.h"
-#include "bigTextLabel.h"
-#include "informationPanel.h"
-#include "config.h"
-#include <memory>
-#include "Menu.h"
+#include "main.h"
 
 
 
@@ -31,9 +13,9 @@ bool fullscreen = false;
 
 static constexpr double MAX_TIMEOUT = (1.0 / FPS);
 
-ALLEGRO_DISPLAY *display = NULL;
-ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-ALLEGRO_TIMER *timer = NULL;
+ALLEGRO_DISPLAY *display = nullptr;
+ALLEGRO_EVENT_QUEUE *event_queue = nullptr;
+ALLEGRO_TIMER *timer = nullptr;
 
 const ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
 const ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
@@ -51,10 +33,6 @@ enum class GameState {
     MAIN_MENU_SCREEN,
     LOGO_SCREEN
 };
-
-
-
-
 
 static GameState s_gamestate = GameState::MAIN_MENU_SCREEN;
 
@@ -292,14 +270,7 @@ int main()
     mainMenu.addSingleButton("menu_quit", "QUIT");
 
     mainMenu.setMenuOptionFont("fonts//Game Of Squids.ttf",22,0);
-    mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, 10, 25);
-
-    //Menu::MenuOption* start_option =  mainMenu.getMenuOption("START");
-
-    //mainMenu.addSingleButton("START", &start_option->button, nullptr);
-
-
-
+    mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, 10, 35);
 
     mainMenuContext.setGlobalTimer(timer);
     mainMenuContext.setGlobalDisplay(display);
@@ -322,11 +293,7 @@ int main()
                 break;
             }
 
-            if(event.type  == ALLEGRO_EVENT_KEY_DOWN){
-                if(event.keyboard.type == ALLEGRO_KEY_ESCAPE){
-                    running = false;
-                }
-            }
+
 
 
             if(event.type == ALLEGRO_EVENT_TIMER){
@@ -358,7 +325,10 @@ int main()
             }
 
 
+
+
             if(s_gamestate == GameState::IN_GAME_SCREEN){
+
                 if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
                     al_acknowledge_drawing_halt(display);
                     background_mode = true;
@@ -392,6 +362,34 @@ int main()
             }
 
             if(s_gamestate == GameState::MAIN_MENU_SCREEN){
+
+                 bool fullscreen = Config::getConfig<bool>(config, "game", "fullscreen");
+
+                //esc to quit on in main menu
+                if(event.type  == ALLEGRO_EVENT_KEY_DOWN){
+                    if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                        running = false;
+                    }
+
+
+                    if(event.keyboard.keycode == ALLEGRO_KEY_UP || event.keyboard.keycode == ALLEGRO_KEY_W){
+                        mainMenu.MoveMenuUp();
+                    }
+
+                    if(event.keyboard.keycode == ALLEGRO_KEY_DOWN || event.keyboard.keycode == ALLEGRO_KEY_S){
+                        mainMenu.MoveMenuDown();
+                    }
+
+                }
+
+                if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
+                    running = false;
+                }
+
+
+
+
+
                 mainMenuContext.update_input(&event);
             }
 
@@ -412,6 +410,7 @@ int main()
 
                 case GameState::MAIN_MENU_SCREEN:
                 {
+                    mainMenu.DrawMenuSelected();
                     mainMenuContext.draw();
                 }
                 break;
@@ -421,26 +420,6 @@ int main()
             al_flip_display();
 
         }
-
-        /*
-        switch(s_gamestate){
-            case GameState::IN_GAME:
-            {
-                if(redraw){
-                    redraw = false;
-                    al_clear_to_color(al_map_rgb(0,0,0));
-                    gameMainScreen.draw();
-                    al_flip_display();
-
-                }
-            }
-            break;
-
-           case GameState::MAIN_MENU:
-                mainMenuContext.draw();
-           break;
-        }
-        */
 
     }
 

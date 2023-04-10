@@ -4,11 +4,17 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++14 -Wall -Werror -Wextra -Wunused -Wno-switch
 
+
+
 unix: {
     #INCLUDEPATH += /usr/include
     #INCLUDEPATH += -L/usr/include/c++/10
     LIBS += -L/usr/lib64
     LIBS += -lallegro -lallegro_primitives  -lallegro_font -lallegro_ttf -lallegro_image -lallegro_dialog
+
+    debug: {
+        DEFINES += GAME_DEBUG
+    }
 
 }
 
@@ -31,4 +37,5 @@ HEADERS += \
     ../hall.h \
     ../informationPanel.h \
     ../interfaceComponent.h \
+    ../main.h \
     ../myButtonCallback.h

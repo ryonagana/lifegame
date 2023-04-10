@@ -246,7 +246,11 @@ void myButton::draw(){
         al_draw_textf(button_font, al_map_rgb(255,255,255), x0,y0, 0, "%s", button_text.c_str());
         return;
     }
-    if(visible == true)draw_sprites();
+
+    if(visible == true){
+        draw_sprites();
+        return;
+    }
 }
 
 ALLEGRO_BITMAP* myButton::tmp_button(){

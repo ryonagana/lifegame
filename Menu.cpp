@@ -1,8 +1,26 @@
 #include "Menu.h"
 #include "config.h"
-
+#include "main.h"
 
 Menu::Menu(gameScreenContext &context) : menuContext(context)
+{
+    menu_selected = 1;
+    selected_x = 0;
+    selected_y = 0;
+    cursor = nullptr;
+
+    cursor  = al_load_bitmap("pictures//gl.png");
+
+    if(!cursor){
+        cursor = al_create_bitmap(32,32);
+        al_set_target_bitmap(cursor);
+        al_clear_to_color(al_map_rgb(255,255,255));
+        al_set_target_backbuffer(display);
+    }
+
+}
+
+Menu::~Menu()
 {
 
 }
@@ -58,6 +76,7 @@ void Menu::setMenuOffset(int x, int y, int height_offset)
 
     this->x = x;
     this->y = y;
+    this->height_offset = height_offset;
     int count = 1;
 
     for(auto& m : m_menu_options){
@@ -91,6 +110,39 @@ void Menu::setMenuOptionFont(ALLEGRO_FONT *font)
             m->button.setTextFont(font);
     }
     return;
+}
+
+void Menu::MoveMenuUp()
+{
+    if(static_cast<size_t>(menu_selected) < 1){
+        menu_selected = m_menu_options.size();
+        return;
+    }
+
+    menu_selected--;
+}
+
+void Menu::MoveMenuDown()
+{
+    if(static_cast<size_t>(menu_selected) > m_menu_options.size()-1){
+        menu_selected = 1;
+        return;
+    }
+
+
+    menu_selected++;
+}
+
+void Menu::DrawMenuSelected()
+{
+
+    al_draw_scaled_rotated_bitmap(cursor,
+                                  al_get_bitmap_width(cursor)/2,
+                                  al_get_bitmap_height(cursor)/2,
+                                  this->x - 50,
+                                  (this->y + this->height_offset) * menu_selected,
+                                  0.3f,0.3f,0.0,0
+                                  );
 }
 
 
