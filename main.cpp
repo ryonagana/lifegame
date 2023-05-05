@@ -11,7 +11,7 @@ static bool paused = false;
 
 bool fullscreen = false;
 
-static constexpr double MAX_TIMEOUT = (1.0 / FPS);
+//static constexpr double MAX_TIMEOUT = (1.0 / FPS);
 
 ALLEGRO_DISPLAY *display = nullptr;
 ALLEGRO_EVENT_QUEUE *event_queue = nullptr;
@@ -78,7 +78,7 @@ int init_allegro(void)
 			SCREEN_H = info.y2 - info.y1 - 80;
 		}
 
-        int flags = ALLEGRO_OPENGL_3_0;
+        int flags = ALLEGRO_OPENGL_FORWARD_COMPATIBLE | ALLEGRO_PROGRAMMABLE_PIPELINE;
 
         if(fullscreen){
             flags |= ALLEGRO_FULLSCREEN_WINDOW;
@@ -89,10 +89,14 @@ int init_allegro(void)
 		// Create the display
 		al_set_new_display_flags(flags);
 
+        al_set_new_display_option(ALLEGRO_SAMPLES,1, ALLEGRO_SUGGEST);
+        al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS,1,ALLEGRO_SUGGEST);
+        al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
+
         display = al_create_display(SCREEN_W, SCREEN_H);
         if (!display) {
 			fprintf(stderr, "Failed to create display.\n");
-			return 1;
+            return 0;
 		}
 
         //force all bitmaps being used by GPU + better quality, less crisp
@@ -140,7 +144,9 @@ int init_allegro(void)
 int main()
 {
 
-	init_allegro();
+    if(!init_allegro()){
+        exit(0);
+    }
 
 
 
@@ -276,20 +282,15 @@ int main()
 
     while(running){
 
+#if 1
+        ALLEGRO_EVENT event;
+        ALLEGRO_TIMEOUT timeout;
 
-        do {
-
-            ALLEGRO_EVENT event;
-            ALLEGRO_TIMEOUT timeout;
-
-            al_init_timeout(&timeout, MAX_TIMEOUT);
+        al_init_timeout(&timeout, 0.1);
 
 
-            if(!al_wait_for_event_until(event_queue, &event, &timeout)){
-                break;
-            }
 
-
+        while(al_wait_for_event_until(event_queue, &event, &timeout) ){
 
 
             if(event.type == ALLEGRO_EVENT_TIMER){
@@ -355,7 +356,8 @@ int main()
                     }
                 }
 
-                gameContext.update_input(&event);
+                 gameContext.update_input(&event);
+
             }
 
 
@@ -391,7 +393,7 @@ int main()
 
 
 
-        }while(!al_event_queue_is_empty(event_queue));
+        };
 
 
         if(redraw){
@@ -419,6 +421,7 @@ int main()
             al_flip_display();
 
         }
+#endif
 
     }
 

@@ -132,9 +132,10 @@ void myButton::mouse_event_input(ALLEGRO_EVENT *ev){
         }
 
 		if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+            al_get_mouse_state(&state);
 
             if (state.buttons & 1) {
-                al_get_mouse_state(&state);
+
 				//Primary (e.g. left) mouse button is held.
 				//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
 				if((state.x >= x0)&&(state.x <= x0+sizeX0)){

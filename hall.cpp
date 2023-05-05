@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+
 hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	x0 = x;
 	y0 = y;
@@ -71,6 +72,8 @@ void hall::calcNumBlocs(){
 }
 
 void hall::draw_line(){
+
+#if 1
    ALLEGRO_COLOR color;
    color = al_map_rgb_f(0.3, 0.3, 0.3);
    int x = x0;
@@ -88,6 +91,7 @@ void hall::draw_line(){
    	   al_draw_line(x, y, x, y+height, color, 0);
    	   x = x + size;
     }
+#endif
 }
 
 void hall::draw_text(){
@@ -271,11 +275,13 @@ void hall::CreateAndKillLife(){
 
 void hall::update(){
 	moveGrid();
+    contAllNeighbors();
+    CreateAndKillLife();
 }
 
 void hall::draw(){
-    contAllNeighbors();
-	CreateAndKillLife();
+    //contAllNeighbors();
+    //CreateAndKillLife();
 	draw_line();
 	draw_markers();
 	draw_text();
