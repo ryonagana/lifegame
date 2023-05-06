@@ -5,7 +5,7 @@
 static int SCREEN_W = 1300;
 static int SCREEN_H = 700;
 
-static constexpr double FPS = 60.0;
+static double FPS = 60.0;
 static bool background_mode = false;
 static bool paused = false;
 
@@ -65,7 +65,23 @@ int init_allegro(void)
 
 
 		// Initialize the timer
-        timer = al_create_timer(1.0 / FPS);
+
+
+        double fps_desired = Config::getConfigFloat(config, "game", "max_fps_desired", FPS);
+        int laptop_mode =   Config::getConfigInt(config, "game", "laptop_mode", 0);
+
+
+        if(laptop_mode){
+            timer = al_create_timer(1.0 / 30.0);
+        }else {
+            if(fps_desired > 60){
+                fprintf(stdout, "please set CFG  FPS less or equal to 60, higher speed can have some slowness issues");
+            }
+
+            timer = al_create_timer(1.0 / fps_desired);
+        }
+
+
         if (!timer) {
 			fprintf(stderr, "Failed to create timer.\n");
 			return 1;
@@ -91,9 +107,26 @@ int init_allegro(void)
 
         al_set_new_display_option(ALLEGRO_SAMPLES,1, ALLEGRO_SUGGEST);
         al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS,1,ALLEGRO_SUGGEST);
-        al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
 
-        display = al_create_display(SCREEN_W, SCREEN_H);
+
+        int vsync_enabled = Config::getConfigInt(config, "game", "vsync");
+
+        if(vsync_enabled < 0) vsync_enabled = 0;
+        if(vsync_enabled > 1) vsync_enabled = 1;
+
+
+        al_set_new_display_option(ALLEGRO_VSYNC, vsync_enabled, ALLEGRO_SUGGEST);
+
+
+        int display_width = Config::getConfigInt(config, "game", "width");
+        int display_height = Config::getConfigInt(config, "game", "height");
+
+
+        if(display_width <= 800)  display_width = 800;
+        if(display_height <= 600) display_width = 600;
+
+
+        display = al_create_display(display_width, display_height);
         if (!display) {
 			fprintf(stderr, "Failed to create display.\n");
             return 0;
@@ -109,8 +142,19 @@ int init_allegro(void)
 			return 1;
 		}
 
-		al_init_font_addon();
-		al_init_ttf_addon();
+
+        if(!al_init_font_addon()){
+                fprintf(stderr, "font addon cannot be initialized!");
+        }
+
+
+        if(!al_init_ttf_addon()){
+            fprintf(stderr, "ttf addon cannot be initialized!");
+        }
+
+        if(!al_init_primitives_addon()){
+            fprintf(stderr, "primitives addon cannot be initialized!");
+        }
 
         ALLEGRO_BITMAP *icon = nullptr;
 
@@ -130,7 +174,7 @@ int init_allegro(void)
 		al_flip_display();
 		// Start the timer
         al_start_timer(timer);
-		al_init_primitives_addon();
+
 
 
 
@@ -154,12 +198,19 @@ int main()
     gameScreenContext gameContext;
 
 
-    gameContext.setScreenSize(SCREEN_W, SCREEN_H);
+    int w,h;
+
+    w = al_get_display_width(display);
+    h = al_get_display_height(display);
+
+    //gameContext.setScreenSize(w, h);
 
 
 
 
-	hall hall1(50, 150, SCREEN_W, SCREEN_H);
+
+
+    hall hall1(50, 150, w, h);
 	myButton playButton(570, 40, 100, 100);
 	myButton resetButton(680, 40, 100, 100);
 	myButton restoreButton(800, 40, 100, 100);
@@ -289,6 +340,33 @@ int main()
         al_init_timeout(&timeout, 0.1);
 
 
+        if(redraw){
+            redraw = false;
+            al_clear_to_color(al_map_rgb(0,0,0));
+            switch(g_gamestate){
+
+                case GameState::LOGO_SCREEN: break; //temporary disabled
+                case GameState::IN_GAME_SCREEN:
+                {
+                    gameContext.draw();
+                }
+                break;
+
+                case GameState::MAIN_MENU_SCREEN:
+                {
+                    mainMenu.drawTitle();
+                    mainMenu.drawMenuSelected();
+                    mainMenuContext.draw();
+                }
+                break;
+            }
+
+
+            al_flip_display();
+
+        }
+
+
 
         while(al_wait_for_event_until(event_queue, &event, &timeout) ){
 
@@ -302,6 +380,7 @@ int main()
                     case GameState::IN_GAME_SCREEN:
                     {
                         if(!paused){
+
                             gameContext.update();
                             redraw = true;
                         }
@@ -396,31 +475,7 @@ int main()
         };
 
 
-        if(redraw){
-            redraw = false;
-            al_clear_to_color(al_map_rgb(0,0,0));
-            switch(g_gamestate){
 
-                case GameState::LOGO_SCREEN: //temporary disabled
-                case GameState::IN_GAME_SCREEN:
-                {
-                    gameContext.draw();
-                }
-                break;
-
-                case GameState::MAIN_MENU_SCREEN:
-                {
-                    mainMenu.drawTitle();
-                    mainMenu.drawMenuSelected();
-                    mainMenuContext.draw();
-                }
-                break;
-            }
-
-
-            al_flip_display();
-
-        }
 #endif
 
     }

@@ -22,9 +22,10 @@ public:
 
     }
 
-    static bool  getConfigBool(Config& cfg, const char *sector, const char *key);
-    static int   getConfigInt(Config& cfg, const char *sector, const char *key);
-    static float getConfigFloat(Config& cfg, const char *sector, const char *key);
+    static const char* getConfigStr(Config& cfg, const char *sector, const char *key, const char *def  = "");
+    static bool  getConfigBool(Config& cfg, const char *sector, const char *key,  bool def = false);
+    static int   getConfigInt(Config& cfg, const char *sector, const char *key, int def=0);
+    static float getConfigFloat(Config& cfg, const char *sector, const char *key, float def=0.0f);
 
     ALLEGRO_CONFIG* createDefaultConfig();
     void Unload();

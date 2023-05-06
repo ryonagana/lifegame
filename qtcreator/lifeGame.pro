@@ -18,6 +18,19 @@ unix: {
 
 }
 
+win32: {
+    INCLUDEPATH += D:\libs\allegro_x86_64\include
+    INCLUDEPATH += D:\projetos\libs\allegro-x86_64\allegro\include
+    INCLUDEPATH += include
+
+    LIBS += -LD:\libs\allegro_x86_64\lib
+    LIBS += -LD:\projetos\libs\allegro-x86_64\allegro\lib
+
+
+
+LIBS += -lallegro_monolith.dll
+}
+
 SOURCES += \
     ../Menu.cpp \
     ../bigTextLabel.cpp \
