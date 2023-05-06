@@ -74,7 +74,7 @@ int init_allegro(void)
         if(laptop_mode){
             timer = al_create_timer(1.0 / 30.0);
         }else {
-            if(fps_desired > 60){
+            if(fps_desired > 60.0){
                 fprintf(stdout, "please set CFG  FPS less or equal to 60, higher speed can have some slowness issues");
             }
 
@@ -400,8 +400,6 @@ int main()
 
 
             }
-
-
 
 
             if(g_gamestate == GameState::IN_GAME_SCREEN){
