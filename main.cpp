@@ -31,7 +31,7 @@ static Config config;
 
 GameState g_gamestate = GameState::MAIN_MENU_SCREEN;
 
-int init_allegro(void)
+static int init_allegro(void)
 {
 
 
@@ -184,6 +184,59 @@ int init_allegro(void)
 
 
 
+static void S_processWindowEvents(ALLEGRO_EVENT& e){
+    if(e.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
+            g_gamestate = GameState::MAIN_MENU_SCREEN;
+    }
+
+    if(e.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
+        al_acknowledge_drawing_halt(display);
+        background_mode = true;
+    }
+
+    if(e.type == ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING){
+        al_acknowledge_drawing_resume(display);
+        background_mode = false;
+    }
+
+    if(e.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){
+        paused = true;
+    }
+
+    if(e.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){
+        paused = false;
+    }
+
+
+    if(e.type == ALLEGRO_EVENT_KEY_DOWN){
+        if(e.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+            g_gamestate = GameState::MAIN_MENU_SCREEN;
+        }
+    }
+
+}
+
+
+static void S_processMenuEvents(ALLEGRO_EVENT& e, Menu& menu){
+    //esc to quit on in main menu
+    if(e.type  == ALLEGRO_EVENT_KEY_DOWN){
+
+
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_UP || e.keyboard.keycode == ALLEGRO_KEY_W){
+            menu.moveMenuUp();
+        }
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_DOWN || e.keyboard.keycode == ALLEGRO_KEY_S){
+            menu.moveMenuDown();
+        }
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_ENTER || e.keyboard.keycode == ALLEGRO_KEY_SPACE){
+                menu.updateMenu();
+        }
+
+    }
+}
 
 int main()
 {
@@ -313,9 +366,6 @@ int main()
     gameContext.setGlobalDisplay(display);
     gameContext.setGlobalEventQueue(event_queue);
 
-
-
-
     Menu mainMenu(mainMenuContext);
 
     mainMenu.addSingleButton("menu_start", "START");
@@ -333,7 +383,6 @@ int main()
 
     while(running){
 
-#if 1
         ALLEGRO_EVENT event;
         ALLEGRO_TIMEOUT timeout;
 
@@ -361,11 +410,9 @@ int main()
                 break;
             }
 
-
             al_flip_display();
 
         }
-
 
 
         while(al_wait_for_event_until(event_queue, &event, &timeout) ){
@@ -380,7 +427,6 @@ int main()
                     case GameState::IN_GAME_SCREEN:
                     {
                         if(!paused){
-
                             gameContext.update();
                             redraw = true;
                         }
@@ -389,13 +435,9 @@ int main()
 
 
                     case GameState::MAIN_MENU_SCREEN:
-
                             mainMenuContext.update();
                             redraw = true;
                     break;
-
-
-
                 }
 
 
@@ -403,78 +445,18 @@ int main()
 
 
             if(g_gamestate == GameState::IN_GAME_SCREEN){
-
-                if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
-                        g_gamestate = GameState::MAIN_MENU_SCREEN;
-                }
-
-                if(event.type == ALLEGRO_EVENT_DISPLAY_HALT_DRAWING){
-                    al_acknowledge_drawing_halt(display);
-                    background_mode = true;
-                }
-
-                if(event.type == ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING){
-                    al_acknowledge_drawing_resume(display);
-                    background_mode = false;
-                }
-
-                if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){
-                    paused = true;
-                }
-
-                if(event.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){
-                    paused = false;
-                }
-
-
-                if(event.type == ALLEGRO_EVENT_KEY_DOWN){
-                    if(event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-                        g_gamestate = GameState::MAIN_MENU_SCREEN;
-                    }
-                }
-
+                 S_processWindowEvents(event);
                  gameContext.update_input(&event);
 
             }
 
 
-
-
             if(g_gamestate == GameState::MAIN_MENU_SCREEN){
-
-
-
-                //esc to quit on in main menu
-                if(event.type  == ALLEGRO_EVENT_KEY_DOWN){
-
-
-
-                    if(event.keyboard.keycode == ALLEGRO_KEY_UP || event.keyboard.keycode == ALLEGRO_KEY_W){
-                        mainMenu.moveMenuUp();
-                    }
-
-                    if(event.keyboard.keycode == ALLEGRO_KEY_DOWN || event.keyboard.keycode == ALLEGRO_KEY_S){
-                        mainMenu.moveMenuDown();
-                    }
-
-                    if(event.keyboard.keycode == ALLEGRO_KEY_ENTER || event.keyboard.keycode == ALLEGRO_KEY_SPACE){
-                            mainMenu.updateMenu();
-                    }
-
-                }
-
+                S_processMenuEvents(event, mainMenu);
                 mainMenuContext.update_input(&event);
             }
 
-
-
-
-
         };
-
-
-
-#endif
 
     }
 

@@ -54,6 +54,10 @@ void Menu::addSingleButton(std::string name, std::string text)
     opt->text = text;
     opt->name = name;
 
+
+    funcCallBack f1 = &myButtonCallback::FuncCallBack;
+    opt->button.registerCallBack(this,f1);
+
    m_menu_options.push_back(std::move(opt));
    menuContext.insertComponent(&m_menu_options.back()->button);
 
@@ -149,7 +153,7 @@ void Menu::drawTitle()
 
     for(size_t i = 0;i < sizeof(title_text)/sizeof(title_text[0]);i++){
         int text_size = al_get_text_width(fnt,title_text[i]);
-        al_draw_textf(fnt,al_map_rgb(255,255,255), al_get_display_width(display)/2 - text_size /2 ,i * 80 +10,0,"%s", title_text[i]);
+        al_draw_textf(fnt,al_map_rgb(255,255,255), al_get_display_width(display)/2 - text_size/2 ,i * 80 +10,0,"%s", title_text[i]);
     }
 
     al_destroy_font(fnt);
