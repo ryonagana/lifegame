@@ -290,6 +290,10 @@ void hall::draw(){
 			QuadradosList[i+bloco_x0][j+bloco_y0].draw();
 		}
 	}
+
+#ifdef GAME_DEBUG
+    renderMouseDebug();
+#endif
 }
 
 void hall::setQuadradoInf(){
@@ -390,20 +394,34 @@ Position hall::get_Position(int pos_x, int pos_y){
 
 void hall::mouse_event_input(ALLEGRO_EVENT *ev){
 	ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
 
-	if(ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-		al_get_mouse_state(&state);
-		if (state.buttons & 1) {
-			/* Primary (e.g. left) mouse button is held. */
-			//printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
-			if(!play){
-				Position Q1 = get_Position(state.x, state.y);
-				if((Q1.x >= 0)&&(Q1.y >= 0)){
-					QuadradosList[Q1.x][Q1.y].toogle();
-				}
-			}
-		}
-	}
+
+    if (state.buttons & 1) {
+        /* Primary (e.g. left) mouse button is held. */
+        //printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
+        if(!play){
+            Position Q1 = get_Position(state.x, state.y);
+            if((Q1.x >= 0)&&(Q1.y >= 0)){
+                if(!QuadradosList[Q1.x][Q1.y].checked){
+                    QuadradosList[Q1.x][Q1.y].toogle();
+                }
+            }
+        }
+    }
+
+    if (state.buttons & 2) {
+        /* Primary (e.g. left) mouse button is held. */
+        //printf("KKKK Mouse position: (%d, %d)\n", state.x, state.y);
+        if(!play){
+            Position Q1 = get_Position(state.x, state.y);
+            if((Q1.x >= 0)&&(Q1.y >= 0)){
+                if(QuadradosList[Q1.x][Q1.y].checked){
+                    QuadradosList[Q1.x][Q1.y].toogle();
+                }
+            }
+        }
+    }
 
 	if(ev->type == ALLEGRO_EVENT_MOUSE_AXES){
 		al_get_mouse_state(&state);
@@ -718,4 +736,15 @@ void hall::changeSize(bool zoom){
 void hall::update_input(ALLEGRO_EVENT *e){
     mouse_event_input(e);
     keyboard_event_input(e);
+}
+
+void hall::renderMouseDebug()
+{
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+
+    al_draw_textf(text_font, al_map_rgb(255,0,0), 10,100,0, "BOTAO ESQUERDO %s", state.buttons & 1 ? "PRESSIONADO" : "LIVRE");
+    al_draw_textf(text_font, al_map_rgb(255,0,0), 10,120,0, "BOTAO DIREITO %s", state.buttons & 2 ? "PRESSIONADO" : "LIVRE");
+    al_draw_textf(text_font, al_map_rgb(255,0,0), 10,140,0, "X: %d Y: %d", state.x, state.y);
+
 }
