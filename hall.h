@@ -125,6 +125,7 @@ private:
 	bool load_dialog_open;
 	bool save_dialog_open;
 
+
 public:
 
 	EVOLUTION_SPEED ev_speed[NUMBER_OF_SPEEDS] = {
@@ -187,6 +188,9 @@ public:
     void changeSize(bool zoom) override;
     virtual void draw() override;
     virtual void update_input(ALLEGRO_EVENT *e) override;
+
+
+    void renderMouseDebug();
 
 
 };

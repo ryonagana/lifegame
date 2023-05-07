@@ -1,17 +1,14 @@
 #include "main.h"
 
-
-
-static int SCREEN_W = 1300;
-static int SCREEN_H = 700;
+//static int SCREEN_W = 1300;
+//static int SCREEN_H = 700;
 
 static double FPS = 60.0;
 static bool background_mode = false;
 static bool paused = false;
 
-bool fullscreen = false;
+static bool fullscreen = false;
 
-//static constexpr double MAX_TIMEOUT = (1.0 / FPS);
 
 ALLEGRO_DISPLAY *display = nullptr;
 ALLEGRO_EVENT_QUEUE *event_queue = nullptr;
@@ -21,9 +18,9 @@ const ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
 const ALLEGRO_COLOR red = al_map_rgb_f(1.0, 1.0, 1.0);
 const ALLEGRO_COLOR blue = al_map_rgb_f(1.0, 1.0, 1.0);
 const ALLEGRO_COLOR yellow = al_map_rgb_f(1.0, 1.0, 0);
-bool running = true;
-bool redraw = false;
 
+bool running = true;
+static bool redraw = false;
 static Config config;
 
 
@@ -64,6 +61,10 @@ static int init_allegro(void)
         fullscreen = Config::getConfig<bool>(config, "game", "fullscreen");
 
 
+        int display_width = Config::getConfigInt(config, "game", "width");
+        int display_height = Config::getConfigInt(config, "game", "height");
+
+
 		// Initialize the timer
 
 
@@ -90,8 +91,8 @@ static int init_allegro(void)
 		ALLEGRO_MONITOR_INFO info;
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
-			SCREEN_W = info.x2 - info.x1;
-			SCREEN_H = info.y2 - info.y1 - 80;
+            display_width = info.x2 - info.x1;
+            display_height = info.y2 - info.y1 - 80;
 		}
 
         int flags = ALLEGRO_OPENGL_FORWARD_COMPATIBLE | ALLEGRO_PROGRAMMABLE_PIPELINE;
@@ -116,11 +117,6 @@ static int init_allegro(void)
 
 
         al_set_new_display_option(ALLEGRO_VSYNC, vsync_enabled, ALLEGRO_SUGGEST);
-
-
-        int display_width = Config::getConfigInt(config, "game", "width");
-        int display_height = Config::getConfigInt(config, "game", "height");
-
 
         if(display_width <= 800)  display_width = 800;
         if(display_height <= 600) display_width = 600;
@@ -182,8 +178,6 @@ static int init_allegro(void)
 }
 
 
-
-
 static void S_processWindowEvents(ALLEGRO_EVENT& e){
     if(e.type == ALLEGRO_EVENT_DISPLAY_CLOSE && !fullscreen){
             g_gamestate = GameState::MAIN_MENU_SCREEN;
@@ -217,26 +211,7 @@ static void S_processWindowEvents(ALLEGRO_EVENT& e){
 }
 
 
-static void S_processMenuEvents(ALLEGRO_EVENT& e, Menu& menu){
-    //esc to quit on in main menu
-    if(e.type  == ALLEGRO_EVENT_KEY_DOWN){
 
-
-
-        if(e.keyboard.keycode == ALLEGRO_KEY_UP || e.keyboard.keycode == ALLEGRO_KEY_W){
-            menu.moveMenuUp();
-        }
-
-        if(e.keyboard.keycode == ALLEGRO_KEY_DOWN || e.keyboard.keycode == ALLEGRO_KEY_S){
-            menu.moveMenuDown();
-        }
-
-        if(e.keyboard.keycode == ALLEGRO_KEY_ENTER || e.keyboard.keycode == ALLEGRO_KEY_SPACE){
-                menu.updateMenu();
-        }
-
-    }
-}
 
 int main()
 {
@@ -245,16 +220,13 @@ int main()
         exit(0);
     }
 
-
-
     gameScreenContext mainMenuContext;
     gameScreenContext gameContext;
 
+    int display_w,display_h;
 
-    int w,h;
-
-    w = al_get_display_width(display);
-    h = al_get_display_height(display);
+    display_w = al_get_display_width(display);
+    display_h = al_get_display_height(display);
 
     //gameContext.setScreenSize(w, h);
 
@@ -263,7 +235,7 @@ int main()
 
 
 
-    hall hall1(50, 150, w, h);
+    hall hall1(50, 150, display_w, display_h);
 	myButton playButton(570, 40, 100, 100);
 	myButton resetButton(680, 40, 100, 100);
 	myButton restoreButton(800, 40, 100, 100);
@@ -379,8 +351,6 @@ int main()
     mainMenuContext.setGlobalDisplay(display);
     mainMenuContext.setGlobalEventQueue(event_queue);
 
-
-
     while(running){
 
         ALLEGRO_EVENT event;
@@ -414,16 +384,14 @@ int main()
 
         }
 
-
         while(al_wait_for_event_until(event_queue, &event, &timeout) ){
-
 
             if(event.type == ALLEGRO_EVENT_TIMER){
 
 
                 switch(g_gamestate){
 
-                    case GameState::LOGO_SCREEN:
+                    case GameState::LOGO_SCREEN: break;
                     case GameState::IN_GAME_SCREEN:
                     {
                         if(!paused){
@@ -432,17 +400,12 @@ int main()
                         }
                     }
                     break;
-
-
                     case GameState::MAIN_MENU_SCREEN:
                             mainMenuContext.update();
                             redraw = true;
                     break;
                 }
-
-
             }
-
 
             if(g_gamestate == GameState::IN_GAME_SCREEN){
                  S_processWindowEvents(event);
@@ -450,17 +413,14 @@ int main()
 
             }
 
-
             if(g_gamestate == GameState::MAIN_MENU_SCREEN){
-                S_processMenuEvents(event, mainMenu);
+                mainMenu.processMenuEvents(event,mainMenu);
                 mainMenuContext.update_input(&event);
             }
 
         };
 
     }
-
-
 
 	// Clean up
     config.Unload();

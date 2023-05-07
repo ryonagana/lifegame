@@ -179,6 +179,25 @@ void Menu::updateMenu()
     }
 }
 
+void Menu::processMenuEvents(ALLEGRO_EVENT &e, Menu &menu)
+{
+    if(e.type  == ALLEGRO_EVENT_KEY_DOWN){
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_UP || e.keyboard.keycode == ALLEGRO_KEY_W){
+            menu.moveMenuUp();
+        }
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_DOWN || e.keyboard.keycode == ALLEGRO_KEY_S){
+            menu.moveMenuDown();
+        }
+
+        if(e.keyboard.keycode == ALLEGRO_KEY_ENTER || e.keyboard.keycode == ALLEGRO_KEY_SPACE){
+                menu.updateMenu();
+        }
+
+    }
+}
+
 
 
 

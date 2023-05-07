@@ -57,6 +57,7 @@ public:
     void drawTitle();
 
     void updateMenu();
+    void processMenuEvents(ALLEGRO_EVENT& e, Menu& menu);
 
 private:
     int y;

@@ -21,7 +21,6 @@
 #include <memory>
 #include "Menu.h"
 
-
 extern ALLEGRO_DISPLAY *display;
 extern ALLEGRO_EVENT_QUEUE *event_queue;
 extern ALLEGRO_TIMER *timer;
@@ -32,10 +31,7 @@ enum class GameState {
     LOGO_SCREEN
 };
 
-
-
 extern GameState g_gamestate;
 extern bool running;
-
 
 #endif // MAIN_H

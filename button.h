@@ -45,11 +45,6 @@ private:
 
 public:
 
-    void X(int x) {  this->x0 = x; }
-    int X(void) { return this->x0; }
-
-    void Y(int y) {  this->y0 = y; }
-    int Y(void) { return this->y0; }
 
     myButton(int x, int y, int sizeX, int sizeY, bool is_text = false);
     myButton(bool is_text = false);
