@@ -158,6 +158,9 @@ public:
 	int saveToFile(const std::string file);
 	int readFile(const std::string file);
 
+	bool randGenerator();
+	void fillRandomGrid();
+
 	Position get_Position(int pos_x, int pos_y);
 	void setTextGenerations(bigTextLabel<int> &t1);
 	int contNeighbors(int x, int y);

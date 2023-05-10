@@ -136,6 +136,24 @@ void hall::resetAll(bool){
 	}
 }
 
+bool hall::randGenerator()
+{
+  int g = std::rand();
+  return (g % 2); // 1 is converted to true and 0 as false
+}
+
+
+void hall::fillRandomGrid(){
+	if(!play){
+		generationNumber = 0;
+		for(int i = 0;i<numero_x;i++){
+			for(int j = 0;j<numero_y;j++){
+				QuadradosList[i][j].checked = randGenerator();
+			}
+		}
+	}
+}
+
 void hall::makeScreenBackup(){
 	for(int i = 0;i<numero_x;i++){
 		for(int j = 0;j<numero_y;j++){
@@ -545,46 +563,51 @@ void hall::calcNewBlocZeroZero(int pos_x, int pos_y, int nextSize){
 }
 
 void hall::loadFunPatterns(bool){
-	if(!play){
 
-		//Pattern 1
-		int x1 = 106;
-		int y1 = 25;
-		QuadradosList[x1][y1].checked = true;
-		QuadradosList[x1][y1+1].checked = true;
-		QuadradosList[x1+1][y1].checked = true;
-		QuadradosList[x1+2][y1].checked = true;
-		QuadradosList[x1+3][y1].checked = true;
-		QuadradosList[x1+4][y1].checked = true;
-		QuadradosList[x1+4][y1+1].checked = true;
+	if(false){ // Speed up if I want to change the loadFunPatterns button action. True Random, False Fun.
+		fillRandomGrid(); //Generates a grid with random filled units
+	} else {
+		if(!play){
 
-		//Pattern 2
-		int x2 = 100;
-		int y2 = 0;
-		QuadradosList[x2][y2].checked = true;
-		QuadradosList[x2][y2+1].checked = true;
-		QuadradosList[x2][y2+2].checked = true;
-		QuadradosList[x2+1][y2+2].checked = true;
-		QuadradosList[x2+2][y2+1].checked = true;
+			//Pattern 1
+			int x1 = 106;
+			int y1 = 25;
+			QuadradosList[x1][y1].checked = true;
+			QuadradosList[x1][y1+1].checked = true;
+			QuadradosList[x1+1][y1].checked = true;
+			QuadradosList[x1+2][y1].checked = true;
+			QuadradosList[x1+3][y1].checked = true;
+			QuadradosList[x1+4][y1].checked = true;
+			QuadradosList[x1+4][y1+1].checked = true;
 
-		//Pattern 3
-		int x3 = 74;
-		int y3 = 30;
-		QuadradosList[x3][y3].checked = true;
-		QuadradosList[x3+1][y3].checked = true;
-		QuadradosList[x3][y3+1].checked = true;
-		QuadradosList[x3+1][y3+1].checked = true;
+			//Pattern 2
+			int x2 = 100;
+			int y2 = 0;
+			QuadradosList[x2][y2].checked = true;
+			QuadradosList[x2][y2+1].checked = true;
+			QuadradosList[x2][y2+2].checked = true;
+			QuadradosList[x2+1][y2+2].checked = true;
+			QuadradosList[x2+2][y2+1].checked = true;
 
-		//Pattern 4
-		int x4 = 24;
-		int y4 = 26;
-		QuadradosList[x4][y4].checked = true;
-		QuadradosList[x4][y4-1].checked = true;
-		QuadradosList[x4][y4+1].checked = true;
-		QuadradosList[x4+1][y4].checked = true;
-		QuadradosList[x4+2][y4].checked = true;
-		QuadradosList[x4+3][y4].checked = true;
-		QuadradosList[x4+4][y4].checked = true;
+			//Pattern 3
+			int x3 = 74;
+			int y3 = 30;
+			QuadradosList[x3][y3].checked = true;
+			QuadradosList[x3+1][y3].checked = true;
+			QuadradosList[x3][y3+1].checked = true;
+			QuadradosList[x3+1][y3+1].checked = true;
+
+			//Pattern 4
+			int x4 = 24;
+			int y4 = 26;
+			QuadradosList[x4][y4].checked = true;
+			QuadradosList[x4][y4-1].checked = true;
+			QuadradosList[x4][y4+1].checked = true;
+			QuadradosList[x4+1][y4].checked = true;
+			QuadradosList[x4+2][y4].checked = true;
+			QuadradosList[x4+3][y4].checked = true;
+			QuadradosList[x4+4][y4].checked = true;
+		}
 	}
 }
 
