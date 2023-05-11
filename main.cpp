@@ -357,7 +357,7 @@ int main()
         ALLEGRO_TIMEOUT timeout;
 
         al_init_timeout(&timeout, 0.1);
-
+        al_wait_for_event_until(event_queue, &event, &timeout);
 
         if(redraw){
             redraw = false;
@@ -384,41 +384,38 @@ int main()
 
         }
 
-        while(al_wait_for_event_until(event_queue, &event, &timeout) ){
-
-            if(event.type == ALLEGRO_EVENT_TIMER){
+    if(event.type == ALLEGRO_EVENT_TIMER){
 
 
-                switch(g_gamestate){
+        switch(g_gamestate){
 
-                    case GameState::LOGO_SCREEN: break;
-                    case GameState::IN_GAME_SCREEN:
-                    {
-                        if(!paused){
-                            gameContext.update();
-                            redraw = true;
-                        }
-                    }
-                    break;
-                    case GameState::MAIN_MENU_SCREEN:
-                            mainMenuContext.update();
-                            redraw = true;
-                    break;
+            case GameState::LOGO_SCREEN: break;
+            case GameState::IN_GAME_SCREEN:
+            {
+                if(!paused){
+                    gameContext.update();
+                    redraw = true;
                 }
             }
+            break;
+            case GameState::MAIN_MENU_SCREEN:
+                    mainMenuContext.update();
+                    redraw = true;
+            break;
+        }
+    }
 
-            if(g_gamestate == GameState::IN_GAME_SCREEN){
-                 S_processWindowEvents(event);
-                 gameContext.update_input(&event);
+    if(g_gamestate == GameState::IN_GAME_SCREEN){
+         S_processWindowEvents(event);
+         gameContext.update_input(&event);
+    }
 
-            }
+    if(g_gamestate == GameState::MAIN_MENU_SCREEN){
+        mainMenu.processMenuEvents(event,mainMenu);
+        mainMenuContext.update_input(&event);
+    }
 
-            if(g_gamestate == GameState::MAIN_MENU_SCREEN){
-                mainMenu.processMenuEvents(event,mainMenu);
-                mainMenuContext.update_input(&event);
-            }
 
-        };
 
     }
 
