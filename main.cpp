@@ -1,4 +1,11 @@
 #include "main.h"
+#include "hall.h"
+#include "button.h"
+#include "gameScreenContext.h"
+#include "bigTextLabel.h"
+#include "informationPanel.h"
+#include "config.h"
+#include "Menu.h"
 
 //static int SCREEN_W = 1300;
 //static int SCREEN_H = 700;
@@ -340,9 +347,9 @@ int main()
 
     Menu mainMenu(mainMenuContext);
 
-    mainMenu.addSingleButton("menu_start", "START");
-    mainMenu.addSingleButton("menu_load", "LOAD");
-    mainMenu.addSingleButton("menu_quit", "QUIT");
+    mainMenu.addSingleButton("menu_start", "START", Menu::Menu_StartButtonClick);
+    //mainMenu.addSingleButton("menu_load", "LOAD");
+    mainMenu.addSingleButton("menu_quit", "QUIT", Menu::Menu_QuitButtonClick);
 
     mainMenu.setMenuOptionFont("fonts//Game Of Squids.ttf",22,0);
     mainMenu.setMenuOffset(al_get_display_width(display)/2 - 100, al_get_display_height(display)/2 - 100 , 36);

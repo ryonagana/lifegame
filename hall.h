@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
+#include "main.h"
 
 
 enum {
@@ -58,12 +58,14 @@ public:
 	int size;
 	int number_of_neighbors;
 	ALLEGRO_COLOR white = al_map_rgb_f(1.0, 1.0, 1.0);
+    ALLEGRO_BITMAP *quad_bmp = NULL;
 	Quadrado(){
 		checked = false;
 		x = 0;
 		y = 0;
 		size = 50;
 		number_of_neighbors = 0;
+
 	}
 
 	void checkNeighbors(){
@@ -76,7 +78,7 @@ public:
 
 	void draw(){
 		if(checked){
-			al_draw_filled_rectangle(x, y, x+size, y+size, white);
+            al_draw_filled_rectangle(x, y, x+size, y+size, white);
 		}
 	}
 
@@ -123,7 +125,7 @@ private:
 
 
 	bool load_dialog_open;
-	bool save_dialog_open;
+    bool save_dialog_open;
 
 
 public:

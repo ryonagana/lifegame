@@ -3,10 +3,14 @@
 #include "main.h"
 
 
-char title_text[][127] = {
+char title_text[][255] = {
     {"Conway\'s Game of Life"},
-    {"LIFEGAME!"}
+    {"LIFEGAME!"},
+    {0}
 };
+
+
+
 
 
 
@@ -16,6 +20,7 @@ Menu::Menu(gameScreenContext &context) : menuContext(context)
     selected_x = 0;
     selected_y = 0;
     cursor = nullptr;
+    menuContext = context;
 
     //cursor  = al_load_bitmap("pictures//gl.png");
 
@@ -44,29 +49,31 @@ Menu::~Menu()
 
 
 
-void Menu::addSingleButton(std::string name, std::string text)
+void Menu::addSingleButton(std::string name, std::string text, void (*callback_callee)(bool, gameScreenContext&))
 {
 
-    MenuOptionPtr opt = std::make_shared<MenuOption>();
+    MenuOptionPtr opt = std::make_shared<MenuOption>(menuContext);
 
     opt->button.setTextButton(true);
     opt->button.insertText(text);
     opt->text = text;
     opt->name = name;
+    opt->callback_callee = callback_callee;
+
+    if(callback_callee != nullptr){
+        funcCallBack f1 = &myButtonCallback::FuncCallBack;
+        opt->button.registerCallBack(opt.get(),f1);
+    }
 
 
-    funcCallBack f1 = &myButtonCallback::FuncCallBack;
-    opt->button.registerCallBack(this,f1);
+
+
 
    m_menu_options.push_back(std::move(opt));
    menuContext.insertComponent(&m_menu_options.back()->button);
 
 }
 
-void Menu::menuFunc(bool status)
-{
-    printf("status %d", status);
-}
 
 void Menu::setMenuOffset(int x, int y, int height_offset)
 {
@@ -146,9 +153,6 @@ void Menu::drawTitle()
 {
     ALLEGRO_FONT *fnt = al_load_ttf_font("fonts//Game Of Squids.ttf", 48,0);
 
-
-
-
     if(!fnt) return;
 
     for(size_t i = 0;i < sizeof(title_text)/sizeof(title_text[0]);i++){
@@ -168,9 +172,7 @@ void Menu::updateMenu()
             g_gamestate = GameState::IN_GAME_SCREEN;
         break;
 
-        case MenuOptionId::LOAD_FILE:
-        break;
-
+        default:
         case MenuOptionId::QUIT:
         //printf("QUIT");
         running = false;
@@ -181,21 +183,46 @@ void Menu::updateMenu()
 
 void Menu::processMenuEvents(ALLEGRO_EVENT &e, Menu &menu)
 {
-    if(e.type  == ALLEGRO_EVENT_KEY_DOWN){
+    ALLEGRO_KEYBOARD_STATE kbd;
 
-        if(e.keyboard.keycode == ALLEGRO_KEY_UP || e.keyboard.keycode == ALLEGRO_KEY_W){
+
+    if(e.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+        running = false;
+        return;
+    }
+
+    if(e.type  == ALLEGRO_EVENT_KEY_DOWN){
+         al_get_keyboard_state(&kbd);
+
+        if(al_key_down(&kbd, ALLEGRO_KEY_UP) || al_key_down(&kbd, ALLEGRO_KEY_W)){
             menu.moveMenuUp();
         }
 
-        if(e.keyboard.keycode == ALLEGRO_KEY_DOWN || e.keyboard.keycode == ALLEGRO_KEY_S){
+        if(al_key_down(&kbd, ALLEGRO_KEY_DOWN) || al_key_down(&kbd, ALLEGRO_KEY_DOWN)){
             menu.moveMenuDown();
         }
 
-        if(e.keyboard.keycode == ALLEGRO_KEY_ENTER || e.keyboard.keycode == ALLEGRO_KEY_SPACE){
-                menu.updateMenu();
+        if((al_key_down(&kbd, ALLEGRO_KEY_ENTER) || al_key_down(&kbd, ALLEGRO_KEY_SPACE))){
+            menu.updateMenu();
         }
 
     }
+}
+
+void Menu::Menu_StartButtonClick(bool status, gameScreenContext &context)
+{
+    (void)status;
+    (void)context;
+
+    g_gamestate = GameState::IN_GAME_SCREEN;
+
+}
+
+void Menu::Menu_QuitButtonClick(bool status, gameScreenContext &context)
+{
+    (void)status;
+    (void)context;
+    running = false;
 }
 
 

@@ -15,36 +15,39 @@
 
 #include "myButtonCallback.h"
 
-using myButtonPtr = std::shared_ptr<myButton>;
-
-class Menu : public myButtonCallback {
+class Menu {
 
 public:
 
     enum class MenuOptionId: int {
         START_GAME=1,
-        LOAD_FILE,
         QUIT
     };
 
-    struct MenuOption {
+    struct MenuOption :  public myButtonCallback {
         std::string text;
         std::string name;
         myButton button;
+        gameScreenContext& context;
+        void (*callback_callee)(bool, gameScreenContext&);
+
+        // myButtonCallback interface
+    public:
+        MenuOption(gameScreenContext& ctx) : context(ctx){
+
+        }
+        virtual void FuncCallBack(bool status) {
+            callback_callee(status, context);
+        }
     };
 
     using MenuOptionPtr = std::shared_ptr<MenuOption>;
 
+
     Menu(gameScreenContext& context);
     ~Menu();
-    void addSingleButton(std::string name, std::string text);
+    void addSingleButton(std::string name, std::string text, void (*callback_callee)(bool, gameScreenContext &) = nullptr);
 
-    void menuFunc(bool status);
-
-    virtual void FuncCallBack(bool status){
-        menuFunc(status);
-        printf("apertou virtual funccallback\n");
-    }
 
     void setMenuOffset(int x, int y, int height_offset = 0);
     void setMenuOptionFont(const std::string filepath, int size, int flags);
@@ -59,6 +62,9 @@ public:
     void updateMenu();
     void processMenuEvents(ALLEGRO_EVENT& e, Menu& menu);
 
+    static void Menu_StartButtonClick(bool status,  gameScreenContext& context);
+    static void Menu_QuitButtonClick(bool status,  gameScreenContext& context);
+
 private:
     int y;
     int x;
@@ -72,7 +78,7 @@ private:
     ALLEGRO_BITMAP *cursor;
 
     gameScreenContext& menuContext;
-    std::list<MenuOptionPtr> m_menu_options;
+    std::list<Menu::MenuOptionPtr> m_menu_options;
     MenuOptionId menu_chosen;
 
 

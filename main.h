@@ -12,14 +12,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
-#include "hall.h"
-#include "button.h"
-#include "gameScreenContext.h"
-#include "bigTextLabel.h"
-#include "informationPanel.h"
-#include "config.h"
+
 #include <memory>
-#include "Menu.h"
+
 
 extern ALLEGRO_DISPLAY *display;
 extern ALLEGRO_EVENT_QUEUE *event_queue;

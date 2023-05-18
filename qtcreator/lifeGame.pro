@@ -3,7 +3,7 @@ CONFIG -= qt
 
 
 QMAKE_CXXFLAGS += -std=c++14 -Wall -Werror -Wextra -Wunused -Wno-switch
-
+QMAKE_CXXFLAGS_DEBUG += -g -Og -Wpedantic
 
 
 unix: {
@@ -19,16 +19,16 @@ unix: {
 }
 
 win32: {
-    INCLUDEPATH += D:\libs\allegro_x86_64\include
+    INCLUDEPATH += D:\libs\allegro_5.2.8-x64\include
     INCLUDEPATH += D:\projetos\libs\allegro-x86_64\allegro\include
     INCLUDEPATH += include
 
-    LIBS += -LD:\libs\allegro_x86_64\lib
+    LIBS += -LD:\libs\allegro_5.2.8-x64\lib
     LIBS += -LD:\projetos\libs\allegro-x86_64\allegro\lib
 
 
 
-LIBS += -lallegro_monolith.dll
+    LIBS += -lmingw32 -lallegro_monolith.dll
 }
 
 SOURCES += \

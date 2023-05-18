@@ -302,7 +302,7 @@ void hall::setQuadradoInf(){
 			if((i >= bloco_x0)&&(i < (bloco_x0+numBloc_X))&&(j >= bloco_y0)&&(j < (bloco_y0+numBloc_Y))){
 				QuadradosList[i][j].size = size;
 				QuadradosList[i][j].x = x0 + size*(i-bloco_x0);
-				QuadradosList[i][j].y = y0 + size*(j-bloco_y0);
+                QuadradosList[i][j].y = y0 + size*(j-bloco_y0);
 			}else{
 				QuadradosList[i][j].size = 0;
 				QuadradosList[i][j].x = -1;
