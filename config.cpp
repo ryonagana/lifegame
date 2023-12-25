@@ -26,6 +26,7 @@ CONFIG_FIELD default_config[MAX_DEFAULT_CONFIG] = {
     {"game","vsync", "1"},
     {"game","laptop_mode", "0"},
     {"game","max_fps_desired", "60"},
+    {"game", "vsync", "1"},
     CONFIG_END
 
 

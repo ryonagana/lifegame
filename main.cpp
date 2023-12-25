@@ -28,6 +28,13 @@ static Config config;
 
 GameState g_gamestate = GameState::MAIN_MENU_SCREEN;
 
+void get_desktop_resolution(int *w, int *h){
+    ALLEGRO_MONITOR_INFO info;
+    al_get_monitor_info(0,&info);
+    *w = info.x2 - info.x1;
+    *h = info.y2 - info.y1;
+}
+
 static int init_allegro(void)
 {
 
@@ -74,6 +81,7 @@ static int init_allegro(void)
 
         if(laptop_mode){
             timer = al_create_timer(1.0 / 30.0);
+            al_set_new_display_option(ALLEGRO_VSYNC,1, ALLEGRO_REQUIRE);
         }else {
             if(fps_desired > 60.0){
                 fprintf(stdout, "please set CFG  FPS less or equal to 60, higher speed can have some slowness issues");
@@ -87,13 +95,16 @@ static int init_allegro(void)
 			fprintf(stderr, "Failed to create timer.\n");
 			return 1;
 		}
-
+        
+        /*
 		ALLEGRO_MONITOR_INFO info;
 		al_get_monitor_info(0, &info);
 		if(((info.x2 - info.x1) > 0)&&((info.y2 - info.y1) > 0)){ // Verify if the resolution is ok...
             display_width = info.x2 - info.x1;
             display_height = info.y2 - info.y1 - 80;
-		}
+		}*/
+        
+        get_desktop_resolution(&display_width, &display_height);
 
         int flags = ALLEGRO_OPENGL_FORWARD_COMPATIBLE | ALLEGRO_PROGRAMMABLE_PIPELINE;
 
@@ -112,9 +123,7 @@ static int init_allegro(void)
 
         int vsync_enabled = Config::getConfigInt(config, "game", "vsync");
 
-        if(vsync_enabled < 0) vsync_enabled = 0;
-        if(vsync_enabled > 1) vsync_enabled = 1;
-
+        vsync_enabled = vsync_enabled > 0 ? 1 : 0; 
 
         al_set_new_display_option(ALLEGRO_VSYNC, vsync_enabled, ALLEGRO_SUGGEST);
 
@@ -354,13 +363,13 @@ int main()
     while(running){
 
         ALLEGRO_EVENT event;
-        ALLEGRO_TIMEOUT timeout;
-
-        al_init_timeout(&timeout, 0.1);
+        
+        al_wait_for_event(event_queue, &event);
 
 
         if(redraw){
             redraw = false;
+            al_set_clipping_rectangle(0,0, display_w, display_h);
             al_clear_to_color(al_map_rgb(0,0,0));
             switch(g_gamestate){
 
@@ -384,44 +393,47 @@ int main()
 
         }
 
-        while(al_wait_for_event_until(event_queue, &event, &timeout) ){
+        
 
-            if(event.type == ALLEGRO_EVENT_TIMER){
+        if(event.type == ALLEGRO_EVENT_TIMER){
 
 
-                switch(g_gamestate){
+            switch(g_gamestate){
 
-                    case GameState::LOGO_SCREEN: break;
-                    case GameState::IN_GAME_SCREEN:
-                    {
-                        if(!paused){
-                            gameContext.update();
-                            redraw = true;
-                        }
+                case GameState::LOGO_SCREEN: break;
+                case GameState::IN_GAME_SCREEN:
+                {
+                    if(!paused){
+                        gameContext.update();
+                        redraw = true;
                     }
-                    break;
-                    case GameState::MAIN_MENU_SCREEN:
-                            mainMenuContext.update();
-                            redraw = true;
-                    break;
                 }
+                break;
+                case GameState::MAIN_MENU_SCREEN:
+                        mainMenuContext.update();
+                        redraw = true;
+                break;
             }
+        }
 
-            if(g_gamestate == GameState::IN_GAME_SCREEN){
-                 S_processWindowEvents(event);
-                 gameContext.update_input(&event);
+        if(g_gamestate == GameState::IN_GAME_SCREEN){
+             S_processWindowEvents(event);
+             gameContext.update_input(&event);
 
-            }
+        }
 
-            if(g_gamestate == GameState::MAIN_MENU_SCREEN){
-                mainMenu.processMenuEvents(event,mainMenu);
-                mainMenuContext.update_input(&event);
-            }
+        if(g_gamestate == GameState::MAIN_MENU_SCREEN){
+            mainMenu.processMenuEvents(event,mainMenu);
+            mainMenuContext.update_input(&event);
+        }
 
-        };
+        
 
     }
-
+    
+    gameContext.unloadComponents();
+    mainMenuContext.unloadComponents();
+    
 	// Clean up
     config.Unload();
     al_destroy_display(display);

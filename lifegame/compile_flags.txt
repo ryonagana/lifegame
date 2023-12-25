@@ -1,0 +1,12 @@
+-I/home/archdark/projetos/cpp/lifegame/lifegame
+-I/usr/include/c++/13
+-I/usr/include/c++/13/x86_64-suse-linux
+-I/usr/include/c++/13/backward
+-I/usr/lib64/gcc/x86_64-suse-linux/13/include
+-I/usr/local/include
+-I/usr/lib64/gcc/x86_64-suse-linux/13/include-fixed
+-I/usr/x86_64-suse-linux/include
+-I/usr/include
+-std=c++14
+-target
+x86_64-suse-linux

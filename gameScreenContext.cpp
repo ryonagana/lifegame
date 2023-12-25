@@ -67,3 +67,15 @@ void gameScreenContext::draw()
 
 
 
+void gameScreenContext::unloadComponents(){
+    
+    for(auto &p : list_of_components){
+        if(p){
+            delete p;
+        }
+        
+    }
+    
+    list_of_components.clear();
+    
+}

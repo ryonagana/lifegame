@@ -15,3 +15,9 @@ Makefile
 *.pro.user
 Makefile.Release
 Makefile.Debug
+lifeGame
+lifeGame.exe
+.ctagsd/
+.codelite/
+*.pro.user
+*.pro.user.*

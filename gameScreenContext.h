@@ -32,6 +32,8 @@ public:
 	gameScreenContext();
 	virtual ~gameScreenContext(){}
 	void setScreenSize(int w, int h);
+    void unloadComponents();
+    
 	void insertComponent(interfaceComponent* c1);
 	void setGlobalTimer(ALLEGRO_TIMER *timer);
    	void setGlobalDisplay(ALLEGRO_DISPLAY *dsp);
@@ -47,7 +49,7 @@ public:
 	virtual void update();
 	virtual void update_input(ALLEGRO_EVENT *e);
 	virtual void draw();
-
+    
 
 
 };
