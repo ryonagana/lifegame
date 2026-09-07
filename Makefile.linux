@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=gnu++11 -Wall -Wextra -Wpedantic 
+CXXFLAGS=-std=gnu++11 -Wall -Wextra -Wpedantic -MMD -MP
 TARGET=lifeGame
 RELEASE=debug
 LIB_DIR=-L/usr/local/lib
@@ -16,7 +16,7 @@ LIBS=$(LIB_DIR) -lallegro \
 SRC=$(shell find . -type f -name "*.cpp")
 OBJ=$(SRC:.cpp=.o)
 DEPS_FLAGS=-MMD -MP
-
+DEPS=$(SRC=.cpp=.d)
 
 ifeq ($(RELEASE), debug)
     CXXFLAGS+=-O0 -g -gdwarf-5
@@ -33,6 +33,8 @@ $(TARGET): $(OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+-include $(DEPS)
+
 .PHONY: clean rebuild
 
 
@@ -42,5 +44,5 @@ clean:
 rebuild: clean
 	$(MAKE) -j$(shell nproc --ignore=1)
 
--include $(OBJ:.o=.d)
+
 

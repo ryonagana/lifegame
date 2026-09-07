@@ -8,3 +8,4 @@ codeblocks/obj*
 !codeblocks/*.layout
 !codeblocks/*.depend
 SavedGame.*
+*.d

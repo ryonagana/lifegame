@@ -51,6 +51,7 @@ hall::hall(int x, int y, int screen_Wj, int screen_Hj) : interfaceComponent() {
 	generationNumber = 0;
 	load_dialog_open = false;
 	save_dialog_open = false;
+	evolution_start_time = al_get_time();
 }
 
 hall::~hall(){
@@ -95,7 +96,7 @@ void hall::draw_line(){
 void hall::draw_text(){
     al_draw_textf(text_font,Color_white, x0, y0 - 35, 0, "HALL");
     al_draw_textf(text_font,Color_white, x0, y0 - 25, 0, "%d X %d", numero_x, numero_y);
-    al_draw_textf(text_font,Color_white, x0, y0 - 15, 0, "Evolution Speed: %.2f", ev_speed[actual_speed].speed);
+    al_draw_textf(text_font,Color_white, x0, y0 - 15, 0, "Evolution Speed: %.2f", ev_speed[actual_speed].div);
 }
 
 void hall::draw_markers(){
@@ -304,6 +305,27 @@ void hall::loadFile(bool){
 }
 
 void hall::CreateAndKillLife(){
+
+	double now = al_get_time();
+
+	if(play  && ev_speed[actual_speed].type != SPEED_STOPPED){
+
+
+		if((now - evolution_start_time) > ev_speed[actual_speed].speed){
+			
+			
+			for(int i = 0;i<numero_x;i++){
+                for(int j = 0;j<numero_y;j++){
+                    QuadradosList[i][j].checkNeighbors();
+                }
+            }
+			generationNumber++;
+			evolution_start_time = now;
+		}
+
+	}
+
+#if 0
 	if(play && ev_speed[actual_speed].type != SPEED_STOPPED){
 		double CurrentTimer = (al_get_timer_count(this->timer) / ev_speed[actual_speed].div);
         if(CurrentTimer >= evolution_speed){
@@ -316,6 +338,7 @@ void hall::CreateAndKillLife(){
             evolution_speed = (al_get_timer_count(this->timer) / ev_speed[actual_speed].div)+ev_speed[actual_speed].speed;
         }
 	}
+#endif
 }
 
 void hall::update(){
@@ -750,13 +773,13 @@ void hall::NextSpeed(bool)
 	} else{
 		actual_speed--;
 	}
-	this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
+	//this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
 }
 
 void hall::PrevSpeed(bool) {
 	actual_speed++;
 	if (actual_speed == NUMBER_OF_SPEEDS) actual_speed = SPEED_NORMAL;//Go back to the normal speed
-	this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
+	//this->evolution_speed = (al_get_timer_count(timer) / ev_speed[actual_speed].div);
 }
 
 void hall::changeSize(bool zoom){

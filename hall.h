@@ -46,8 +46,8 @@ typedef struct Position {
 }Position;
 
 typedef struct EVOLUTION_SPEED {
-    int div;
-    float speed;
+    float div;
+    double speed;
     int type;
 }EVOLUTION_SPEED;
 
@@ -170,15 +170,19 @@ private:
 	bool load_dialog_open;
 	bool save_dialog_open;
 
+	//novas variaveis tempo
+	double evolution_start_time;
+
+
 public:
 
 	EVOLUTION_SPEED ev_speed[NUMBER_OF_SPEEDS] = {
-			{1,1.0, SPEED_NORMAL},
-			{20,0.75, SPEED_SLOW1},
-			{40,0.50, SPEED_SLOW2},
-			{60,0.25, SPEED_SLOW3},
-			{80,0.10, SPEED_SLOWER},
-		    {120,0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
+			{1.0 ,  0.01, SPEED_NORMAL},
+			{0.75,  0.25, SPEED_SLOW1},
+			{0.50,  0.50, SPEED_SLOW2},
+			{0.25,  0.75, SPEED_SLOW3},
+			{0.20,  1.0,  SPEED_SLOWER},
+		    {0.0 ,  0.00, SPEED_STOPPED}// This one will not be 120 it will stop.
 	};
 
 	hall(int x, int y, int screen_Wj, int screen_Hj);
