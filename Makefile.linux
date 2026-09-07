@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-std=gnu++11 -Wall -Wextra -Wpedantic 
 TARGET=lifeGame
-RELEASE=release #debug mode (no optimizations) or release (with optimization flags)
+RELEASE=debug
 LIB_DIR=-L/usr/local/lib
 
 LIBS=$(LIB_DIR) -lallegro \
@@ -18,10 +18,10 @@ OBJ=$(SRC:.cpp=.o)
 DEPS_FLAGS=-MMD -MP
 
 
-ifeq ($RELEASE, debug)
-    CXXFLAGS=-O0 -g -gdwarf-5
+ifeq ($(RELEASE), debug)
+    CXXFLAGS+=-O0 -g -gdwarf-5
 else
-	CXXFLAGS=-O3 -DNDEBUG -flto -s  
+	CXXFLAGS+=-O3 -DNDEBUG -flto -s  
 endif
 
 
