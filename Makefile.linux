@@ -1,0 +1,46 @@
+CXX=g++
+CXXFLAGS=-std=gnu++11 -Wall -Wextra -Wpedantic 
+TARGET=lifeGame
+RELEASE=release #debug mode (no optimizations) or release (with optimization flags)
+LIB_DIR=-L/usr/local/lib
+
+LIBS=$(LIB_DIR) -lallegro \
+	 -lallegro_image \
+	 -lallegro_font \
+	 -lallegro_ttf \
+	 -lallegro_dialog \
+	 -lallegro_primitives \
+	 -lallegro_audio \
+	 -lallegro_acodec
+
+SRC=$(shell find . -type f -name "*.cpp")
+OBJ=$(SRC:.cpp=.o)
+DEPS_FLAGS=-MMD -MP
+
+
+ifeq ($RELEASE, debug)
+    CXXFLAGS=-O0 -g -gdwarf-5
+else
+	CXXFLAGS=-O3 -DNDEBUG -flto -s  
+endif
+
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CXX) $(CXXFLAGS) $(LIBS) $^ -o $(TARGET) 
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean rebuild
+
+
+clean:
+	@rm -rf *.o $(TARGET) *.d
+
+rebuild: clean
+	$(MAKE) -j$(shell nproc --ignore=1)
+
+-include $(OBJ:.o=.d)
+
